@@ -1,0 +1,71 @@
+import { View, ActivityIndicator, Pressable } from 'react-native';
+import { router } from 'expo-router';
+import { getTopic } from '@axiom/core/topics';
+import { Screen, Copy, Icon, Button } from '@/components/ui';
+import { useApp } from '@/state/app-state';
+import { spacing } from '@/theme';
+export default function HistoryScreen() {
+  const { history, hydrated, colors } = useApp();
+  if (!hydrated)
+    return (
+      <Screen>
+        <ActivityIndicator color={colors.accent} accessibilityLabel="Carregando histórico" />
+      </Screen>
+    );
+  return (
+    <Screen>
+      <Copy variant="eyebrow" tone="accent">
+        SUA ESCUTA, NO SEU RITMO
+      </Copy>
+      <Copy variant="title">Um assunto pode{'\n'}levar a outro.</Copy>
+      {history.length ? (
+        <>
+          <Copy tone="secondary">Suas amostras de teste ficam salvas neste aparelho.</Copy>
+          <View>
+            {history.map((item) => {
+              const topic = getTopic(item.topicId)!;
+              return (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={`Continuar ${topic.name}`}
+                  key={item.topicId}
+                  onPress={() =>
+                    router.push({ pathname: '/episode/[id]', params: { id: item.topicId } })
+                  }
+                  style={({ pressed }) => ({
+                    paddingVertical: spacing.lg,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.line,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: spacing.md,
+                    opacity: pressed ? 0.7 : 1,
+                  })}
+                >
+                  <Icon name={topic.icon} symbol={topic.symbol} color={topic.color} />
+                  <View style={{ flex: 1, gap: spacing.xs }}>
+                    <Copy variant="headline">{topic.name}</Copy>
+                    <Copy variant="caption" tone="muted">
+                      Demonstração · {new Date(item.playedAt).toLocaleDateString('pt-BR')} · 12
+                      segundos
+                    </Copy>
+                  </View>
+                  <Icon name="play-circle-outline" symbol="play.circle" color={colors.accent} />
+                </Pressable>
+              );
+            })}
+          </View>
+        </>
+      ) : (
+        <View style={{ paddingVertical: spacing.xl, gap: spacing.lg }}>
+          <Icon name="headphones" symbol="headphones" size={48} color={colors.muted} />
+          <Copy variant="headline">Seu histórico começa com um play.</Copy>
+          <Copy tone="secondary">
+            Explore os temas e teste o player. Depois, você poderá continuar de onde parou.
+          </Copy>
+          <Button title="Explorar temas" onPress={() => router.replace('/')} />
+        </View>
+      )}
+    </Screen>
+  );
+}

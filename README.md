@@ -8,14 +8,14 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 
 ## Sobre o trabalho
 
-| Informação | Detalhe |
-| --- | --- |
-| Faculdade | AEMS |
-| Curso | Tecnologia em Análise e Desenvolvimento de Sistemas (TADS) |
-| Período | 6º período |
-| Cidade | Três Lagoas |
-| Disciplina | Programação para Dispositivos Móveis |
-| Professor | Bruno |
+| Informação | Detalhe                                                    |
+| ---------- | ---------------------------------------------------------- |
+| Faculdade  | AEMS                                                       |
+| Curso      | Tecnologia em Análise e Desenvolvimento de Sistemas (TADS) |
+| Período    | 6º período                                                 |
+| Cidade     | Três Lagoas                                                |
+| Disciplina | Programação para Dispositivos Móveis                       |
+| Professor  | Bruno                                                      |
 
 ### Participantes
 
@@ -34,20 +34,36 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 
 ## Tecnologias previstas
 
-| Parte do projeto | Tecnologias |
-| --- | --- |
-| Aplicativo mobile | React Native, Expo e TypeScript |
+| Parte do projeto                    | Tecnologias                                            |
+| ----------------------------------- | ------------------------------------------------------ |
+| Aplicativo mobile                   | React Native, Expo e TypeScript                        |
 | Back-end, banco de dados e arquivos | Supabase Edge Functions, PostgreSQL e Supabase Storage |
-| Processamento em segundo plano | Trigger.dev e Node.js |
-| Busca de notícias | GNews API |
-| Criação do roteiro | OpenAI Responses API |
-| Geração da voz | ElevenLabs |
-| Reprodução e tratamento de áudio | expo-audio e FFmpeg/FFprobe |
-| Versionamento e distribuição | GitHub e Expo EAS |
+| Processamento em segundo plano      | Trigger.dev e Node.js                                  |
+| Busca de notícias                   | GNews API                                              |
+| Criação do roteiro                  | OpenAI Responses API                                   |
+| Geração da voz                      | ElevenLabs                                             |
+| Reprodução e tratamento de áudio    | expo-audio e FFmpeg/FFprobe                            |
+| Versionamento e distribuição        | GitHub e Expo EAS                                      |
 
 ## Planejamento
 
-O projeto está na fase de planejamento. Vamos começar validando as notícias e a qualidade da voz, depois construir as telas, integrar os serviços e testar o aplicativo nos dois sistemas.
+O desenvolvimento começou. A primeira versão traz as telas e um player de demonstração, além de uma prova de viabilidade local para integrar notícias, roteiro e voz. A geração real ainda depende da configuração das contas e da validação de conteúdo e narração.
 
 - [Roadmap resumido](AXIOM-roadmap-resumido.md): visão rápida da proposta, das tecnologias e das etapas.
 - [Roadmap completo](AXIOM-roadmap.md): detalhes da arquitetura, da geração dos episódios e dos testes previstos.
+
+## Como executar
+
+Com Node.js 22.14 ou superior, na raiz do projeto:
+
+```sh
+npm ci
+npm start
+```
+
+Use o Expo Go compatível com o SDK 58 para abrir no celular. Para uma prévia no navegador, execute `npm run web`.
+
+A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narração. Os podcasts reais de dois minutos serão validados na próxima integração.
+
+- [Guia de desenvolvimento](docs/development.md): configuração e testes.
+- [Andamento das etapas](docs/progress.md): o que já foi feito e o que falta validar.

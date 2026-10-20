@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "AXIOM",
+    "slug": "axiom",
+    "scheme": "axiom",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": { "supportsTablet": true, "bundleIdentifier": "br.com.axiom.mobile" },
+    "android": { "package": "br.com.axiom.mobile" },
+    "web": { "bundler": "metro", "output": "single", "name": "AXIOM" },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "enableBackgroundPlayback": true,
+          "enableBackgroundRecording": false
+        }
+      ]
+    ],
+    "experiments": { "typedRoutes": true }
+  }
+}
