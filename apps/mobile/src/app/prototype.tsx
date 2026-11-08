@@ -25,6 +25,11 @@ export default function PrototypeScreen() {
       <Button title="Testar preparação da amostra" onPress={() => run('ready')} />
       <Button title="Testar falta de notícias" secondary onPress={() => run('empty')} />
       <Button title="Testar falha e recuperação" secondary onPress={() => run('error')} />
+      <Button
+        title="Verificar integração com o servidor"
+        secondary
+        onPress={() => router.push('/integration')}
+      />
       <Button title="Voltar aos temas" secondary onPress={() => router.replace('/')} />
     </Screen>
   );

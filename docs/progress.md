@@ -24,9 +24,19 @@ Verificação na prévia web mobile: navegação, preparação, cancelamento, es
 
 Pendente: avaliação com usuários, ampliação de fonte e leitores de tela em aparelhos físicos e aprovação visual pelo responsável. Isso não equivale ao aceite do beta.
 
-## Etapa 3 — Base técnica: iniciada
+## Etapa 3 — Base técnica: implementação local, integração remota pendente
 
-Criados os workspaces, TypeScript, verificações automáticas e uma proposta de migração SQL com RLS e roteiros privados. A migração ainda não foi aplicada. O app não está conectado a Supabase ou Trigger.dev.
+Entrega de 8 de novembro de 2026, seguindo as seções 6, 9, 10 e 11 do roadmap:
+
+- API compartilhada entre runner local e Edge Function, com validação de sessão, catálogo, contratos de pedidos e respostas sem roteiro.
+- App com cliente Supabase Auth anônimo e tela de verificação em Preferências → Apresentação do projeto → Verificar integração com o servidor.
+- Comunicação HTTP real com a API local descartável, incluindo falha de conexão e nova tentativa. Esse runner não emula Supabase inteiro.
+- Migração adicional com associação entre sessões e trabalhos, quotas, reuso, expiração e reserva transacional de uma edição por tema.
+- Bucket privado e adaptador de URLs assinadas com validade limitada; metadados operacionais restritos ao servidor.
+- Configuração do Trigger.dev e tarefa inicial que encerra com `integration_pending`, sem fornecedores. A geração permanece desativada na Edge Function.
+- 31 testes automatizados, verificação Deno da função e verificações mobile. Migrações executadas em PostgreSQL embarcado com contratos mínimos de Auth/Storage.
+
+Pendente: aplicar e testar em Supabase completo, configurar projetos separados e credenciais, validar Auth e Storage reais, implantar a fila, conectar o pipeline e testar concorrência distribuída. Não há Docker/Supabase CLI disponíveis neste computador. A etapa ainda não cumpre o aceite remoto; nenhum banco remoto foi alterado. Veja [base técnica](backend.md).
 
 ## Etapas 4 a 8
 

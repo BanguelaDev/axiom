@@ -1,5 +1,15 @@
 # Validações do AXIOM
 
+## Etapa 3 — 8 de novembro de 2026
+
+- TypeScript, ESLint e exportação web: aprovados.
+- 31 testes aprovados: os 17 anteriores, mais 14 sobre API, autenticação, isolamento entre sessões, erros seguros, limites de payload e origem, cliente HTTP, migrações, RLS, quotas, reuso, trabalhos abandonados e URLs temporárias.
+- As duas migrações foram executadas em PostgreSQL embarcado (PGlite) com contratos mínimos dos schemas Auth/Storage; permissões e políticas exercitadas por uma role de cliente. Não é um teste do serviço Supabase completo ou de concorrência entre processos.
+- Edge Function verificada com Deno 2.9.6. Essa verificação integra `npm run typecheck`, já executado pelo GitHub Actions, sem alterar o arquivo do workflow.
+- Na prévia web: sessão local, catálogo dos seis temas, servidor interrompido, mensagem de falha e recuperação por nova tentativa.
+- A exportação web não contém os nomes das variáveis secretas dos fornecedores ou service_role. Somente configuração pública e contratos do cliente entram no app.
+- Supabase remoto, Auth/Storage reais, Trigger.dev e fornecedores não foram acionados. Geração desativada; nenhuma nova amostra jornalística foi produzida.
+
 ## Etapa 2 — 8 de novembro de 2026
 
 - TypeScript e ESLint: aprovados.
@@ -32,7 +42,7 @@ Notícias reais dos seis temas, credenciais e quotas dos fornecedores, independ�
 
 ## Dependências a acompanhar
 
-Após aplicar as correções não destrutivas disponíveis, o `npm audit` ainda sinaliza avisos transitivos em `braces`, `node-forge` e `uuid`, propagados pela cadeia de ferramentas Expo/React Native. A sugestão automática de forçar o Expo para a versão 44 é incompatível com o SDK 58 e não foi aplicada. Reavaliar correções dos fornecedores e impacto nas ferramentas antes de builds de distribuição. A aprovação de TypeScript, testes e Expo Doctor não substitui essa análise.
+Nesta entrega, `npm audit` sinaliza 20 avisos (1 baixo, 16 moderados e 3 altos), propagados pela cadeia Expo: `deepmerge`, `glob`, `minimatch`, `node-forge`, `uuid` e uma versão transitiva de `zod` no CLI. A dependência direta de Zod é 4.6.7. Nenhuma atualização forçada de SDK foi aplicada; a sugestão automática inclui regressão para Expo 52, incompatível com o SDK 58. Reavaliar correções dos fornecedores antes de builds de distribuição. A aprovação das verificações não resolve esses avisos.
 
 ## Documentação usada nas integrações
 

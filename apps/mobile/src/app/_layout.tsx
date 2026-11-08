@@ -2,8 +2,21 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AppProvider, useApp } from '@/state/app-state';
 import { typography } from '@/theme';
+import { useEffect } from 'react';
+import { AppState } from 'react-native';
+import { setAuthActive } from '@/services/backend';
 function Navigation() {
   const { colors, scheme } = useApp();
+  useEffect(() => {
+    setAuthActive(AppState.currentState === 'active');
+    const listener = AppState.addEventListener('change', (state) =>
+      setAuthActive(state === 'active'),
+    );
+    return () => {
+      listener.remove();
+      setAuthActive(false);
+    };
+  }, []);
   return (
     <>
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
@@ -30,6 +43,10 @@ function Navigation() {
         <Stack.Screen
           name="prototype"
           options={{ title: 'Apresentação do projeto', headerBackTitle: 'Voltar' }}
+        />
+        <Stack.Screen
+          name="integration"
+          options={{ title: 'Conexão com o servidor', headerBackTitle: 'Voltar' }}
         />
       </Stack>
     </>

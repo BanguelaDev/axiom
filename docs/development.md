@@ -21,6 +21,10 @@ Durante as alterações de interface, mantenha `npm start` em execução e uma a
 
 Antes de cada etapa, leia `AXIOM-roadmap.md` e `docs/progress.md`. Ao entregar, atualize o acompanhamento e o `CHANGELOG.md`, execute as verificações e crie um commit com a etapa, mudanças, testes e pendências. Envie ao mesmo repositório sem reescrever o histórico. As instruções também estão no `AGENTS.md` da raiz.
 
+## Testar a API local
+
+Na versão 0.3, execute `npm run dev:api` em outro terminal e mantenha a prévia web na porta 8081. Abra Preferências → Apresentação do projeto → Verificar integração com o servidor. A API local cria uma sessão temporária e entrega o catálogo, sem notícias, voz ou cobrança. Leia [base técnica](backend.md) para o contrato, limitações e configuração futura de Supabase/Trigger.dev.
+
 ## Validar notícias, roteiro e voz reais
 
 1. Copie `.env.example` para `.env` na raiz.
@@ -37,16 +41,18 @@ As amostras ficam em `work/episode-*`, ignorado pelo Git. `episode.json` contém
 
 ## Estrutura
 
-| Pasta                 | Conteúdo                                                                        |
-| --------------------- | ------------------------------------------------------------------------------- |
-| `apps/mobile`         | Aplicativo Expo com Expo Router e tema compartilhado                            |
-| `packages/core`       | Catálogo e regras de seleção, validade e evidência                              |
-| `packages/pipeline`   | Integrações de notícias, LLM, voz e tratamento de áudio, exclusivas do servidor |
-| `scripts`             | Verificação de configuração e prova de viabilidade                              |
-| `tests`               | Testes das regras editoriais e do áudio                                         |
-| `supabase/migrations` | Proposta inicial do banco com políticas de acesso; ainda não aplicada           |
+| Pasta               | Conteúdo                                                                        |
+| ------------------- | ------------------------------------------------------------------------------- |
+| `apps/mobile`       | Aplicativo Expo com Expo Router e tema compartilhado                            |
+| `packages/core`     | Catálogo e regras de seleção, validade e evidência                              |
+| `packages/pipeline` | Integrações de notícias, LLM, voz e tratamento de áudio, exclusivas do servidor |
+| `scripts`           | Verificação de configuração e prova de viabilidade                              |
+| `packages/backend`  | Handler HTTP, runner local e adaptador de banco/Storage do servidor             |
+| `packages/tasks`    | Contrato inicial da tarefa Trigger.dev; geração ainda desativada                |
+| `tests`             | Testes editoriais, áudio, API, banco e proteção de dados                        |
+| `supabase`          | Migrações, configuração local e Edge Function; sem aplicação remota             |
 
-O app importa somente o catálogo de temas de `@axiom/core/topics`. Não importa os adaptadores do servidor nem seus segredos.
+O app importa contratos e regras públicas de `@axiom/core`. Não importa os adaptadores do servidor nem seus segredos. Apenas URL e chave publishable do Supabase podem ser públicas; a chave service_role e as credenciais dos fornecedores são exclusivas do servidor.
 
 ## Verificações
 
@@ -57,8 +63,10 @@ npm test
 npm run export:web
 ```
 
+`typecheck` inclui a verificação da Edge Function com Deno 2.9.6, também executada pela automação existente do GitHub. Para executá-la separadamente, use `npm run typecheck:edge`. Na primeira execução, o npm baixa o runtime Deno fixado nessa versão.
+
 O FFmpeg é uma dependência oficial de pacote para a prova de áudio. Em ambientes que bloqueiam scripts de instalação do npm, revise a configuração `allowScripts` e execute `npm rebuild esbuild ffmpeg-static` após autorizar esses dois pacotes. Não é necessário habilitar scripts de todos os pacotes.
 
 ## Próxima integração
 
-Após a validação dos seis temas e da voz, conectar Supabase Auth anônimo, Edge Functions e Trigger.dev. A API deve validar sessão, aplicar quotas, controlar edições compartilhadas por transação e entregar URLs temporárias somente para episódios válidos. O bucket de áudio será privado. Roteiros ficam em schema privado com acesso apenas do servidor. A migração é um ponto de partida e ainda precisa de teste com Supabase local antes da aplicação em qualquer ambiente.
+Após a validação dos seis temas e da voz, substituir a tarefa inicial do Trigger.dev pela orquestração real e validar a base já implementada em Supabase completo. As migrações passaram em PostgreSQL embarcado com contratos mínimos; isso não substitui o teste de Auth/Storage, gateway, fila e concorrência distribuída. A geração segue desativada até essa integração.

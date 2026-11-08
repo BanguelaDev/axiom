@@ -1,12 +1,12 @@
 # AXIOM — Roadmap de construção do aplicativo mobile
 
-**Versão:** 1.1
+**Versão:** 1.2
 
 **Criado em:** 19 de outubro de 2026
 
 **Atualizado em:** 8 de novembro de 2026
 
-**Status:** desenvolvimento em andamento; etapa 2 com protótipo navegável implementado.
+**Status:** desenvolvimento em andamento; protótipo navegável e conexão com API local implementados. Etapa 3 com integração remota pendente.
 
 O escopo abaixo continua sendo a referência do projeto. O andamento e as validações pendentes ficam em [docs/progress.md](docs/progress.md), e as entregas estão registradas no [CHANGELOG.md](CHANGELOG.md). A etapa 1 ainda depende dos fornecedores e da avaliação de notícias e voz reais; o protótipo usa cenários identificados como demonstração.
 

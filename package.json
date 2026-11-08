@@ -1,6 +1,6 @@
 {
   "name": "axiom",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -13,7 +13,9 @@
   "scripts": {
     "start": "npm run start --workspace apps/mobile",
     "web": "npm run web --workspace apps/mobile",
-    "typecheck": "tsc --noEmit && npm run typecheck --workspace apps/mobile",
+    "dev:api": "tsx scripts/dev-api.ts",
+    "typecheck": "tsc --noEmit && npm run typecheck --workspace apps/mobile && npm run typecheck:edge",
+    "typecheck:edge": "npx --yes deno@2.9.6 check --config supabase/functions/deno.json --frozen supabase/functions/axiom/index.ts",
     "lint": "npm run lint --workspace apps/mobile",
     "test": "tsx --test tests/*.test.ts",
     "validate:providers": "tsx --env-file-if-exists=.env scripts/validate-providers.ts",
@@ -21,12 +23,15 @@
     "export:web": "npm run export:web --workspace apps/mobile"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15",
     "@types/node": "^26.6.5",
     "prettier": "^3.9.10",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "@trigger.dev/sdk": "^4.8.3",
     "ffmpeg-static": "^5.3.0",
     "ffprobe-static": "^3.1.0",
     "openai": "^7.39.0",

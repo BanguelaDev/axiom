@@ -1,0 +1,25 @@
+project_id = "axiom"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 100
+
+[db]
+port = 54322
+major_version = 17
+
+[auth]
+enabled = true
+site_url = "http://localhost:8081"
+enable_anonymous_sign_ins = true
+
+[storage]
+enabled = true
+file_size_limit = "10MiB"
+
+[functions.axiom]
+# A função valida o access token em Auth.getUser. Compatível com publishable keys.
+verify_jwt = false

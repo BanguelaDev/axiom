@@ -1,5 +1,11 @@
 # Entregas do AXIOM
 
+## 0.3.0 — 8 de novembro de 2026
+
+**Etapa 3: base técnica e conexão local.** API com validação de sessão, cliente anônimo Supabase, verificação de conexão no app e runner HTTP descartável. Migração transacional para associação de sessões, reuso, quotas e uma reserva ativa por tema. Metadados operacionais restritos, bucket privado e URLs temporárias. Configuração inicial do Trigger.dev, com geração desativada até a integração validada do pipeline.
+
+Verificação: TypeScript, lint, 31 testes, exportação web, checagem Deno da Edge Function e conexão/falha/retomada na prévia. Migrações testadas em PostgreSQL embarcado; Supabase completo, fila remota e fornecedores continuam pendentes. Nenhum serviço remoto foi implantado ou usado para gerar áudio.
+
 ## 0.2.0 — 8 de novembro de 2026
 
 **Etapa 2: UX e identidade.** Jornada de escolha do tema até o player, preparação cancelável, estados de falta de notícias e falha com recuperação. Mini player nas abas, retomada de escuta, histórico validado e preferências com gravação serializada. Identidade e contraste revisados em claro/escuro. Cenários simulados separados da geração real.
