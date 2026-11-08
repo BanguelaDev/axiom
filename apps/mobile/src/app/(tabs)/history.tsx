@@ -4,8 +4,9 @@ import { getTopic } from '@axiom/core/topics';
 import { Screen, Copy, Icon, Button } from '@/components/ui';
 import { useApp } from '@/state/app-state';
 import { spacing } from '@/theme';
+import { resumePosition, DEMO_DURATION } from '@axiom/core/listening';
 export default function HistoryScreen() {
-  const { history, hydrated, colors } = useApp();
+  const { history, hydrated, colors, topicColors } = useApp();
   if (!hydrated)
     return (
       <Screen>
@@ -42,12 +43,17 @@ export default function HistoryScreen() {
                     opacity: pressed ? 0.7 : 1,
                   })}
                 >
-                  <Icon name={topic.icon} symbol={topic.symbol} color={topic.color} />
+                  <Icon name={topic.icon} symbol={topic.symbol} color={topicColors[topic.id]} />
                   <View style={{ flex: 1, gap: spacing.xs }}>
                     <Copy variant="headline">{topic.name}</Copy>
                     <Copy variant="caption" tone="muted">
                       Demonstração · {new Date(item.playedAt).toLocaleDateString('pt-BR')} · 12
                       segundos
+                    </Copy>
+                    <Copy variant="caption" tone="muted">
+                      {item.position >= DEMO_DURATION - 0.25
+                        ? 'Ouvir novamente'
+                        : `Continuar em ${Math.floor(resumePosition(item.position, DEMO_DURATION))}s`}
                     </Copy>
                   </View>
                   <Icon name="play-circle-outline" symbol="play.circle" color={colors.accent} />

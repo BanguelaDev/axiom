@@ -13,6 +13,7 @@ import { SymbolView, type SFSymbol } from 'expo-symbols';
 import type { ComponentProps, ReactNode } from 'react';
 import { useApp } from '@/state/app-state';
 import { spacing, typography, radius, sizes } from '@/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export function Copy({
   variant = 'body',
   tone = 'text',
@@ -29,6 +30,7 @@ export function Copy({
 }
 export function Screen({ children }: { children: ReactNode }) {
   const { colors } = useApp();
+  const insets = useSafeAreaInsets();
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
@@ -36,7 +38,7 @@ export function Screen({ children }: { children: ReactNode }) {
       contentContainerStyle={{
         flexGrow: 1,
         padding: spacing.lg,
-        paddingBottom: spacing.xxl,
+        paddingBottom: spacing.xxl + insets.bottom,
         gap: spacing.lg,
       }}
     >
@@ -108,7 +110,7 @@ export function Button({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.onAccent} />
+        <ActivityIndicator color={secondary ? colors.text : colors.onAccent} />
       ) : (
         <Copy variant="headline" style={{ color: secondary ? colors.text : colors.onAccent }}>
           {title}

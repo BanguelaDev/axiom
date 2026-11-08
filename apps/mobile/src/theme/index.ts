@@ -1,4 +1,23 @@
 import type { TextStyle } from 'react-native';
+import type { TopicId } from '@axiom/core/topics';
+export const topicColors = {
+  dark: {
+    ukraine: '#60A5FA',
+    ai: '#A78BFA',
+    'mental-health': '#34D399',
+    fraud: '#FBBF24',
+    politics: '#22D3EE',
+    crime: '#FB7185',
+  },
+  light: {
+    ukraine: '#1D4ED8',
+    ai: '#6D28D9',
+    'mental-health': '#047857',
+    fraud: '#92400E',
+    politics: '#0E7490',
+    crime: '#BE123C',
+  },
+} satisfies Record<'dark' | 'light', Record<TopicId, string>>;
 export const palettes = {
   dark: {
     background: '#0B1020',
@@ -37,7 +56,20 @@ export const spacing = {
   hero: 64,
 };
 export const radius = { sm: 8, md: 12, lg: 20, full: 9999 };
-export const sizes = { content: 680, icon: 22, touch: 48, play: 80, artwork: 184, waveWidth: 5 };
+export const sizes = {
+  content: 680,
+  icon: 22,
+  touch: 48,
+  play: 80,
+  artwork: 184,
+  waveWidth: 5,
+  waveHeight: 100,
+  progress: 4,
+  brandMark: 28,
+  smallIcon: 18,
+  largeIcon: 48,
+  heroIcon: 88,
+};
 export const typography = {
   hero: { fontSize: 38, lineHeight: 44, fontWeight: '700', letterSpacing: -1.1 },
   title: { fontSize: 26, lineHeight: 33, fontWeight: '700', letterSpacing: -0.5 },

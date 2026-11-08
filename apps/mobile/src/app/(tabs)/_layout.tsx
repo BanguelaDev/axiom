@@ -1,11 +1,21 @@
 import { Tabs } from 'expo-router';
+import { BottomTabBar } from 'expo-router/tabs';
+import { View } from 'react-native';
 import { Icon } from '@/components/ui';
+import { Brand } from '@/components/brand';
+import { MiniPlayer } from '@/components/mini-player';
 import { useApp } from '@/state/app-state';
 import { typography } from '@/theme';
 export default function TabsLayout() {
   const { colors } = useApp();
   return (
     <Tabs
+      tabBar={(props) => (
+        <View>
+          <MiniPlayer />
+          <BottomTabBar {...props} />
+        </View>
+      )}
       screenOptions={{
         headerStyle: { backgroundColor: colors.background },
         headerTintColor: colors.text,
@@ -20,6 +30,7 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: 'AXIOM',
+          headerTitle: () => <Brand />,
           tabBarLabel: 'Explorar',
           tabBarIcon: ({ color }) => (
             <Icon

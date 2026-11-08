@@ -1,6 +1,18 @@
-# Validação da primeira entrega
+# Validações do AXIOM
 
-## Executado localmente
+## Etapa 2 — 8 de novembro de 2026
+
+- TypeScript e ESLint: aprovados.
+- 17 testes automatizados aprovados: os nove originais, mais cenários de preparação pronta/vazia/falha, cancelamento e resposta antiga, preferências incompatíveis, retomada e contraste em claro/escuro.
+- Fluxo revisado na prévia web em largura mobile: detalhe do tema → preparação simulada → player, sem áudio automático.
+- Cancelamento retorna ao tema e interrompe a tentativa. Cenários de falta de notícias e falha exibem explicação e saída; nova tentativa chega ao estado pronto.
+- Reprodução, pausa e busca na amostra verificadas; mini player nas abas e ponto de escuta no histórico confirmados.
+- Tema claro revisado, incluindo o controle de seleção que antes herdava cores escuras do navegador.
+- A configuração dos fornecedores continua pendente. Não foram executadas chamadas reais de notícias, LLM ou voz; o banco e a fila remota não foram implantados.
+
+O protótipo está pronto para revisão visual. Avaliação com usuários e testes com texto ampliado, leitores de tela, Android e iPhone físicos continuam pendentes.
+
+## Primeira entrega — 19 de outubro de 2026
 
 - TypeScript: aprovado no núcleo, na prova de viabilidade e no aplicativo.
 - ESLint do Expo: aprovado, sem erros ou avisos.

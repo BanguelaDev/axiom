@@ -1,18 +1,13 @@
 import { View } from 'react-native';
-import { Host, Picker } from '@expo/ui';
+import { Picker } from '@expo/ui';
+import { router } from 'expo-router';
+import { ControlsHost } from '@/components/controls-host';
 import { Copy, Screen, Button, Notice } from '@/components/ui';
 import { useApp, type ThemePreference } from '@/state/app-state';
 import { spacing } from '@/theme';
 export default function SettingsScreen() {
-  const {
-    scheme,
-    colors,
-    themePreference,
-    setThemePreference,
-    clearHistory,
-    storageError,
-    history,
-  } = useApp();
+  const { colors, themePreference, setThemePreference, clearHistory, storageError, history } =
+    useApp();
   return (
     <Screen>
       <View style={{ gap: spacing.sm }}>
@@ -34,7 +29,7 @@ export default function SettingsScreen() {
         <Copy variant="caption" tone="muted">
           Escolha o visual ou acompanhe o tema do aparelho.
         </Copy>
-        <Host matchContents colorScheme={scheme} seedColor={colors.accent}>
+        <ControlsHost>
           <Picker<ThemePreference>
             selectedValue={themePreference}
             onValueChange={setThemePreference}
@@ -44,7 +39,7 @@ export default function SettingsScreen() {
             <Picker.Item label="Claro" value="light" />
             <Picker.Item label="Acompanhar o sistema" value="system" />
           </Picker>
-        </Host>
+        </ControlsHost>
       </View>
       <View
         style={{
@@ -71,9 +66,10 @@ export default function SettingsScreen() {
           Projeto de Programação para Dispositivos Móveis da AEMS. TADS, 6º período, Três Lagoas.
         </Copy>
         <Copy variant="caption" tone="muted">
-          Professor Bruno · Versão 0.1.0
+          Professor Bruno · Versão 0.2.0
         </Copy>
       </View>
+      <Button title="Apresentação do projeto" secondary onPress={() => router.push('/prototype')} />
       <Notice>
         Versão inicial para explorar a experiência. A coleta de notícias e a voz final ainda estão
         em validação. Nenhuma notícia é gerada nesta demonstração.

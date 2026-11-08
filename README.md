@@ -47,7 +47,7 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 
 ## Planejamento
 
-O desenvolvimento começou. A primeira versão traz as telas e um player de demonstração, além de uma prova de viabilidade local para integrar notícias, roteiro e voz. A geração real ainda depende da configuração das contas e da validação de conteúdo e narração.
+O desenvolvimento está na etapa de experiência e identidade. Já é possível escolher um tema, acompanhar uma preparação simulada, explorar o player e continuar pelo mini player ou pelo histórico. Há também cenários de falha e falta de notícias para apresentação do trabalho. A geração real ainda depende da configuração das contas e da validação de conteúdo e narração.
 
 - [Roadmap resumido](AXIOM-roadmap-resumido.md): visão rápida da proposta, das tecnologias e das etapas.
 - [Roadmap completo](AXIOM-roadmap.md): detalhes da arquitetura, da geração dos episódios e dos testes previstos.
@@ -67,3 +67,5 @@ A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narraç
 
 - [Guia de desenvolvimento](docs/development.md): configuração e testes.
 - [Andamento das etapas](docs/progress.md): o que já foi feito e o que falta validar.
+- [Experiência e identidade](docs/ux.md): decisões e caminhos do protótipo.
+- [Registro das entregas](CHANGELOG.md): mudanças e testes de cada etapa.

@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./topics": "./src/topics.ts"
+    "./topics": "./src/topics.ts",
+    "./demo-generation": "./src/demo-generation.ts",
+    "./listening": "./src/listening.ts"
   }
 }

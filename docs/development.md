@@ -13,6 +13,14 @@ Escaneie o QR code com o Expo Go compatível com o SDK 58. Para testar no navega
 
 A versão inicial permite explorar os seis temas, testar reprodução, pausa e busca no áudio, consultar o estado vazio de fontes, salvar histórico local e escolher o tema visual. Ela usa um sinal sonoro original de 12 segundos para testar o player. Não contém narração nem notícias simuladas. A duração exibida corresponde ao arquivo real. O arquivo pode ser recriado com `npx tsx scripts/create-player-sample.ts`.
 
+Na versão 0.2, a jornada começa no detalhe do tema e passa por uma preparação simulada antes do player. O mini player permite controlar a escuta nas abas. Para apresentar os estados pronto, sem notícias e falha com recuperação, abra Preferências → Apresentação do projeto. Esses passos didáticos não chamam fornecedores.
+
+## Acompanhar ao vivo e registrar etapas
+
+Durante as alterações de interface, mantenha `npm start` em execução e uma aba de `http://localhost:8081` aberta. O Fast Refresh mostra as edições de código. Se o computador ou o servidor for desligado, execute o comando novamente; a aba, sozinha, não mantém o servidor em execução.
+
+Antes de cada etapa, leia `AXIOM-roadmap.md` e `docs/progress.md`. Ao entregar, atualize o acompanhamento e o `CHANGELOG.md`, execute as verificações e crie um commit com a etapa, mudanças, testes e pendências. Envie ao mesmo repositório sem reescrever o histórico. As instruções também estão no `AGENTS.md` da raiz.
+
 ## Validar notícias, roteiro e voz reais
 
 1. Copie `.env.example` para `.env` na raiz.

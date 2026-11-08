@@ -1,11 +1,11 @@
 import { View, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { topics } from '@axiom/core/topics';
-import { Copy, Icon, Screen } from '@/components/ui';
+import { Copy, Icon, Screen, Notice } from '@/components/ui';
 import { useApp } from '@/state/app-state';
 import { spacing, radius, sizes } from '@/theme';
 export default function HomeScreen() {
-  const { colors } = useApp();
+  const { colors, topicColors } = useApp();
   return (
     <Screen>
       <View style={{ gap: spacing.md, paddingTop: spacing.sm }}>
@@ -16,6 +16,10 @@ export default function HomeScreen() {
         <Copy tone="secondary">
           Escolha um assunto. A gente transforma as notícias recentes em algo que você pode ouvir.
         </Copy>
+        <Notice>
+          Você está explorando o protótipo. O player usa uma amostra de 12 segundos; as notícias e a
+          voz final ainda estão em validação.
+        </Notice>
       </View>
       <View
         style={{
@@ -50,7 +54,7 @@ export default function HomeScreen() {
             key={topic.id}
             accessibilityRole="button"
             accessibilityLabel={`Explorar ${topic.name}`}
-            onPress={() => router.push({ pathname: '/episode/[id]', params: { id: topic.id } })}
+            onPress={() => router.push({ pathname: '/topic/[id]', params: { id: topic.id } })}
             style={({ pressed }) => ({
               flexDirection: 'row',
               alignItems: 'center',
@@ -72,7 +76,7 @@ export default function HomeScreen() {
                 justifyContent: 'center',
               }}
             >
-              <Icon name={topic.icon} symbol={topic.symbol} color={topic.color} />
+              <Icon name={topic.icon} symbol={topic.symbol} color={topicColors[topic.id]} />
             </View>
             <View style={{ flex: 1, gap: spacing.xs }}>
               <Copy variant="headline">{topic.name}</Copy>

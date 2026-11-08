@@ -20,7 +20,13 @@ export default function SourcesScreen() {
         A amostra do player não utiliza matérias jornalísticas. Não há fontes de notícias para
         exibir nesta demonstração.
       </Notice>
-      <Button title="Voltar aos temas" onPress={() => router.replace('/')} />
+      {topic ? (
+        <Button
+          title="Voltar ao player"
+          onPress={() => router.replace({ pathname: '/episode/[id]', params: { id: topic.id } })}
+        />
+      ) : null}
+      <Button title="Voltar aos temas" secondary onPress={() => router.replace('/')} />
     </Screen>
   );
 }
