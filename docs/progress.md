@@ -66,6 +66,21 @@ Entrega de 8 de novembro de 2026, conforme as seções 7.4, 7.5, 10 e 11 do road
 
 Pendente: configurar e executar fornecedores reais, avaliar fidelidade e linguagem com notícias dos seis temas, medir tempo/custo, revisar casos sensíveis com pessoas e persistir os registros no ambiente remoto. Revisão por LLM e validação de citações não garantem ausência de erros. O aceite editorial real ainda não foi alcançado. Veja [roteiro e revisão](editorial.md).
 
-## Etapas 6 a 8
+## Etapa 6 — Áudio: implementação local, narração e publicação remotas pendentes
+
+Entrega de 8 de novembro de 2026, conforme as seções 7.6, 7.7, 10 e 11 do roadmap:
+
+- Adaptador ElevenLabs com formato definido, limites de resposta e erros seguros, sem repetir automaticamente uma chamada de voz cujo resultado possa ter sido cobrado.
+- Orquestração com até três versões revisadas, reaproveitamento local da síntese por versão/voz e conferência de integridade antes de publicar.
+- Medição real de codec, duração, volume e silêncio; normalização e ajuste de ritmo limitado a 3%, sem cortar fala nem preencher com silêncio.
+- Adaptador de publicação em bucket privado e migração transacional para episódio, fontes, roteiro e relatório privado. Repetições conferem o checksum; falha de confirmação não apaga um objeto que pode já estar publicado.
+- Tela de apresentação com amostra técnica de 120,01 segundos e cenários bloqueados. É um sinal sonoro, sem voz ou notícias; a amostra comum do protótipo continua tendo 12 segundos.
+- 76 testes aprovados, incluindo FFmpeg real, transporte de voz controlado, Storage simulado e migrações em PostgreSQL embarcado. Auditoria local aprova a amostra e bloqueia silêncio e duração fora da margem.
+
+Verificação na prévia: preparação sem reprodução automática, reprodução, pausa, progresso e bloqueios de silêncio/duração; tela revisada em 390 pixels. A aba permanece disponível para acompanhar o projeto.
+
+Pendente: testar a narração real em português e com ouvintes, aplicar a migração em Supabase completo e conectar a orquestração e a publicação à tarefa Trigger.dev. A tarefa ainda encerra com `integration_pending`; a geração de produção continua desativada. Nenhum fornecedor foi consultado nem banco remoto alterado. Veja [áudio e publicação](audio.md).
+
+## Etapas 7 e 8
 
 As integrações locais são a base para a coleta e geração de produção. Filas remotas, controle distribuído de consumo, streaming de notícias geradas, builds de aparelhos, beta e publicação continuam pendentes. Nenhum marco de produção foi marcado como concluído.

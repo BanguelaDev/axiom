@@ -66,7 +66,7 @@ export default function SettingsScreen() {
           Projeto de Programação para Dispositivos Móveis da AEMS. TADS, 6º período, Três Lagoas.
         </Copy>
         <Copy variant="caption" tone="muted">
-          Professor Bruno · Versão 0.5.0
+          Professor Bruno · Versão 0.6.0
         </Copy>
       </View>
       <Button title="Apresentação do projeto" secondary onPress={() => router.push('/prototype')} />

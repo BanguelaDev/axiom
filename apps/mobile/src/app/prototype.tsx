@@ -40,6 +40,11 @@ export default function PrototypeScreen() {
         secondary
         onPress={() => router.push('/editorial')}
       />
+      <Button
+        title="Conferir o áudio de dois minutos"
+        secondary
+        onPress={() => router.push('/audio-lab')}
+      />
       <Button title="Voltar aos temas" secondary onPress={() => router.replace('/')} />
     </Screen>
   );

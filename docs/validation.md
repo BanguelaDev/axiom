@@ -1,5 +1,16 @@
 # Validações do AXIOM
 
+## Etapa 6 — 8 de novembro de 2026
+
+- TypeScript/Deno, lint e exportação web: aprovados.
+- 76 testes aprovados: os 67 anteriores e nove sobre voz, renderização, publicação e transação. FFmpeg real mede e processa arquivos; não são apenas durações declaradas.
+- Amostra final com 120,01 segundos; silêncio e duração de 150,05 segundos bloqueados na auditoria `audit:audio`.
+- Verificados: cache da síntese, versão alterada, limite de três versões, silêncio e pausa longa, integridade do arquivo, endereço temporário, leitura parcial e expiração.
+- Adaptador ElevenLabs exercitado com transporte HTTP controlado: formato, quota, MIME, resposta vazia, limite de bytes e falha de rede, sem repetição automática nem exposição de dados privados.
+- Publicação com Storage controlado e SQL em PGlite: acesso restrito ao servidor, idempotência, rollback de metadados inválidos e recuperação após confirmação incerta sem apagar o objeto. Isso não valida o serviço Supabase completo.
+- Prévia: navegação e Fast Refresh confirmados. Preparação sem reprodução automática, reprodução, pausa com avanço do progresso, bloqueio por silêncio e por duração fora da margem e recuperação para amostra pronta. Tela revisada em 390 pixels; aba preservada para acompanhamento.
+- Sem fornecedores reais, avaliação humana da narração, publicação remota ou integração com a fila. Geração de produção desativada.
+
 ## Etapa 5 — 8 de novembro de 2026
 
 - TypeScript/Deno, lint e exportação web: aprovados.

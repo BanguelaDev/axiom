@@ -1,5 +1,11 @@
 # Entregas do AXIOM
 
+## 0.6.0 — 8 de novembro de 2026
+
+**Etapa 6: processamento de áudio e preparação da publicação.** Voz com limites e erros seguros, reaproveitamento da síntese por versão, até três roteiros revisados e medição real de duração, silêncio e volume. Arquivo final normalizado, com ajuste de ritmo de até 3%. Adaptador de publicação privada e migração transacional, com conferência de integridade e repetição sem duplicar o episódio. Nova apresentação com sinal técnico de dois minutos e exemplos de bloqueio.
+
+Verificação: TypeScript/Deno, lint, exportação web, 76 testes e auditoria com FFmpeg real. Reprodução, pausa, progresso e bloqueios conferidos na prévia, também em 390 pixels. Voz e Storage usam respostas controladas; migrações executadas em PostgreSQL embarcado. Fornecedores reais, avaliação humana, fila e publicação remota continuam pendentes; geração de produção desativada.
+
 ## 0.5.0 — 8 de novembro de 2026
 
 **Etapa 5: roteiro e revisão no servidor.** Extração de fatos, redação e revisão por afirmação, com evidências, referências e controles antes da voz. Material insuficiente, citações inválidas, números novos, atribuição perdida, revisão incompleta e alterações após aprovação são bloqueados. Prova de viabilidade integrada a registros privados. Nova apresentação dos controles, sem expor o roteiro.

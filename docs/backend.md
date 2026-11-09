@@ -39,6 +39,12 @@ A etapa 5 acrescenta `/dev/editorial/:topicId`, também restrita ao desenvolvime
 
 ## Banco e acesso
 
+A etapa 6 acrescenta a migração `202611080002_complete_generation.sql` e o adaptador `publishEpisode`. O arquivo é enviado ao bucket privado antes da transação; `complete_generation`, restrita a `service_role`, confere trabalho, metadados, fontes, duração e presença do objeto e grava episódio, referências, roteiro e qualidade juntos. A repetição só retorna o mesmo episódio válido com o mesmo checksum. O servidor confere os bytes antes da publicação; a função SQL não analisa o áudio nem substitui a revisão editorial.
+
+Se a confirmação falhar, o objeto privado é preservado: a transação pode ter sido concluída. A nova tentativa confere o arquivo existente antes de repetir a confirmação. Limpeza de objetos órfãos e integração com a fila continuam pendentes. Veja [áudio e publicação](audio.md).
+
+Somente no runner local, `GET /dev/audio` exige sessão e prepara o sinal técnico. O resultado pronto fornece um endereço opaco de mídia com validade de dez minutos, leitura parcial e suporte a HEAD. O endereço permite acesso temporário ao sinal, sem expor roteiro ou caminho local. Essas rotas não existem em staging/produção.
+
 - Roteiros ficam no schema `private`; o app não tem leitura ou escrita.
 - O bucket `episodes` é privado, sem política de acesso direto ao cliente.
 - Episódios, fontes e trabalhos são lidos pelo servidor e projetados em campos públicos. O cliente não lê as tabelas operacionais diretamente.
@@ -54,7 +60,7 @@ Esses limites são a base do controle de consumo. Proteção adicional contra cr
 Usar projetos separados para desenvolvimento/testes e produção. Nenhuma conta ou ambiente remoto foi criado nesta entrega.
 
 1. Com Docker e Supabase CLI disponíveis, executar `supabase start` e `supabase db reset` em um ambiente local descartável. `db reset` apaga os dados locais; não usar contra um banco com dados que precisem ser preservados.
-2. Validar as duas migrações e as políticas no Supabase completo. Habilitar login anônimo e configurar a proteção contra abuso recomendada pelo serviço.
+2. Validar as três migrações e as políticas no Supabase completo. Habilitar login anônimo e configurar a proteção contra abuso recomendada pelo serviço.
 3. No app, copiar `apps/mobile/.env.example` para `.env` nessa pasta e preencher apenas URL e chave **publishable**. As variáveis `EXPO_PUBLIC_` entram no pacote do app.
 4. Na Edge Function, configurar os secrets do servidor: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `AXIOM_ENVIRONMENT` (`staging` ou `production`), `ALLOWED_ORIGINS` e, futuramente, `TRIGGER_SECRET_KEY`. O gateway usa `verify_jwt=false` porque a própria função valida o access token com `auth.getUser`; isso não torna as rotas de dados públicas.
 5. Configurar `TRIGGER_PROJECT_REF` e os secrets do servidor no Trigger.dev. A configuração e a tarefa inicial estão versionadas; nenhuma tarefa foi implantada ou executada remotamente.

@@ -9,6 +9,7 @@ import {
 import { getTopic, topics, type TopicId } from '../core/src/topics.ts';
 import type { DemoSelection } from '../core/src/selection-report.ts';
 import type { EditorialDemoReport, EditorialScenario } from '../core/src/editorial-report.ts';
+import type { AudioDemoReport } from '../core/src/audio-report.ts';
 
 export interface BackendRepository {
   request(userId: string, topicId: TopicId): Promise<GenerationResult>;
@@ -24,6 +25,7 @@ export interface BackendOptions {
   repository: BackendRepository;
   enqueue(jobId: string): Promise<void>;
   developmentSelection?(topicId: TopicId, insufficient: boolean): DemoSelection;
+  developmentAudio?(scenario: 'ready' | 'silence' | 'long'): Promise<AudioDemoReport>;
   developmentEditorial?(
     topicId: TopicId,
     scenario: EditorialScenario,
@@ -46,9 +48,9 @@ export function createApi(options: BackendOptions) {
     if (origin) headers.set('Access-Control-Allow-Origin', origin);
     headers.set(
       'Access-Control-Allow-Headers',
-      'authorization, apikey, content-type, x-client-info',
+      'authorization, apikey, content-type, x-client-info, range',
     );
-    headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    headers.set('Access-Control-Allow-Methods', 'GET, HEAD, POST, OPTIONS');
     const json = (value: unknown, status = 200) =>
       new Response(JSON.stringify(value), { status, headers });
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers });
@@ -69,6 +71,17 @@ export function createApi(options: BackendOptions) {
       if (!token || token.length > 8192) throw new ApiFault('unauthorized', 401);
       const userId = await options.authenticate(token);
       if (!userId) throw new ApiFault('unauthorized', 401);
+      if (
+        path === '/dev/audio' &&
+        request.method === 'GET' &&
+        options.environment === 'development' &&
+        options.developmentAudio
+      ) {
+        const scenario = new URL(request.url).searchParams.get('scenario') || 'ready';
+        if (!['ready', 'silence', 'long'].includes(scenario))
+          throw new ApiFault('invalid_request', 400);
+        return json(await options.developmentAudio(scenario as 'ready' | 'silence' | 'long'));
+      }
 
       const editorial = path.match(/^\/dev\/editorial\/([^/]+)$/);
       if (

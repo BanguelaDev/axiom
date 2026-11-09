@@ -56,6 +56,10 @@ function Navigation() {
           name="editorial"
           options={{ title: 'Revisão do roteiro', headerBackTitle: 'Voltar' }}
         />
+        <Stack.Screen
+          name="audio-lab"
+          options={{ title: 'Verificação de áudio', headerBackTitle: 'Voltar' }}
+        />
       </Stack>
     </>
   );

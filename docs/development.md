@@ -43,6 +43,12 @@ A versão 0.4 também grava `private/selection-report.json`, com decisões e met
 
 Na versão 0.5, o pipeline extrai fatos uma vez e separa redação e revisão por afirmação. Cada nova redação para corrigir duração precisa de nova revisão. Os arquivos de fatos e revisão ficam em `private/`; não entram nas respostas do app. Veja [roteiro e revisão](editorial.md). A apresentação dos controles fica em Apresentação do projeto → Entender a revisão do roteiro, ou pelo comando `npm run audit:editorial`, sem IA real.
 
+## Verificar o áudio
+
+Na versão 0.6, abra Preferências → Apresentação do projeto → Conferir o áudio de dois minutos, com `npm run dev:api` em execução. A preparação usa FFmpeg real e não inicia a reprodução automaticamente. É um sinal técnico, sem voz nem notícias. Para verificar os três arquivos pelo terminal, execute `npm run audit:audio`; os resultados ficam em `work/audio-audit`, fora do Git. Veja [áudio e publicação](audio.md).
+
+Na prova de viabilidade, a síntese de cada versão aprovada é guardada em `private/`, com checksum e identidade da voz. `private/audio-report.json` registra tentativas e medições. Voz com resultado de rede incerto não é repetida automaticamente; é preciso verificar o consumo antes de uma nova execução. A publicação em Supabase está preparada como módulo, ainda sem conexão com a tarefa remota.
+
 ## Estrutura
 
 | Pasta               | Conteúdo                                                                        |

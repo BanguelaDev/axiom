@@ -210,15 +210,17 @@ test('app conversa por HTTP com sessão descartável e catálogo da API local', 
   }
 });
 
-test('amostras de seleção não existem na API de staging e exigem sessão no desenvolvimento', async () => {
+test('apresentações não existem na API de staging e exigem sessão no desenvolvimento', async () => {
   const { call } = setup();
   assert.equal((await call('/dev/selection/ai')).status, 404);
   assert.equal((await call('/dev/editorial/ai')).status, 404);
+  assert.equal((await call('/dev/audio')).status, 404);
   const local = setup({ environment: 'development' });
   assert.equal(
     (await local.call('/dev/selection/ai', { headers: { Authorization: '' } })).status,
     401,
   );
+  assert.equal((await local.call('/dev/audio', { headers: { Authorization: '' } })).status, 401);
 });
 
 test('cliente rejeita API incompatível e não repassa mensagens arbitrárias do servidor', async () => {

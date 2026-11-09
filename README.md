@@ -47,7 +47,7 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 
 ## Planejamento
 
-Já é possível explorar os seis temas, o player e o histórico. O app também apresenta os critérios de seleção e revisão com exemplos fictícios. No servidor, a preparação foi dividida em fatos, redação e revisão, mantendo o roteiro interno. A integração com serviços reais e a validação da qualidade de conteúdo e voz continuam pendentes.
+Já é possível explorar os seis temas, o player e o histórico. O app também apresenta os critérios de seleção, revisão e áudio. No servidor, a preparação foi dividida em fatos, redação, revisão e tratamento do som, mantendo o roteiro interno. A integração com serviços reais e a validação da qualidade de conteúdo e voz continuam pendentes.
 
 - [Roadmap resumido](AXIOM-roadmap-resumido.md): visão rápida da proposta, das tecnologias e das etapas.
 - [Roadmap completo](AXIOM-roadmap.md): detalhes da arquitetura, da geração dos episódios e dos testes previstos.
@@ -63,7 +63,7 @@ npm start
 
 Use o Expo Go compatível com o SDK 58 para abrir no celular. Para uma prévia no navegador, execute `npm run web`.
 
-A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narração. Os podcasts reais de dois minutos serão validados na próxima integração.
+A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narração. Em Preferências → Apresentação do projeto, a verificação de áudio também oferece um sinal técnico de dois minutos, com a API local em execução. Os podcasts com notícias e voz reais ainda precisam de validação.
 
 - [Guia de desenvolvimento](docs/development.md): configuração e testes.
 - [Andamento das etapas](docs/progress.md): o que já foi feito e o que falta validar.
@@ -71,4 +71,5 @@ A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narraç
 - [Base técnica](docs/backend.md): API local, banco, sessões e próximos passos da integração.
 - [Coleta e seleção](docs/news-selection.md): janela de 72 horas, fontes e auditoria.
 - [Roteiro e revisão](docs/editorial.md): evidências, verificações e limites da avaliação por IA.
+- [Áudio e publicação](docs/audio.md): duração, volume, integridade e demonstração de dois minutos.
 - [Registro das entregas](CHANGELOG.md): mudanças e testes de cada etapa.

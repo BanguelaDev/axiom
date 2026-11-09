@@ -3,15 +3,19 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { createApi } from './handler.ts';
 import { createSelectionDemo } from './selection-demo.ts';
 import { createEditorialDemo } from './editorial-demo.ts';
+import { createAudioDemo } from './audio-demo.ts';
+import { resolve } from 'node:path';
 
 const allowedOrigins = ['http://localhost:8081', 'http://127.0.0.1:8081'];
 /** Runner descartável: não substitui Supabase Auth, banco, Storage nem Trigger.dev. */
 export function startLocalApi(port = 8787): Promise<Server> {
   const sessions = new Map<string, { id: string; expires: number }>();
+  const audioDemo = createAudioDemo(resolve('work', 'audio-demo'));
   const api = createApi({
     environment: 'development',
     generationAvailable: false,
     allowedOrigins,
+    developmentAudio: (scenario) => audioDemo.prepare(scenario),
     developmentEditorial: (topicId, scenario) => createEditorialDemo(topicId, scenario, new Date()),
     developmentSelection: (topicId, insufficient) =>
       createSelectionDemo(topicId, new Date(), insufficient),
@@ -61,7 +65,16 @@ export function startLocalApi(port = 8787): Promise<Server> {
       });
       let response: Response;
       const origin = headers.get('origin');
-      if (new URL(request.url).pathname === '/dev/session' && incoming.method === 'POST') {
+      const media = new URL(request.url).pathname.match(/^\/dev\/media\/([a-f0-9]{48})$/);
+      if (media && ['GET', 'HEAD'].includes(incoming.method || '')) {
+        response =
+          origin && !allowedOrigins.includes(origin)
+            ? new Response(null, { status: 403 })
+            : audioDemo.media(media[1]!, headers.get('range'), incoming.method === 'HEAD');
+        if (origin && allowedOrigins.includes(origin))
+          response.headers.set('Access-Control-Allow-Origin', origin);
+        response.headers.set('Vary', 'Origin');
+      } else if (new URL(request.url).pathname === '/dev/session' && incoming.method === 'POST') {
         const sessionHeaders: Record<string, string> = {
           'Content-Type': 'application/json',
           'Cache-Control': 'no-store',

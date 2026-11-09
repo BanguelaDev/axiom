@@ -23,7 +23,11 @@ before(async () => {
     grant select on storage.objects to authenticated;
     insert into auth.users values('${userOne}'), ('${userTwo}');
   `);
-  for (const migration of ['202610190001_initial_schema.sql', '202611080001_api_foundation.sql'])
+  for (const migration of [
+    '202610190001_initial_schema.sql',
+    '202611080001_api_foundation.sql',
+    '202611080002_complete_generation.sql',
+  ])
     await db.exec(
       await readFile(new URL(`../supabase/migrations/${migration}`, import.meta.url), 'utf8'),
     );
@@ -32,6 +36,92 @@ after(async () => db?.close());
 beforeEach(async () => {
   await db.exec(
     'truncate public.generation_requests, public.generation_jobs, public.episodes, private.request_limits cascade;',
+  );
+});
+
+async function completionPayload(jobId: string) {
+  const date = (await db.query<{ now: string }>('select now()::text as now')).rows[0]!.now;
+  const generated = new Date(date);
+  const checksum = 'a'.repeat(64);
+  const payload = {
+    topicId: 'ai',
+    title: 'Episódio somente para teste',
+    generatedAt: generated.toISOString(),
+    expiresAt: new Date(generated.getTime() + 1800_000).toISOString(),
+    duration: 120,
+    audioPath: `${jobId}/${checksum}.mp3`,
+    sha256: checksum,
+    sources: ['a', 'b'].map((name) => ({
+      publisher: `Teste ${name}`,
+      title: 'Matéria fictícia',
+      url: `https://${name}.example/story`,
+      publishedAt: new Date(generated.getTime() - 3600_000).toISOString(),
+      editorialGroup: name,
+      originGroup: name,
+    })),
+  };
+  await db.query("insert into storage.objects(bucket_id, name) values('episodes', $1)", [
+    payload.audioPath,
+  ]);
+  return {
+    payload,
+    script: {
+      title: payload.title,
+      claims: [{ narration: 'Somente teste' }, { narration: 'Outra afirmação de teste' }],
+    },
+    quality: { sha256: checksum },
+  };
+}
+
+test('publicação transacional é restrita ao servidor e uma nova confirmação não duplica o episódio', async () => {
+  const job = (await request()).job_id!;
+  const { payload, script, quality } = await completionPayload(job);
+  await assert.rejects(
+    asUser(`select public.complete_generation('${job}', '{}'::jsonb, '{}'::jsonb, '{}'::jsonb)`),
+    /permission denied/,
+  );
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const result = await db.query<{ id: string }>(
+      'select public.complete_generation($1,$2,$3,$4) as id',
+      [job, payload, script, quality],
+    );
+    assert.equal(result.rows[0]?.id, job);
+  }
+  assert.equal((await db.query('select * from public.episodes')).rows.length, 1);
+  assert.equal((await db.query('select * from public.episode_sources')).rows.length, 2);
+  assert.equal((await db.query('select * from private.episode_quality')).rows.length, 1);
+  await assert.rejects(asUser('select * from private.episode_quality'), /permission denied/);
+});
+
+test('fontes vencidas e duração inválida não deixam metadados parcialmente prontos', async () => {
+  const job = (await request()).job_id!;
+  const { payload, script, quality } = await completionPayload(job);
+  await assert.rejects(
+    db.query('select public.complete_generation($1,$2,$3,$4)', [
+      job,
+      { ...payload, duration: 150 },
+      script,
+      quality,
+    ]),
+    /invalid_episode/,
+  );
+  const stale = structuredClone(payload);
+  stale.sources[0]!.publishedAt = new Date(
+    Date.parse(payload.generatedAt) - 73 * 3600_000,
+  ).toISOString();
+  await assert.rejects(
+    db.query('select public.complete_generation($1,$2,$3,$4)', [job, stale, script, quality]),
+    /invalid_sources/,
+  );
+  assert.equal((await db.query('select * from public.episodes')).rows.length, 0);
+  assert.equal((await db.query('select * from private.episode_scripts')).rows.length, 0);
+  assert.equal(
+    (
+      await db.query<{ stage: string }>('select stage from public.generation_jobs where id=$1', [
+        job,
+      ])
+    ).rows[0]?.stage,
+    'queued',
   );
 });
 
