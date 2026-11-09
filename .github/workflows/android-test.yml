@@ -86,7 +86,7 @@ jobs:
         run: |
           mkdir -p work/native-evidence
           cp work/e2e-server.log work/native-evidence/ || true
-          adb logcat -d > work/native-evidence/logcat.txt || true
+          timeout 10s adb logcat -d > work/native-evidence/logcat.txt || true
           git rev-parse HEAD > work/native-evidence/test-commit.txt
           cp work/candidate/source-commit.txt work/native-evidence/apk-commit.txt
           zip -qr "work/android-test-api-${{ matrix.api }}.zip" work/native-evidence
