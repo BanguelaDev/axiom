@@ -1,17 +1,34 @@
 # Validações do AXIOM
 
-## Situação atual — candidato 0.12.0
+## Situação atual — Expo Go e servidor local, versão 0.12.1
 
-- APK compilado com Gradle no build [42655654822](https://github.com/BanguelaDev/axiom/actions/runs/42655654822), fonte 914f341. Assinatura verificada no executor e SHA-256 conferido após download.
-- Inspeção do APK: arm64-v8a e x86_64, sem `.env`, sem os marcadores do pipeline privado, sem o endereço pessoal do servidor e sem nenhuma das quatro chaves locais verificadas. Os valores das chaves não foram exibidos.
-- CI de código aprovada nos commits 914f341, 189327f e 8141647. A correção editorial 189327f é do servidor e não altera o APK.
-- Testes nativos em execução nos emuladores API 29 e 34. Até o registro do resultado, não considerar segundo plano ou tela bloqueada aprovados no binário.
-- Tentativa real de IA às 15:09, horário de Três Lagoas/Cuiabá: fornecedor respondeu HTTP 503 na preparação editorial; nenhuma voz foi liberada. O relatório local registrou fases, tokens retornados e a falha. Episódios aprovados anteriormente continuam sendo a evidência de voz real.
-- Segunda tentativa às 15:14: nova edição de IA aprovada e MP3 medido em 120,032653 segundos. Relatório privado em `work/live-check/2026-11-09T19-14-01-711Z`. Encontrado e corrigido HTML escapado na leitura RSS, com regressão entre 27 testes direcionados.
-- O responsável avaliou essa amostra em 5/5 para clareza e 5/5 para naturalidade. Solicitou retirar a abertura falada; a preferência foi incorporada à geração seguinte. Trata-se de uma avaliação individual.
-- [Teste nativo no Android 14](https://github.com/BanguelaDev/axiom/actions/runs/42686872673): jornada, pausa, avanço e continuidade com tela desligada aprovados no primeiro pacote. Verificados serviço foreground, saída AudioTrack iniciada e energia Asleep. O novo pacote 0.12.1 ainda terá sua conferência separada.
+O responsável dispensou o APK e escolheu concluir diretamente no Expo Go. Os testes de binário abaixo são registros experimentais; não impedem a entrega escolhida.
 
-As seções por etapa abaixo preservam o histórico das verificações. Supabase/Trigger.dev, lojas e iPhone físico pertencem às evoluções opcionais da entrega local escolhida.
+| Verificação | Resultado |
+| --- | --- |
+| Código do servidor e app | 116 testes, TypeScript/Deno e lint aprovados |
+| Expo | Doctor 20/20; exportações web e Hermes Android/iOS aprovadas |
+| Episódios reais | MP3 medidos em 120,032653 segundos; fontes e revisão privadas |
+| Avaliação inicial da voz | Um ouvinte: clareza 5/5 e naturalidade 5/5 |
+| Android físico com Expo Go | Abertura, reprodução e correção da barra confirmadas em Galaxy Note 20 Ultra |
+| APK independente 0.12.1 | Compilado, assinado para testes, checksum conferido e publicado como pré-release |
+| Android 14 emulado, mesmo APK | Conexão/restauração, reprodução, pausa, avanço, segundo plano e tela apagada aprovados |
+| Android 10 emulado, APK opcional | Automação não aprovada; investigação encerrada após mudança de escopo |
+| APK no celular físico | Dispensado pelo responsável; fora do aceite |
+| Segundo plano/tela bloqueada no Expo Go | Serviço nativo não é acionado; fora do aceite escolhido |
+| Bluetooth, chamadas e acessibilidade física | Não avaliados |
+
+[Baixar a versão](https://github.com/BanguelaDev/axiom/releases/tag/v0.12.1). [Build do APK](https://github.com/BanguelaDev/axiom/actions/runs/42686834811). Fonte do APK: `67208d57bc5dc433c499ccca8a7c4684302825a8`. SHA-256: `8d8349577f150d8291300624b0ea9eca5bb967b0bc772285f5188af107515b19`.
+
+O [teste final do Android 14](https://github.com/BanguelaDev/axiom/actions/runs/42690687582/job/129409307566) usa conteúdo fictício e áudio técnico, sem Gemini ou chaves. O job do Android 14 passou; o resultado global da execução inclui a falha separada do Android 10. Conferidos MediaSession PLAYING, posição avançando, AudioTrack STARTED, serviço foreground e energia `Asleep`. Isso comprova saída de áudio ativa no emulador; não substitui escuta em aparelho físico.
+
+Inspeção do APK: arm64-v8a e x86_64, sem `.env`, marcadores do pipeline privado, IP pessoal ou as quatro chaves locais conferidas. Nenhum valor de chave foi exibido. O servidor atualizado contém mudanças posteriores ao build: abertura falada removida e calibração de roteiro. Elas não exigem reinstalar o APK.
+
+A avaliação 5/5 corresponde à amostra de IA gerada às 15:14 de 9 de novembro, com 120,03 segundos. A pedido do responsável, os próximos episódios começam diretamente no assunto. O lembrete final das fontes permanece. O envio do texto sem apresentação e a calibração passaram nos testes; a tentativa de gerar nova amostra completa encontrou a cota gratuita de voz (HTTP 429). Não houve fallback pago nem uma nova amostra real aprovada depois dessa alteração.
+
+A cobertura por RSS varia: na última auditoria, Ucrânia, IA, Política e Crimes tinham material; Saúde Mental e Fraudes estavam insuficientes. Não se ampliam as 72 horas para preencher uma pauta. O beta de cinco episódios por tema, iPhone físico, lojas e hospedagem Supabase/Trigger.dev não integram o aceite local escolhido.
+
+As seções abaixo preservam o histórico de cada etapa. Dependências antigas indicadas como pendentes devem ser lidas na data do registro.
 
 ## Etapa 10 — Fontes e Android físico
 

@@ -43,11 +43,13 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 | Criação do roteiro                  | Gemini Free Tier                |
 | Geração da voz                      | Gemini TTS Free Tier            |
 | Reprodução e tratamento de áudio    | expo-audio e FFmpeg/FFprobe     |
-| Versionamento e distribuição        | GitHub Actions, Expo Prebuild e Gradle |
+| Versionamento e apresentação        | GitHub, GitHub Actions e Expo Go |
 
 ## Planejamento
 
-A versão acadêmica conecta a escolha do tema à busca de notícias, ao roteiro, à revisão e à narração. Episódios reais foram medidos em 120,03 segundos. O player oferece pausa, barra, controles de 15 segundos, fontes e histórico, com reprodução confirmada em Galaxy Note 20 Ultra no Expo Go. O roteiro fica no servidor. O APK próprio e a avaliação humana de conteúdo e voz continuam em validação.
+A versão acadêmica está integrada ao servidor no computador, com notícias RSS, roteiro interno e narração gratuita. Episódios reais foram medidos em 120,03 segundos. O responsável confirmou reprodução e barra no Galaxy Note 20 Ultra pelo Expo Go e avaliou a voz em 5/5 para clareza e naturalidade. A nova narração começa diretamente no assunto.
+
+A entrega escolhida usa **Expo Go no Android**, com o computador ligado na mesma rede Wi-Fi. Não é necessário instalar um APK próprio. Reprodução, barra e busca foram confirmadas no celular. Controles nativos de tela bloqueada e reprodução com o app em segundo plano exigem um binário próprio e ficam fora desta entrega. Veja o [guia do Expo Go](docs/android-expo-go.md).
 
 - [Guia de apresentação](ENTREGA.md): preparação e sequência para mostrar o trabalho ao professor.
 - [Roadmap resumido](AXIOM-roadmap-resumido.md): visão rápida da proposta, das tecnologias e das etapas.
@@ -68,7 +70,8 @@ A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narraç
 
 - [Guia de desenvolvimento](docs/development.md): configuração e testes.
 - [Andamento das etapas](docs/progress.md): o que já foi feito e o que falta validar.
-- [Android com servidor no computador](docs/android-apk.md): conexão sem Expo Go, conforme disponibilidade do candidato.
+- [Android pelo Expo Go](docs/android-expo-go.md): abrir no celular por QR code, sem cabo USB.
+- [APK experimental opcional](docs/android-apk.md): registro do pacote próprio, fora da entrega escolhida.
 - [Operação local](docs/operacao-local.md): relatos, métricas, retirada e retenção.
 - [Experiência e identidade](docs/ux.md): decisões e caminhos do protótipo.
 - [Base técnica](docs/backend.md): API local, banco, sessões e próximos passos da integração.

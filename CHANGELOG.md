@@ -2,9 +2,11 @@
 
 ## 0.12.1 — 9 de novembro de 2026
 
-Correção detectada no emulador: o texto globalmente selecionável interceptava o toque no centro de botões Android. O componente de texto agora segue o comportamento nativo padrão; seleção pode ser habilitada explicitamente quando necessária. A automação verificará a jornada completa novamente com o novo APK.
+**Entrega escolhida:** Android pelo Expo Go, com servidor no computador. O responsável dispensou o APK; segundo plano e controles de tela bloqueada ficam como evolução opcional. Guia de conexão por QR, README, apresentação e roadmap atualizados. O pacote experimental já publicado é preservado, sem exigir instalação. A investigação da automação Android 10 foi encerrada e os seletores experimentais foram desfeitos.
 
-O candidato 0.12.0 permanece sem publicação. O novo pacote será conferido antes do teste no celular.
+O componente de texto deixou de habilitar seleção globalmente; a opção permanece disponível quando necessária. A falha de toque observada no teste Android 10 continuou depois dessa alteração, portanto não foi atribuída definitivamente ao texto selecionável. A tentativa de ajuste dos seletores não foi validada antes da mudança de escopo; não se declara aceite Android 10.
+
+O APK 0.12.1 foi publicado como pré-release para avaliação no celular. Build 42686834811 e assinatura aprovados, checksum conferido. O mesmo pacote passou no Android 14 na execução 42690687582, incluindo serviço foreground, saída de áudio e tela apagada. O candidato 0.12.0 foi substituído.
 
 A pedido do responsável, a narração passa a começar diretamente no assunto, sem a apresentação fixa do AXIOM e o aviso falado sobre IA. O texto efetivamente enviado à voz entra na chave do cache. O lembrete final das fontes permanece, e a duração continua sendo conferida em dois minutos.
 

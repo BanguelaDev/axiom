@@ -7,9 +7,7 @@ appId: br.com.axiom.mobile
     id: server-url-input
 - inputText: http://10.0.2.2:8787
 - hideKeyboard
-- tapOn:
-    containsChild:
-      text: "Conectar"
+- tapOn: Conectar
 - assertVisible: "(?s)O mundo, em.*"
 - launchApp
 - assertVisible: "(?s)O mundo, em.*"
@@ -18,33 +16,21 @@ appId: br.com.axiom.mobile
 - tapOn: "Explorar Inteligência Artificial"
 - scrollUntilVisible:
     element: "Gerar podcast de dois minutos"
-- tapOn:
-    containsChild:
-      text: "Gerar podcast de dois minutos"
+- tapOn: "Gerar podcast de dois minutos"
 - extendedWaitUntil:
     visible: "Abrir podcast"
     timeout: 30000
-- tapOn:
-    containsChild:
-      text: "Abrir podcast"
+- tapOn: "Abrir podcast"
 - scrollUntilVisible:
     element: "Ouvir podcast"
-- tapOn:
-    containsChild:
-      text: "Ouvir podcast"
+- tapOn: "Ouvir podcast"
 - assertVisible: "Pausar podcast"
 - scrollUntilVisible:
     element: "Avançar 15 s"
-- tapOn:
-    containsChild:
-      text: "Avançar 15 s"
-- tapOn:
-    containsChild:
-      text: "Pausar podcast"
+- tapOn: "Avançar 15 s"
+- tapOn: "Pausar podcast"
 - assertVisible: "Continuar podcast"
-- tapOn:
-    containsChild:
-      text: "Continuar podcast"
+- tapOn: "Continuar podcast"
 - assertVisible: "Pausar podcast"
 - takeScreenshot: work/native-evidence/player
 - pressKey: home

@@ -2,6 +2,14 @@
 
 **Escopo confirmado em 9 de novembro:** servidor no computador, sem hospedagem remota. Validação física disponível em Android sem cabo USB. Supabase/Trigger.dev e lojas ficam fora desta entrega local.
 
+## Entrega local atual — Expo Go, versão 0.12.1
+
+Por decisão do responsável, o projeto será utilizado diretamente no Expo Go, sem necessidade de APK próprio. Servidor e Expo permanecem no computador, com celular na mesma rede. Abertura, reprodução e barra já foram confirmadas em Galaxy Note 20 Ultra. A prévia continua aberta para acompanhamento.
+
+116 testes aprovados; voz avaliada individualmente em 5/5 para clareza e naturalidade. A abertura falada foi removida para as próximas edições. A tentativa de nova amostra encontrou a cota gratuita de voz; nenhum serviço pago foi ativado. A demonstração identificada continua disponível.
+
+APK, controles nativos de segundo plano/tela bloqueada, iPhone físico e lojas ficam opcionais. O pacote experimental passou no Android 14; a investigação da automação Android 10 foi encerrada com a mudança de escopo. Veja [Expo Go](android-expo-go.md) e [validação](validation.md). Os registros abaixo preservam cada etapa na data da execução.
+
 ## Entrega acadêmica — versão 0.8
 
 O fluxo ativo usa RSS público e Gemini Free Tier, com servidor local. A chave já foi configurada e texto e voz foram exercitados com notícias reais. A conferência final da jornada e o resultado do primeiro episódio completo ficam no registro da etapa 8 ao final desta página. Os relatos anteriores descrevem cada versão na data da entrega.
@@ -190,3 +198,9 @@ Execução nativa 42686872673 aprovada no emulador Android 14 para o primeiro pa
 Build 42686834811 concluído com sucesso: APK 0.12.1, fonte 67208d5. Verificação final do pacote e dos emuladores em andamento.
 
 Verificação adicional do APK 0.12.1: Android 14 aprovado na execução 42690687582, incluindo serviço foreground, AudioTrack ativo e tela apagada. No Android 10, o seletor composto do teste não encontrou o botão. A árvore nativa contém o botão com filho “Conectar”; o seletor foi ajustado para escolher esse pai diretamente, conforme a documentação do Maestro. Ainda não há aceite Android 10. O pacote está publicado como pré-release v0.12.1 para avaliação física.
+
+## Encerramento da entrega local pelo Expo Go
+
+O responsável dispensou o APK durante o teste final e escolheu continuar no Expo Go. Encerrada a investigação do seletor Android 10 e cancelada a execução 42693094826, com estado final confirmado no GitHub. A alteração experimental dos seletores foi desfeita; o fluxo já testado no Android 14 permanece disponível para eventual trabalho futuro. O pacote publicado continua identificado como experimental.
+
+README, roadmap, guia de apresentação e validação foram alinhados ao escopo escolhido. Abertura falada removida, nota individual registrada e guia específico de conexão por QR adicionado. Lint e TypeScript/Deno aprovados novamente. Cota de voz, revisão editorial ampliada, acessibilidade e interrupções de áudio não são apresentados como testes concluídos.

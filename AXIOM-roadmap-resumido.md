@@ -31,7 +31,7 @@ O roteiro será interno. O usuário terá um player com reprodução, pausa e na
 | Geração do roteiro | Gemini Free Tier |
 | Síntese de voz | Gemini TTS Free Tier |
 | Reprodução e tratamento de áudio | expo-audio e FFmpeg/FFprobe |
-| Versionamento e distribuição | GitHub Actions, Expo Prebuild e Gradle; EAS opcional |
+| Versionamento e apresentação | GitHub, GitHub Actions e Expo Go |
 
 ## Etapas de desenvolvimento
 
@@ -45,4 +45,4 @@ O roteiro será interno. O usuário terá um player com reprodução, pausa e na
 
 **Prazo inicial estimado:** 6 a 8 semanas, sujeito à validação das integrações e aos testes.
 
-A entrega acadêmica usa a faixa gratuita do Gemini e servidor local, sem contratar serviços. Cotas esgotadas são informadas pelo app.
+A entrega acadêmica usa **Android pelo Expo Go**, servidor no computador e Gemini Free Tier, sem contratar serviços. Cotas esgotadas são informadas pelo app. APK, iOS físico e lojas ficam como evolução opcional.

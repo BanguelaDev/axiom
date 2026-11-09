@@ -1,16 +1,16 @@
 # AXIOM — Roadmap de construção do aplicativo mobile
 
-**Versão:** 1.10
+**Versão:** 1.11
 
 **Criado em:** 19 de outubro de 2026
 
 **Atualizado em:** 9 de novembro de 2026
 
-**Status:** fluxo acadêmico local integrado com RSS público, Gemini Free Tier e SQLite. Episódios reais medidos em 120,03 segundos; abertura, reprodução e barra confirmadas em Galaxy Note 20 Ultra no Expo Go. APK próprio, controles nativos e avaliação humana de conteúdo/voz continuam em validação.
+**Status:** entrega local pelo Expo Go no Android, com RSS, Gemini Free Tier e SQLite no computador. Áudios reais de 120,03 segundos; reprodução e barra confirmadas em Galaxy Note 20 Ultra. Voz avaliada individualmente em 5/5. Por escolha do responsável, APK próprio e seus controles de tela bloqueada/segundo plano ficam como evolução opcional, assim como iOS físico, hospedagem remota e lojas.
 
 O escopo abaixo continua sendo a referência do projeto. O andamento e as validações pendentes ficam em [docs/progress.md](docs/progress.md), e as entregas estão registradas no [CHANGELOG.md](CHANGELOG.md).
 
-**Decisão de 9 de novembro:** concluir com o servidor no computador e validar o Android pela rede Wi-Fi, sem cabo. SQLite passa a guardar sessões, pedidos, cotas e registros de áudio. Hospedagem Supabase/Trigger.dev e publicação em lojas ficam como evoluções opcionais; não são requisitos da entrega local. O aceite em aparelho e a avaliação humana continuam identificados até serem realizados.
+**Decisão de 9 de novembro:** concluir com o servidor no computador e validar o Android pela rede Wi-Fi, sem cabo. SQLite passa a guardar sessões, pedidos, cotas e registros de áudio. Hospedagem Supabase/Trigger.dev e publicação em lojas ficam como evoluções opcionais; não são requisitos da entrega local. Abertura, reprodução e barra foram confirmadas no Android pelo Expo Go. Em decisão posterior no mesmo dia, o responsável dispensou o APK: controles nativos de segundo plano/tela bloqueada ficam opcionais. Avaliação individual de voz realizada; avaliação editorial ampliada permanece separada.
 
 ## 1. Visão do produto
 
@@ -114,9 +114,9 @@ O aplicativo deverá permitir escolher claro, escuro ou acompanhar o sistema. As
 ### Incluído na primeira versão
 
 - [x] Seis temas fixos e geração a partir da escolha de um deles, com bloqueio quando faltam notícias suficientes.
-- [ ] Episódios de 2 minutos com narração em português brasileiro.
-- [ ] Reprodução em segundo plano e controles na tela bloqueada.
-- [x] Retomada da reprodução e histórico local, conferidos na prévia; teste no Android pendente.
+- [x] Episódios de 2 minutos com narração em português brasileiro, medidos em 120,03 segundos; novas gerações dependem da cota gratuita.
+- [ ] Reprodução em segundo plano e controles na tela bloqueada — evolução opcional com binário próprio; fora da entrega pelo Expo Go.
+- [x] Retomada e histórico local conferidos na prévia; reprodução e busca confirmadas no Android pelo Expo Go.
 - [x] Referências das matérias e identificação de conteúdo gerado por IA.
 - [ ] Estados de carregamento, falha, falta de conexão e ausência de notícias suficientes.
 - [x] Roteiro protegido no servidor.
@@ -256,7 +256,7 @@ O roteiro ficará em armazenamento privado, sem endpoint de leitura para o aplic
 2. Gerar a narração a partir do roteiro aprovado.
 3. Medir a duração com FFprobe e verificar áudio ausente, silêncio excessivo e falhas de geração.
 4. Se a duração se afastar da meta, ajustar o roteiro e sintetizar novamente, com limite de duas correções automáticas.
-5. Usar somente pequenos ajustes de ritmo, preservando clareza e frases completas. Na calibração local de 9 de novembro, a voz gratuita admite até 10% de ajuste, sem cortes nem preenchimento com silêncio; a clareza ainda precisa de avaliação com ouvintes.
+5. Usar somente pequenos ajustes de ritmo, preservando clareza e frases completas. Na calibração local de 9 de novembro, a voz gratuita admite até 10% de ajuste, sem cortes nem preenchimento com silêncio; a primeira avaliação individual foi 5/5 em clareza e naturalidade, com avaliação ampliada ainda pendente.
 6. Preparar o arquivo final para **120 segundos**, com tolerância técnica proposta de **1 segundo** na medição do arquivo.
 7. Padronizar volume e salvar em formato compatível com Android e iOS, inicialmente MP3.
 
@@ -287,6 +287,8 @@ Aplicar limites por sessão e sinais adicionais de abuso, controle global de con
 | Episódio corrigido ou retirado | Impedir novo acesso e mostrar sua indisponibilidade no histórico                 |
 
 ## 10. Etapas de construção e entregáveis
+
+**Escopo de entrega atualizado:** Expo Go no Android e servidor no computador. APK, iOS físico, beta ampliado e lojas passam a evoluções opcionais. A tabela abaixo preserva o planejamento original.
 
 **Estimativa inicial:** aproximadamente **6 a 8 semanas de trabalho**, considerando uma pessoa desenvolvedora experiente, dedicação integral e o escopo acima. Prazos de contratação de conteúdo, acesso a contas e revisão das lojas ficam fora dessa estimativa. As etapas são sequenciais, com refinamentos ao longo do trabalho.
 
@@ -323,8 +325,8 @@ Aplicar limites por sessão e sinais adicionais de abuso, controle global de con
 
 ### Áudio e experiência mobile
 
-- [ ] Arquivo final tem 120 segundos, com tolerância de 1 segundo.
-- [ ] Narração recebe avaliação média de pelo menos 4/5 em clareza e naturalidade no teste inicial com ouvintes.
+- [x] Arquivos reais medidos em 120,03 segundos, dentro da tolerância de 1 segundo.
+- [x] Avaliação individual inicial: clareza 5/5 e naturalidade 5/5. O beta com mais ouvintes continua pendente.
 - [ ] Reprodução, pausa, busca e retomada funcionam em aparelhos Android e iOS físicos.
 - [ ] Áudio funciona em segundo plano, com tela bloqueada, fones Bluetooth e interrupções de chamadas.
 - [ ] Interface respeita tema do sistema, ampliação de fonte e leitores de tela nos controles essenciais.
@@ -332,10 +334,10 @@ Aplicar limites por sessão e sinais adicionais de abuso, controle global de con
 
 ### Operação e proteção de dados
 
-- [ ] Roteiros e credenciais não aparecem no pacote do app, respostas da API ou registros expostos.
+- [x] Pacote inspecionado e contratos da API testados sem roteiros ou credenciais. Registros editoriais permanecem privados no computador.
 - [ ] Políticas de banco e Storage impedem acesso indevido a roteiros e trabalhos de outras sessões.
 - [x] Pedidos concorrentes não geram episódios duplicados para a mesma edição.
-- [ ] Falhas, novas tentativas e encerramento do app não deixam trabalhos indefinidamente em processamento.
+- [x] Reinício do servidor marca preparações interrompidas; testes conferem recuperação e limites de tentativas sem repetir fornecedores automaticamente.
 - [ ] Consumo por etapa, tempo de geração e custos ficam registrados para acompanhamento.
 - [x] Há procedimento para retirar ou corrigir episódios e prazos definidos para retenção de textos, áudios e histórico. Ver [operação local](docs/operacao-local.md).
 
