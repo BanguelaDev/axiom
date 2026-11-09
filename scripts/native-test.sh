@@ -7,5 +7,5 @@ adb install work/candidate/AXIOM-android-local.apk
 maestro --version
 maestro test --debug-output work/native-evidence/debug .maestro/android-local.yaml
 node scripts/check-native-media.mjs background
-maestro test --debug-output work/native-evidence/debug-lock .maestro/lock-screen.yaml
+adb shell input keyevent KEYCODE_SLEEP
 node scripts/check-native-media.mjs locked

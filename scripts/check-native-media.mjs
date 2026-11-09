@@ -49,6 +49,7 @@ const services = adb('shell', 'dumpsys', 'activity', 'services', 'br.com.axiom.m
 assert.match(services, /AudioControlsService/);
 assert.match(services, /isForeground=true/);
 const power = adb('shell', 'dumpsys', 'power');
+await writeFile(`work/native-evidence/${mode}-power.txt`, power);
 if (mode === 'locked') assert.match(power, /mWakefulness=(Asleep|Dozing)/);
 await writeFile(
   `work/native-evidence/${mode}.json`,

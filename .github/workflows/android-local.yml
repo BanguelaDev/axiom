@@ -19,8 +19,14 @@ jobs:
       EXPO_PUBLIC_LOCAL_API_URL: ''
       EXPO_PUBLIC_SUPABASE_URL: ''
       EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ''
+      CANDIDATE_TAG: android-local-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v5
+      - name: Reservar rascunho antes de compilar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "$CANDIDATE_TAG" || gh release create "$CANDIDATE_TAG" --draft --prerelease --target "$GITHUB_SHA" --title "AXIOM Android local — candidato" --notes-file docs/android-apk.md
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
@@ -51,5 +57,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "android-local-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" work/android-release/* --draft --prerelease --target "$GITHUB_SHA" --title "AXIOM Android local — candidato" --notes-file docs/android-apk.md
+          gh release upload "$CANDIDATE_TAG" work/android-release/* --clobber
 
