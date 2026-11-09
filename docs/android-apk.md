@@ -12,7 +12,7 @@ O APK não depende do Metro nem de uma conta Expo. O servidor precisa permanecer
 
 ## Conferência do pacote
 
-O fluxo planejado `APK Android local` gera o projeto nativo a partir dos plugins do Expo e compila com Gradle. Ele não recebe o `.env` nem chaves de IA. O resultado ficará primeiro em um rascunho de release, com SHA-256 e identificação do commit. O executor padrão de repositório público é gratuito; o APK não usará armazenamento de artifacts do Actions. A publicação dessa automação aguarda a permissão `workflow` do login GitHub; o código do aplicativo pode ser enviado com a permissão atual.
+O fluxo `APK Android local` gera o projeto nativo a partir dos plugins do Expo e compila com Gradle. Ele não recebe o `.env` nem chaves de IA. O resultado fica primeiro em um rascunho de release, com SHA-256 e identificação do commit. O executor padrão de repositório público é gratuito; o APK não usa armazenamento de artifacts do Actions. A permissão `workflow` foi concedida pelo responsável para publicar a automação.
 
 Ainda é necessário instalar cada candidato no aparelho antes de aprová-lo. Conferir reprodução, pausa, barra, retomada, tela bloqueada, segundo plano e interrupções. Um build bem-sucedido não comprova esses comportamentos no celular.
 
