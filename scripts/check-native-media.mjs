@@ -1,22 +1,24 @@
 import { execFileSync } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { writeFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 const mode = process.argv[2] || 'background';
 const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' });
-function status() {
+function status(label) {
   const dump = adb('shell', 'dumpsys', 'media_session');
+  writeFileSync(`work/native-evidence/${mode}-${label}-media.txt`, dump);
   const start = dump.indexOf('package=br.com.axiom.mobile');
   assert.ok(start >= 0, 'AXIOM precisa ter uma MediaSession nativa.');
   const own = dump.slice(start);
-  const match = /state=PlaybackState\s*\{state=(\d+),\s*position=(\d+)/.exec(own);
+  const match = /state=PlaybackState\s*\{state=(?:[A-Z_]+\()?(\d+)\)?,\s*position=(\d+)/.exec(own);
   assert.ok(match, 'MediaSession deve informar estado e posição.');
   assert.equal(Number(match[1]), 3, 'Áudio deve continuar tocando.');
   return { position: Number(match[2]), dump };
 }
 await mkdir('work/native-evidence', { recursive: true });
-const first = status();
+const first = status('first');
 await new Promise((resolve) => setTimeout(resolve, 4000));
-const second = status();
+const second = status('second');
 assert.ok(second.position > first.position, 'A posição precisa avançar fora da tela do app.');
 const services = adb('shell', 'dumpsys', 'activity', 'services', 'br.com.axiom.mobile');
 assert.match(services, /AudioControlsService/);
