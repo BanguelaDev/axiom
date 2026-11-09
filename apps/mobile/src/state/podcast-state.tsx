@@ -23,7 +23,7 @@ import {
   type PodcastHistory,
 } from '@axiom/core/podcast';
 import { getTopic, type TopicId } from '@axiom/core/topics';
-import { backendConnection, forgetLocalSession } from '@/services/backend';
+import { backendConnection as initialBackendConnection, forgetLocalSession } from '@/services/backend';
 import { registerPlayback, claimPlayback } from '@/services/playback';
 
 type Preparation =
@@ -44,6 +44,8 @@ const safeError = (error: unknown) => {
   return connectionError;
 };
 function usePodcastValue() {
+  // Cada montagem mantém o servidor original; trocar a conexão cancela e remonta o provider.
+  const [backendConnection] = useState(() => initialBackendConnection);
   const [preparation, setPreparation] = useState<Preparation>({ status: 'idle' });
   const [episode, setEpisode] = useState<PublicEpisode | null>(null);
   const [history, setHistory] = useState<PodcastHistory[]>([]);
@@ -284,7 +286,7 @@ function usePodcastValue() {
         if (!controller.signal.aborted) setLoading(false);
       }
     },
-    [player, savePosition],
+    [backendConnection, player, savePosition],
   );
   async function toggle() {
     if (status.playing) {

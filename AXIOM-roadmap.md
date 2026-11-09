@@ -1,12 +1,12 @@
 # AXIOM — Roadmap de construção do aplicativo mobile
 
-**Versão:** 1.8
+**Versão:** 1.9
 
 **Criado em:** 19 de outubro de 2026
 
 **Atualizado em:** 9 de novembro de 2026
 
-**Status:** fluxo acadêmico local integrado com RSS público, Gemini Free Tier e servidor local. Primeiro episódio jornalístico real gerado e medido em 120,03 segundos; validação em aparelhos físicos, avaliação com ouvintes e lançamento continuam pendentes.
+**Status:** fluxo acadêmico local integrado com RSS público, Gemini Free Tier e SQLite. Episódios reais medidos em 120,03 segundos; abertura, reprodução e barra confirmadas em Galaxy Note 20 Ultra no Expo Go. APK próprio, controles nativos e avaliação humana de conteúdo/voz continuam em validação.
 
 O escopo abaixo continua sendo a referência do projeto. O andamento e as validações pendentes ficam em [docs/progress.md](docs/progress.md), e as entregas estão registradas no [CHANGELOG.md](CHANGELOG.md).
 
@@ -145,7 +145,7 @@ A recomendação prioriza ferramentas consolidadas para mobile e serviços geren
 | LLM                            | **Gemini 3.5 Flash Lite na faixa gratuita**                       | Extrair fatos e gerar o roteiro em estrutura validável                  |
 | Voz                            | **Gemini 3.8 Flash Lite TTS na faixa gratuita**                   | Narrar em português brasileiro com consistência                         |
 | Tratamento do áudio            | **FFmpeg e FFprobe no processamento em segundo plano**            | Medir duração, ajustar volume e preparar o arquivo final                |
-| Builds e distribuição          | **Expo EAS Build e EAS Submit**                                   | Gerar e enviar versões Android e iOS                                    |
+| Builds e distribuição          | **Expo Prebuild + Gradle no GitHub Actions; EAS opcional**         | Gerar APK acadêmico; lojas e iOS distribuído são evoluções opcionais     |
 | Código e automação             | **GitHub + GitHub Actions**                                       | Versionamento e verificações antes das entregas                         |
 
 O [expo-audio documenta reprodução em segundo plano e controles na tela bloqueada](https://docs.expo.dev/versions/latest/sdk/audio/). Essas funções exigem configuração nativa e testes em aparelhos; o [EAS Build permite compilar Android e iOS na nuvem](https://docs.expo.dev/build/), inclusive a partir de um ambiente de desenvolvimento Windows.

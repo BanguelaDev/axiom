@@ -1,13 +1,15 @@
 import { View, Pressable } from 'react-native';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import { topics } from '@axiom/core/topics';
 import { Copy, Icon, Screen, Notice, Button } from '@/components/ui';
 import { usePodcast } from '@/state/podcast-state';
 import { useApp } from '@/state/app-state';
 import { spacing, radius, sizes } from '@/theme';
+import { backendConnection, localServerEnabled } from '@/services/backend';
 export default function HomeScreen() {
   const { colors, topicColors } = useApp();
   const { preparation } = usePodcast();
+  if (localServerEnabled && !backendConnection) return <Redirect href="/connection" />;
   return (
     <Screen>
       <View style={{ gap: spacing.md, paddingTop: spacing.sm }}>
@@ -113,8 +115,8 @@ export default function HomeScreen() {
           PROJETO ACADÊMICO · AEMS
         </Copy>
         <Copy variant="caption" tone="muted">
-          Notícias recentes, referências para consultar e narração por inteligência artificial.
-          Um projeto para ouvir e aprender.
+          Notícias recentes, referências para consultar e narração por inteligência artificial. Um
+          projeto para ouvir e aprender.
         </Copy>
       </View>
     </Screen>

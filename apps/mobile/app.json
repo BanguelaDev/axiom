@@ -3,7 +3,7 @@
     "name": "AXIOM",
     "slug": "axiom",
     "scheme": "axiom",
-    "version": "0.10.0",
+    "version": "0.11.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -34,7 +34,8 @@
           "enableBackgroundRecording": false
         }
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      "expo-build-properties"
     ],
     "experiments": {
       "typedRoutes": true

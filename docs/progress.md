@@ -141,3 +141,13 @@ Próximas pendências locais: cobertura das fontes, operação/retirada e reten�
 - 108 testes, TypeScript/Deno, lint, exportações e Expo Doctor 20/20. Pela API, Ucrânia, IA e Crimes geraram áudio de 120,03 segundos; Fraudes foi bloqueado pela revisão de atribuição. Política já havia sido validado e foi reproduzido pelo responsável.
 
 Pendente: APK próprio para validar serviço de reprodução, tela bloqueada e segundo plano; operação/retirada e retenção; revisão humana do conteúdo e da voz. A resposta de nota/versão do Android não permitiu registrar uma avaliação de 1 a 5 com segurança.
+
+## Etapa 11 — APK e conexão no aparelho
+
+- Tela de conexão ao computador, teste do catálogo/API antes de salvar e restauração do endereço no aparelho. Sessões por endereço; troca cancela pedidos e remonta o player.
+- Build local habilitado explicitamente, sem chave ou IP pessoal. Serviço nativo de áudio configurado pelos plugins, com verificação do manifesto gerado. Módulo de tema do sistema instalado.
+- `npm run server:lan` dispensa o Metro para uso com APK. [Guia Android](android-apk.md) com instalação, conexão e critérios de avaliação.
+- 109 testes aprovados, TypeScript/Deno e lint limpos, Expo Doctor 20/20. Prévia conectou ao servidor real e recusou endereço público. CI da etapa 10 aprovada no commit 4abb09a.
+- Workflow preparado localmente para compilar e guardar um candidato em rascunho de release, sem conta Expo ou artifacts pagos. O GitHub recusou o arquivo por falta do escopo OAuth `workflow`; autorização solicitada ao responsável. Compilação e instalação continuam pendentes.
+
+Próximas pendências: concluir o candidato Android, operação/retirada e retenção, registrar avaliação humana e validar controles nativos no aparelho. O responsável confirmou que barra e reprodução no Expo Go agora funcionam.

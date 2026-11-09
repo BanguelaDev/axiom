@@ -1,0 +1,11 @@
+import {readFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const manifest = await readFile('apps/mobile/android/app/src/main/AndroidManifest.xml','utf8');
+assert.match(manifest, /android:usesCleartextTraffic="true"/, 'O APK local precisa acessar HTTP na rede privada.');
+assert.match(manifest, /expo\.modules\.audio\.service\.AudioControlsService/);
+assert.match(manifest, /android:foregroundServiceType="mediaPlayback"/);
+assert.match(manifest, /android\.permission\.FOREGROUND_SERVICE_MEDIA_PLAYBACK/);
+assert.doesNotMatch(manifest, /<uses-permission[^>]*android\.permission\.RECORD_AUDIO[^>]*\/>/);
+const properties = await readFile('apps/mobile/android/gradle.properties','utf8');
+assert.match(properties, /reactNativeArchitectures=arm64-v8a,x86_64/);
+console.log('Configuração Android local conferida: serviço de mídia, rede local e arquiteturas.');

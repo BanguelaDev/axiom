@@ -6,6 +6,7 @@ import { Copy, Screen, Button, Notice } from '@/components/ui';
 import { useApp, type ThemePreference } from '@/state/app-state';
 import { spacing } from '@/theme';
 import { usePodcast } from '@/state/podcast-state';
+import { getLocalServerUrl, localServerEnabled } from '@/services/backend';
 export default function SettingsScreen() {
   const { colors, themePreference, setThemePreference, clearHistory, storageError, history } =
     useApp();
@@ -67,12 +68,25 @@ export default function SettingsScreen() {
         />
       </View>
       <View style={{ gap: spacing.sm }}>
+        {localServerEnabled ? (
+          <>
+            <Copy variant="headline">Servidor no computador</Copy>
+            <Copy variant="caption" tone="secondary">
+              {getLocalServerUrl() || 'Nenhum computador conectado.'}
+            </Copy>
+            <Button
+              title="Alterar computador"
+              secondary
+              onPress={() => router.push('/connection')}
+            />
+          </>
+        ) : null}
         <Copy variant="headline">Sobre o AXIOM</Copy>
         <Copy tone="secondary">
           Projeto de Programação para Dispositivos Móveis da AEMS. TADS, 6º período, Três Lagoas.
         </Copy>
         <Copy variant="caption" tone="muted">
-          Professor Bruno · Versão 0.10.0
+          Professor Bruno · Versão 0.11.0
         </Copy>
       </View>
       <Button title="Apresentação do projeto" secondary onPress={() => router.push('/prototype')} />

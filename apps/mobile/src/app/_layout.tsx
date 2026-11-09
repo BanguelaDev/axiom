@@ -2,9 +2,9 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AppProvider, useApp } from '@/state/app-state';
 import { typography } from '@/theme';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
-import { setAuthActive } from '@/services/backend';
+import { initializeBackend, setAuthActive, subscribeBackend } from '@/services/backend';
 import { PodcastProvider } from '@/state/podcast-state';
 function Navigation() {
   const { colors, scheme } = useApp();
@@ -43,6 +43,7 @@ function Navigation() {
         <Stack.Screen name="sources/[id]" options={{ title: 'Fontes do episódio' }} />
         <Stack.Screen name="generate/[id]" options={{ title: 'Preparando seu podcast' }} />
         <Stack.Screen name="podcast/[id]" options={{ title: 'Seu podcast' }} />
+        <Stack.Screen name="connection" options={{ title: 'Seu computador' }} />
         <Stack.Screen
           name="prototype"
           options={{ title: 'Apresentação do projeto', headerBackTitle: 'Voltar' }}
@@ -67,12 +68,31 @@ function Navigation() {
     </>
   );
 }
+function ConnectedApp() {
+  const [ready, setReady] = useState(false);
+  const [revision, setRevision] = useState(0);
+  useEffect(() => {
+    let active = true;
+    const unsubscribe = subscribeBackend(() => setRevision((value) => value + 1));
+    void initializeBackend().then(() => {
+      if (active) setReady(true);
+    });
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, []);
+  if (!ready) return null;
+  return (
+    <PodcastProvider key={revision}>
+      <Navigation />
+    </PodcastProvider>
+  );
+}
 export default function RootLayout() {
   return (
     <AppProvider>
-      <PodcastProvider>
-        <Navigation />
-      </PodcastProvider>
+      <ConnectedApp />
     </AppProvider>
   );
 }

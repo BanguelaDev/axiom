@@ -1,5 +1,13 @@
 # Entregas do AXIOM
 
+## 0.11.0 — 9 de novembro de 2026
+
+**Etapa 11: candidato Android com servidor configurável.** Tela para conectar ao computador, validação da API e persistência do endereço. Trocar de servidor remonta o player e cancela pedidos da conexão anterior. Sessões separadas por endereço. Modo local explicitamente habilitado no build, sem incorporar endereço pessoal ou chaves.
+
+Configuração nativa gerada pelos plugins do Expo com serviço de mídia, HTTP para a rede local e suporte ao tema do sistema. Comando `server:lan` para executar a API sem Metro. Compilação Gradle em executor público padrão do GitHub, com APK, checksum e commit em rascunho de release; instalação e segundo plano continuam pendentes até teste do candidato.
+
+Verificação local: 109 testes, TypeScript/Deno, lint e Expo Doctor 20/20. Conexão real e rejeição de endereço público conferidas na prévia. A confirmação do responsável encerra o defeito da barra e do aviso no Expo Go.
+
 ## 0.10.0 — 9 de novembro de 2026
 
 **Etapa 10: fontes e teste Android.** Lote RSS distribuído entre grupos editoriais antes do limite de 50; publicação mais antiga preservada antes do corte e datas de calendário inválidas rejeitadas. Feed atual do g1, fonte especializada em psicologia e recortes refinados para evitar menções incidentais a crimes e golpes.

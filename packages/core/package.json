@@ -9,6 +9,7 @@
     "./api-client": "./src/api-client.ts",
     "./podcast": "./src/podcast.ts",
     "./playback": "./src/playback.ts",
+    "./server-config": "./src/server-config.ts",
     "./selection-report": "./src/selection-report.ts",
     "./editorial-report": "./src/editorial-report.ts",
     "./audio-report": "./src/audio-report.ts",
