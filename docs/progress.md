@@ -1,5 +1,7 @@
 # Acompanhamento das etapas
 
+**Escopo confirmado em 9 de novembro:** servidor no computador, sem hospedagem remota. Validação física disponível em Android sem cabo USB. Supabase/Trigger.dev e lojas ficam fora desta entrega local.
+
 ## Entrega acadêmica — versão 0.8
 
 O fluxo ativo usa RSS público e Gemini Free Tier, com servidor local. A chave já foi configurada e texto e voz foram exercitados com notícias reais. A conferência final da jornada e o resultado do primeiro episódio completo ficam no registro da etapa 8 ao final desta página. Os relatos anteriores descrevem cada versão na data da entrega.
@@ -119,3 +121,13 @@ Pendente nesta entrega: chave Gemini Free Tier do responsável, primeira síntes
 - Auditoria RSS dos seis temas: Ucrânia, IA, Fraudes e Política com material suficiente; Saúde Mental e Crimes insuficientes naquele instante. A janela de 72 horas é preservada.
 
 Permanecem fora do aceite acadêmico local: avaliação humana em escala, teste em aparelhos físicos, segundo plano/Bluetooth, Supabase completo, Trigger.dev implantado, beta e lojas. A configuração ativa não usa GNews, OpenAI ou ElevenLabs e não tem fallback pago.
+
+## Etapa 9 — Persistência e recuperação local
+
+- SQLite privado para sessões, pedidos, associações, cotas e registros do áudio aprovado; tokens guardados como hashes.
+- Recuperação após reiniciar sem zerar limites ou repetir chamadas à IA. Trabalhos interrompidos pedem nova tentativa; áudios válidos são reutilizados.
+- Gravação atômica e detecção de alterações concorrentes. Banco incompatível não é apagado automaticamente.
+- Removida uma possibilidade de corrida na reserva de pedidos concorrentes com cache expirado.
+- 103 testes aprovados, incluindo reinício HTTP, isolamento, cota preservada e recuperação de áudio com FFmpeg real. TypeScript/Deno e lint aprovados.
+
+Próximas pendências locais: cobertura das fontes, operação/retirada e retenção, pacote Android instalável e testes com o aparelho e ouvintes. As amostras reais anteriores não equivalem à avaliação dos seis temas.

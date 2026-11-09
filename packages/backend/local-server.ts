@@ -1,5 +1,4 @@
 import { createServer, type Server } from 'node:http';
-import { randomBytes, randomUUID } from 'node:crypto';
 import { createApi } from './handler.ts';
 import { createSelectionDemo } from './selection-demo.ts';
 import { createEditorialDemo } from './editorial-demo.ts';
@@ -10,13 +9,20 @@ import { generatePodcast } from '../pipeline/generate-podcast.ts';
 import { GeminiAccessFault, GeminiQuotaFault } from '../pipeline/gemini.ts';
 import { EditorialFault } from '../pipeline/editorial.ts';
 import { AudioFault } from '../pipeline/audio.ts';
+import { LocalStore } from './local-store.ts';
 
-/** Runner descartável: não substitui Supabase Auth, banco, Storage nem Trigger.dev. */
+/** Servidor local com SQLite; a infraestrutura remota continua opcional. */
 export function startLocalApi(
   port = 8787,
-  options: { generation?: boolean; processor?: Processor; host?: string; publicUrl?: string } = {},
+  options: {
+    generation?: boolean;
+    processor?: Processor;
+    host?: string;
+    publicUrl?: string;
+    statePath?: string;
+  } = {},
 ): Promise<Server> {
-  const sessions = new Map<string, { id: string; expires: number }>();
+  const store = new LocalStore(options.statePath);
   const allowedOrigins = [
     'http://localhost:8081',
     'http://127.0.0.1:8081',
@@ -24,39 +30,47 @@ export function startLocalApi(
   ];
   const audioDemo = createAudioDemo(resolve('work', 'audio-demo'));
   let actualPort = port;
-  const repository = new LocalRepository(
-    options.processor ||
-      (async (topic, id, onPhase) => {
-        try {
-          return await generatePodcast(
-            topic,
-            resolve('work', 'local-episodes', id),
-            async (phase) => {
-              await onPhase(phase);
-              console.log(`[AXIOM] ${id.slice(0, 8)}: ${phase}`);
-            },
-          );
-        } catch (error) {
-          const code =
-            error instanceof GeminiAccessFault
-              ? `gemini_http_${error.status}`
-              : error instanceof GeminiQuotaFault
-                ? 'free_quota'
-                : error instanceof EditorialFault || error instanceof AudioFault
-                  ? error.code
-                  : 'generation_failed';
-          console.log(`[AXIOM] ${id.slice(0, 8)}: ${code}`);
-          throw error;
-        }
-      }),
-    (bytes, expiresIn) => {
-      const media = audioDemo.issueMedia(bytes, expiresIn);
-      return {
-        url: `${options.publicUrl || `http://127.0.0.1:${actualPort}`}${media.path}`,
-        expiresIn: media.expiresIn,
-      };
-    },
-  );
+  let repository: LocalRepository;
+  try {
+    repository = new LocalRepository(
+      options.processor ||
+        (async (topic, id, onPhase) => {
+          try {
+            return await generatePodcast(
+              topic,
+              resolve('work', 'local-episodes', id),
+              async (phase) => {
+                await onPhase(phase);
+                console.log(`[AXIOM] ${id.slice(0, 8)}: ${phase}`);
+              },
+            );
+          } catch (error) {
+            const code =
+              error instanceof GeminiAccessFault
+                ? `gemini_http_${error.status}`
+                : error instanceof GeminiQuotaFault
+                  ? 'free_quota'
+                  : error instanceof EditorialFault || error instanceof AudioFault
+                    ? error.code
+                    : 'generation_failed';
+            console.log(`[AXIOM] ${id.slice(0, 8)}: ${code}`);
+            throw error;
+          }
+        }),
+      (bytes, expiresIn) => {
+        const media = audioDemo.issueMedia(bytes, expiresIn);
+        return {
+          url: `${options.publicUrl || `http://127.0.0.1:${actualPort}`}${media.path}`,
+          expiresIn: media.expiresIn,
+        };
+      },
+      () => Date.now(),
+      store,
+    );
+  } catch (error) {
+    store.close();
+    throw error;
+  }
   const api = createApi({
     environment: 'development',
     generationAvailable: !!options.generation,
@@ -66,8 +80,7 @@ export function startLocalApi(
     developmentSelection: (topicId, insufficient) =>
       createSelectionDemo(topicId, new Date(), insufficient),
     async authenticate(token) {
-      const session = sessions.get(token);
-      return session && session.expires > Date.now() ? session.id : null;
+      return store.session(token);
     },
     repository,
     async enqueue(id) {
@@ -117,17 +130,14 @@ export function startLocalApi(
           response = new Response(null, { status: 403 });
         else {
           if (origin) sessionHeaders['Access-Control-Allow-Origin'] = origin;
-          for (const [token, session] of sessions)
-            if (session.expires <= Date.now()) sessions.delete(token);
-          if (sessions.size >= 64)
+          const session = store.issueSession();
+          if (!session)
             response = new Response(JSON.stringify({ error: { code: 'rate_limited' } }), {
               status: 429,
               headers: sessionHeaders,
             });
           else {
-            const token = randomBytes(32).toString('hex');
-            sessions.set(token, { id: randomUUID(), expires: Date.now() + 3600_000 });
-            response = new Response(JSON.stringify({ accessToken: token, expiresIn: 3600 }), {
+            response = new Response(JSON.stringify(session), {
               headers: sessionHeaders,
             });
           }
@@ -140,9 +150,25 @@ export function startLocalApi(
       outgoing.end(JSON.stringify({ error: { code: 'temporarily_unavailable' } }));
     }
   });
+  let disposed = false;
+  const dispose = () => {
+    if (disposed) return;
+    disposed = true;
+    try {
+      repository.close();
+    } catch {
+      console.error('[AXIOM] Falha ao gravar o encerramento no banco local.');
+    } finally {
+      store.close();
+    }
+  };
+  server.once('close', dispose);
   server.requestTimeout = 10_000;
   return new Promise((resolve, reject) => {
-    server.once('error', reject);
+    server.once('error', (error) => {
+      dispose();
+      reject(error);
+    });
     server.listen(port, options.host || '127.0.0.1', () => {
       const address = server.address();
       if (address && typeof address !== 'string') actualPort = address.port;

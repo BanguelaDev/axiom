@@ -19,6 +19,7 @@ import { createAudioDemo } from '../packages/backend/audio-demo.ts';
 import { createClient } from '@supabase/supabase-js';
 import { publishEpisode } from '../packages/pipeline/publish-episode.ts';
 import { LocalRepository } from '../packages/backend/local-repository.ts';
+import { LocalStore } from '../packages/backend/local-store.ts';
 
 let directory: string;
 let normal: Uint8Array, long: Uint8Array;
@@ -306,7 +307,7 @@ test('falha de confirmação preserva o objeto privado e a repetição confere o
   assert.equal(rpcCalls, 2);
 });
 
-test('fila local compartilha trabalho, isola sessões e só publica áudio verificado', async () => {
+test('fila local compartilha trabalho, persiste áudio aprovado, isola sessões e recupera após reinício', async (t) => {
   const rendered = await renderEpisode({
     directory: join(directory, 'local-repo'),
     clock: () => now,
@@ -324,7 +325,8 @@ test('fila local compartilha trabalho, isola sessões e só publica áudio verif
   const gate = new Promise<void>((resolve) => {
     release = resolve;
   });
-  const repository = new LocalRepository(
+  let store = new LocalStore(join(directory, 'repository.sqlite'));
+  let repository = new LocalRepository(
     async () => {
       calls++;
       await gate;
@@ -332,7 +334,12 @@ test('fila local compartilha trabalho, isola sessões e só publica áudio verif
     },
     (_bytes, expiresIn) => ({ url: 'https://media.example/temporary', expiresIn }),
     () => time,
+    store,
   );
+  t.after(() => {
+    repository.close();
+    store.close();
+  });
   const first = await repository.request('user-one', 'ai');
   assert.equal(first.kind, 'job');
   if (first.kind !== 'job') throw new Error();
@@ -356,7 +363,32 @@ test('fila local compartilha trabalho, isola sessões e só publica áudio verif
   assert.doesNotMatch(JSON.stringify(episode), /"script"|"quote"|"narration"|"artifactId"/);
   assert.equal((await repository.audio(first.job.id))?.expiresIn, 300);
   assert.equal((await repository.request('user-three', 'ai')).kind, 'episode');
+  repository.close();
+  store.close();
+  store = new LocalStore(join(directory, 'repository.sqlite'));
+  repository = new LocalRepository(
+    async () => {
+      calls++;
+      throw new Error('Cache recuperado não deve gerar novamente.');
+    },
+    (_bytes, expiresIn) => ({ url: 'https://media.example/restored', expiresIn }),
+    () => time,
+    store,
+  );
+  assert.equal((await repository.job('user-one', first.job.id))?.stage, 'ready');
+  assert.equal(await repository.job('unknown', first.job.id), null);
+  assert.equal((await repository.episode(first.job.id))?.title, episode.title);
+  assert.equal((await repository.audio(first.job.id))?.url, 'https://media.example/restored');
+  assert.equal((await repository.request('user-four', 'ai')).kind, 'episode');
+  assert.equal(calls, 1);
   time += 3_600_001;
   assert.equal(await repository.episode(first.job.id), null);
   assert.equal(await repository.audio(first.job.id), null);
+  const next = await Promise.all([
+    repository.request('user-new-one', 'ai'),
+    repository.request('user-new-two', 'ai'),
+  ]);
+  assert.ok(next.every((value) => value.kind === 'job'));
+  if (next[0]?.kind === 'job' && next[1]?.kind === 'job')
+    assert.equal(next[0].job.id, next[1].job.id);
 });

@@ -40,7 +40,7 @@ Sem `GEMINI_API_KEY`, a geração real fica desativada e o protótipo permanece 
 ## Arquivos e privacidade
 
 - `work/local-episodes`: MP3 final, metadados públicos e pasta `private` com seleção, fatos, revisão, roteiro e medições. Ignorado pelo Git.
-- Sessões, fila e cache do servidor local ficam em memória. Reiniciar a API descarta esses estados; não equivale a Supabase completo.
+- Sessões, fila, cotas e cache ficam em `work/data/axiom.sqlite`. Áudios aprovados válidos são recuperados após reiniciar; preparações interrompidas pedem uma nova tentativa, sem chamada automática ao fornecedor.
 - O app guarda preferências, histórico e o identificador de uma preparação pendente. URLs de mídia temporárias e roteiros não entram no histórico.
 - No modo local, a sessão temporária é guardada separadamente no aparelho para recuperar o pedido após recarregar. Ela é renovada quando o servidor a rejeita.
 - Áudio e metadados são revalidados antes do acesso. Episódios expirados ou retirados podem continuar listados no histórico, mas não recebem novo acesso.

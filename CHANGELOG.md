@@ -1,5 +1,11 @@
 # Entregas do AXIOM
 
+## 0.9.0 — 9 de novembro de 2026
+
+**Etapa 9: persistência local.** SQLite guarda sessões, pedidos, associações, cotas e registros privados do áudio aprovado. Reiniciar preserva o reuso de episódios válidos e identifica preparações interrompidas, sem repetir o fornecedor. Tokens persistidos como hashes; gravação atômica, detecção de concorrência e falha segura para banco incompatível. Reserva local sem espera intermediária que pudesse duplicar pedidos.
+
+Verificação: 103 testes, TypeScript/Deno e lint. Testes reiniciam API HTTP, recuperam sessão e pedido, mantêm cotas e reutilizam áudio aprovado com FFmpeg real. Servidor na rede local preparado para Android sem cabo. Por escolha do responsável, hospedagem remota e lojas são evoluções opcionais da entrega local.
+
 ## 0.8.0 — 9 de novembro de 2026
 
 **Etapa 8: entrega acadêmica e validação real do fluxo gratuito.** Primeiro episódio com notícias e narração Gemini gerado e medido em 120,03 segundos. Catálogo de evidências literais, descarte auditado de fatos com números sem suporte, créditos antes da revisão e seleção de parágrafos completos para o orçamento de palavras. Uma correção editorial orientada pelo motivo de rejeição, com nova revisão obrigatória. Calibração de ritmo de até 10% para a voz gratuita, sem cortar fala ou acrescentar silêncio.

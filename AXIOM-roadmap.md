@@ -1,6 +1,6 @@
 # AXIOM — Roadmap de construção do aplicativo mobile
 
-**Versão:** 1.7
+**Versão:** 1.8
 
 **Criado em:** 19 de outubro de 2026
 
@@ -8,7 +8,9 @@
 
 **Status:** fluxo acadêmico local integrado com RSS público, Gemini Free Tier e servidor local. Primeiro episódio jornalístico real gerado e medido em 120,03 segundos; validação em aparelhos físicos, avaliação com ouvintes e lançamento continuam pendentes.
 
-O escopo abaixo continua sendo a referência do projeto. O andamento e as validações pendentes ficam em [docs/progress.md](docs/progress.md), e as entregas estão registradas no [CHANGELOG.md](CHANGELOG.md). A etapa 1 ainda depende dos fornecedores e da avaliação de notícias e voz reais; o protótipo usa cenários identificados como demonstração.
+O escopo abaixo continua sendo a referência do projeto. O andamento e as validações pendentes ficam em [docs/progress.md](docs/progress.md), e as entregas estão registradas no [CHANGELOG.md](CHANGELOG.md).
+
+**Decisão de 9 de novembro:** concluir com o servidor no computador e validar o Android pela rede Wi-Fi, sem cabo. SQLite passa a guardar sessões, pedidos, cotas e registros de áudio. Hospedagem Supabase/Trigger.dev e publicação em lojas ficam como evoluções opcionais; não são requisitos da entrega local. O aceite em aparelho e a avaliação humana continuam identificados até serem realizados.
 
 ## 1. Visão do produto
 
@@ -111,14 +113,14 @@ O aplicativo deverá permitir escolher claro, escuro ou acompanhar o sistema. As
 
 ### Incluído na primeira versão
 
-- [ ] Seis temas fixos e geração a partir da escolha de um deles.
+- [x] Seis temas fixos e geração a partir da escolha de um deles, com bloqueio quando faltam notícias suficientes.
 - [ ] Episódios de 2 minutos com narração em português brasileiro.
 - [ ] Reprodução em segundo plano e controles na tela bloqueada.
-- [ ] Retomada da reprodução e histórico local.
-- [ ] Referências das matérias e identificação de conteúdo gerado por IA.
+- [x] Retomada da reprodução e histórico local, conferidos na prévia; teste no Android pendente.
+- [x] Referências das matérias e identificação de conteúdo gerado por IA.
 - [ ] Estados de carregamento, falha, falta de conexão e ausência de notícias suficientes.
-- [ ] Roteiro protegido no servidor.
-- [ ] Reaproveitamento controlado de episódios recentes para reduzir espera e custo.
+- [x] Roteiro protegido no servidor.
+- [x] Reaproveitamento controlado de episódios recentes para reduzir espera e custo, inclusive após reinício.
 
 ### Evoluções posteriores
 
@@ -130,21 +132,21 @@ Por decisão do responsável em 8 de novembro de 2026, a entrega acadêmica não
 
 A recomendação prioriza ferramentas consolidadas para mobile e serviços gerenciados que reduzam o trabalho de infraestrutura. “Melhor” aqui significa adequação ao AXIOM, facilidade de manutenção e capacidade de crescer; popularidade isolada não resolve essas necessidades.
 
-| Camada                         | Escolha recomendada                                                  | Papel no AXIOM                                                          |
-| ------------------------------ | -------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Aplicativo                     | **React Native + Expo + TypeScript**                                 | Construir Android e iOS com uma base compartilhada                      |
-| Navegação e visual             | **Expo Router + componentes nativos + StyleSheet**                   | Organizar telas e manter um sistema visual simples                      |
-| Player                         | **expo-audio**                                                       | Reproduzir episódios e integrar áudio em segundo plano e tela bloqueada |
-| API do back-end                | **Node.js/TypeScript local; Edge Functions opcionais**               | Validar sessões, aplicar limites e iniciar ou consultar gerações        |
-| Banco de dados                 | **Memória e arquivos privados na apresentação; PostgreSQL opcional** | Guardar temas, episódios, referências e estado dos trabalhos            |
-| Sessões e arquivos             | **Sessão opaca local e mídia temporária; Supabase opcional**         | Sessões anônimas e armazenamento protegido dos áudios                   |
-| Processamento em segundo plano | **Fila local Node.js/TypeScript; Trigger.dev opcional**              | Executar busca, roteiro, voz e validações com controle de tentativas    |
-| Notícias                       | **Feeds RSS públicos dos veículos**                                  | Encontrar matérias recentes e obter conteúdo suficiente para o resumo   |
-| LLM                            | **Gemini 3.5 Flash Lite na faixa gratuita**                          | Extrair fatos e gerar o roteiro em estrutura validável                  |
-| Voz                            | **Gemini 3.8 Flash Lite TTS na faixa gratuita**                      | Narrar em português brasileiro com consistência                         |
-| Tratamento do áudio            | **FFmpeg e FFprobe no processamento em segundo plano**               | Medir duração, ajustar volume e preparar o arquivo final                |
-| Builds e distribuição          | **Expo EAS Build e EAS Submit**                                      | Gerar e enviar versões Android e iOS                                    |
-| Código e automação             | **GitHub + GitHub Actions**                                          | Versionamento e verificações antes das entregas                         |
+| Camada                         | Escolha recomendada                                               | Papel no AXIOM                                                          |
+| ------------------------------ | ----------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Aplicativo                     | **React Native + Expo + TypeScript**                              | Construir Android e iOS com uma base compartilhada                      |
+| Navegação e visual             | **Expo Router + componentes nativos + StyleSheet**                | Organizar telas e manter um sistema visual simples                      |
+| Player                         | **expo-audio**                                                    | Reproduzir episódios e integrar áudio em segundo plano e tela bloqueada |
+| API do back-end                | **Node.js/TypeScript local; Edge Functions opcionais**            | Validar sessões, aplicar limites e iniciar ou consultar gerações        |
+| Banco de dados                 | **SQLite e arquivos privados no computador; PostgreSQL opcional** | Guardar temas, episódios, referências e estado dos trabalhos            |
+| Sessões e arquivos             | **Sessão opaca local e mídia temporária; Supabase opcional**      | Sessões anônimas e armazenamento protegido dos áudios                   |
+| Processamento em segundo plano | **Fila local Node.js/TypeScript; Trigger.dev opcional**           | Executar busca, roteiro, voz e validações com controle de tentativas    |
+| Notícias                       | **Feeds RSS públicos dos veículos**                               | Encontrar matérias recentes e obter conteúdo suficiente para o resumo   |
+| LLM                            | **Gemini 3.5 Flash Lite na faixa gratuita**                       | Extrair fatos e gerar o roteiro em estrutura validável                  |
+| Voz                            | **Gemini 3.8 Flash Lite TTS na faixa gratuita**                   | Narrar em português brasileiro com consistência                         |
+| Tratamento do áudio            | **FFmpeg e FFprobe no processamento em segundo plano**            | Medir duração, ajustar volume e preparar o arquivo final                |
+| Builds e distribuição          | **Expo EAS Build e EAS Submit**                                   | Gerar e enviar versões Android e iOS                                    |
+| Código e automação             | **GitHub + GitHub Actions**                                       | Versionamento e verificações antes das entregas                         |
 
 O [expo-audio documenta reprodução em segundo plano e controles na tela bloqueada](https://docs.expo.dev/versions/latest/sdk/audio/). Essas funções exigem configuração nativa e testes em aparelhos; o [EAS Build permite compilar Android e iOS na nuvem](https://docs.expo.dev/build/), inclusive a partir de um ambiente de desenvolvimento Windows.
 
@@ -163,12 +165,12 @@ flowchart TD
     A[App mobile: usuário escolhe um tema] --> B[API: valida sessão e limites]
     B --> C{Existe episódio recente e válido?}
     C -->|Sim| J[Entregar metadados, fontes e acesso ao áudio]
-    C -->|Não| D[Criar trabalho no Trigger.dev]
+    C -->|Não| D[Criar trabalho na fila local com SQLite]
     D --> E[Buscar e validar notícias das últimas 72 horas]
     E --> F[Selecionar fatos e gerar roteiro interno]
     F --> G[Verificar fidelidade e regras editoriais]
     G --> H[Gerar voz e validar duração]
-    H --> I[Salvar áudio no Storage e registrar episódio]
+    H --> I[Salvar áudio privado no computador e registrar episódio no SQLite]
     I --> J
     J --> K[Player no aplicativo]
 ```

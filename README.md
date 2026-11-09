@@ -34,16 +34,16 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 
 ## Tecnologias usadas
 
-| Parte do projeto                    | Tecnologias                              |
-| ----------------------------------- | ---------------------------------------- |
-| Aplicativo mobile                   | React Native, Expo e TypeScript          |
-| Back-end, banco de dados e arquivos | Node.js local; Supabase opcional         |
-| Processamento em segundo plano      | Fila local Node.js; Trigger.dev opcional |
-| Busca de notícias                   | Feeds RSS públicos                       |
-| Criação do roteiro                  | Gemini Free Tier                         |
-| Geração da voz                      | Gemini TTS Free Tier                     |
-| Reprodução e tratamento de áudio    | expo-audio e FFmpeg/FFprobe              |
-| Versionamento e distribuição        | GitHub e Expo EAS                        |
+| Parte do projeto                    | Tecnologias                     |
+| ----------------------------------- | ------------------------------- |
+| Aplicativo mobile                   | React Native, Expo e TypeScript |
+| Back-end, banco de dados e arquivos | Node.js e SQLite no computador  |
+| Processamento em segundo plano      | Fila local Node.js              |
+| Busca de notícias                   | Feeds RSS públicos              |
+| Criação do roteiro                  | Gemini Free Tier                |
+| Geração da voz                      | Gemini TTS Free Tier            |
+| Reprodução e tratamento de áudio    | expo-audio e FFmpeg/FFprobe     |
+| Versionamento e distribuição        | GitHub e Expo EAS               |
 
 ## Planejamento
 

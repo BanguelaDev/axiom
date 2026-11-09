@@ -41,7 +41,7 @@ export default function IntegrationScreen() {
   return (
     <Screen>
       <Copy variant="eyebrow" tone="accent">
-        ETAPA 3 · BASE TÉCNICA
+        CONEXÃO DO APLICATIVO
       </Copy>
       <Copy variant="title">Uma conexão de cada vez.</Copy>
       <Copy tone="secondary">
@@ -50,7 +50,7 @@ export default function IntegrationScreen() {
       </Copy>
       <Notice>
         {backendMode === 'local'
-          ? 'Ambiente local de desenvolvimento. A sessão é temporária e os dados são descartáveis. Não há geração de notícias, voz ou cobrança de fornecedores.'
+          ? 'O servidor funciona no computador e preserva os pedidos no banco local. Esta verificação consulta a conexão e o catálogo; não prepara um podcast.'
           : backendMode === 'supabase'
             ? 'Conexão configurada com Supabase. O teste inicia uma sessão anônima e consulta o catálogo; não solicita um podcast.'
             : 'A integração ainda precisa ser configurada. A demonstração das telas continua disponível.'}

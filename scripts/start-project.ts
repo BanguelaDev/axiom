@@ -20,6 +20,7 @@ const url = `http://${address}:8787`;
 const server = await startLocalApi(8787, {
   host: lan ? '0.0.0.0' : '127.0.0.1',
   publicUrl: url,
+  statePath: resolve('work', 'data', 'axiom.sqlite'),
   generation:
     process.env.AXIOM_LOCAL_GENERATION !== 'false' && !!process.env.GEMINI_API_KEY?.trim(),
 });

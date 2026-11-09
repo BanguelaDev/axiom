@@ -1,5 +1,15 @@
 # Validações do AXIOM
 
+## Etapa 9 — Persistência local
+
+- 103 testes aprovados, TypeScript/Deno e lint sem erros.
+- SQLite reaberto com sessão válida, sem o token original no arquivo. Expiração e credencial inválida recusadas.
+- Reinício HTTP preserva a associação do pedido, informa interrupção e não repete o fornecedor. Cotas permanecem válidas após reabrir o banco.
+- Áudio aprovado por FFmpeg recuperado após recriar o repositório e o banco; novo acesso emitido sem síntese. Cache expirado com pedidos concorrentes gera uma única reserva.
+- Estado incompatível e gravação concorrente falham sem apagar ou substituir silenciosamente os dados.
+
+O teste com aparelho Android sem cabo será registrado separadamente. Hospedagem remota e lojas não fazem parte do escopo local confirmado pelo responsável.
+
 ## Etapa 8 — 9 de novembro de 2026
 
 - TypeScript/Deno, lint e Expo Doctor: aprovados, com 20/20 verificações no Doctor.
