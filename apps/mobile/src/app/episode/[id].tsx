@@ -1,11 +1,10 @@
 import { View, Pressable, ActivityIndicator } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Slider } from '@expo/ui';
 import { getTopic } from '@axiom/core/topics';
 import { Screen, Copy, Icon, Button, Notice } from '@/components/ui';
 import { useApp } from '@/state/app-state';
 import { spacing, radius, sizes, waveform } from '@/theme';
-import { ControlsHost } from '@/components/controls-host';
+import { AudioProgress } from '@/components/audio-progress';
 import { resumePosition } from '@axiom/core/listening';
 function time(value: number) {
   const seconds = Math.floor(Math.max(0, value || 0));
@@ -105,19 +104,13 @@ export default function EpisodeScreen() {
         ))}
       </View>
       <View style={{ gap: spacing.sm }}>
-        <ControlsHost>
-          <Slider
-            value={position}
-            min={0}
-            max={duration}
-            step={0.1}
-            onValueChange={(value) => {
-              void seek(value);
-            }}
-            disabled={!active || disabled}
-            testID="audio-progress"
-          />
-        </ControlsHost>
+        <AudioProgress
+          position={position}
+          duration={duration}
+          onSeek={seek}
+          disabled={!active || disabled}
+          testID="audio-progress"
+        />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Copy variant="caption" tone="muted" style={{ fontVariant: ['tabular-nums'] }}>
             {time(position)}

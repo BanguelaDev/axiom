@@ -12,6 +12,41 @@ import { matchesTopic, newsQueries } from '../packages/pipeline/news-policy.ts';
 import { selectNews } from '../packages/pipeline/selection.ts';
 
 const now = new Date('2026-11-08T12:00:00Z');
+test('recortes incluem bem-estar digital e contexto brasileiro sem depender da palavra Brasil', () => {
+  assert.equal(
+    matchesTopic('mental-health', 'Instagram e solidão', 'Pesquisa sobre o bem-estar de usuários.'),
+    true,
+  );
+  assert.equal(
+    matchesTopic('mental-health', 'YouTube lança recurso', 'Novas opções de vídeo para criadores.'),
+    false,
+  );
+  assert.equal(
+    matchesTopic(
+      'crime',
+      'Polícia Federal investiga homicídio',
+      'Investigação em andamento no Distrito Federal.',
+    ),
+    true,
+  );
+  assert.equal(
+    matchesTopic(
+      'crime',
+      'Discussão sobre responsabilidade fiscal',
+      'Governo em Brasília discute orçamento. '.repeat(40) +
+        ' Caso de prisão antigo é citado ao final.',
+    ),
+    false,
+  );
+  assert.equal(
+    matchesTopic(
+      'fraud',
+      'Governo prorroga auxílio',
+      'Notícia sobre política pública. '.repeat(45) + ' Atenção a golpes.',
+    ),
+    false,
+  );
+});
 test('IA exige menção no título ou abertura e rejeita referência distante ao setor', () => {
   assert.equal(matchesTopic('ai', 'Novo chatbot chega ao mercado', 'Contexto da pesquisa.'), true);
   assert.equal(

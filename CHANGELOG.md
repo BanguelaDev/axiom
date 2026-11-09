@@ -1,5 +1,13 @@
 # Entregas do AXIOM
 
+## 0.10.0 — 9 de novembro de 2026
+
+**Etapa 10: fontes e teste Android.** Lote RSS distribuído entre grupos editoriais antes do limite de 50; publicação mais antiga preservada antes do corte e datas de calendário inválidas rejeitadas. Feed atual do g1, fonte especializada em psicologia e recortes refinados para evitar menções incidentais a crimes e golpes.
+
+Acesso Android com QR local e manifesto conferido. Corrigidos largura e comportamento da barra: contínua, proporcional e com busca ao soltar no Android. O Expo Go não tenta iniciar os controles de tela bloqueada que exigem o binário do app. Abertura, reprodução e correção da barra confirmadas pelo responsável em Galaxy Note 20 Ultra.
+
+Verificação: 108 testes, TypeScript/Deno, lint, exportações web/Android/iOS e Expo Doctor 20/20. Ucrânia, IA e Crimes gerados e medidos em 120,03 segundos; Fraudes teve uma versão rejeitada editorialmente e Saúde Mental ficou sem material elegível. Serviço nativo e segundo plano serão testados no APK.
+
 ## 0.9.0 — 9 de novembro de 2026
 
 **Etapa 9: persistência local.** SQLite guarda sessões, pedidos, associações, cotas e registros privados do áudio aprovado. Reiniciar preserva o reuso de episódios válidos e identifica preparações interrompidas, sem repetir o fornecedor. Tokens persistidos como hashes; gravação atômica, detecção de concorrência e falha segura para banco incompatível. Reserva local sem espera intermediária que pudesse duplicar pedidos.

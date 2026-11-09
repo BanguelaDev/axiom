@@ -31,6 +31,10 @@ npm run dev:lan
 
 Use o QR code do terminal no Expo Go compatível com SDK 58. O comando escolhe um IP privado do computador e fornece esse endereço ao app e à mídia. A chave permanece no servidor. Mantenha o terminal e o computador ligados. VPN, isolamento de Wi-Fi ou firewall podem impedir a conexão; a prévia web continua disponível.
 
+Para gerar uma imagem, execute `npm run phone:qr` em outro terminal. O QR fica em `work/android-preview/expo-go.png`, após conferir API e manifesto. Se houver mais de uma rede, `AXIOM_LAN_HOST` permite indicar um IPv4 privado para ambos os comandos.
+
+No Expo Go, o player permite testar a escuta com o aplicativo aberto. Os controles de tela bloqueada exigem o APK com o serviço nativo configurado. A barra é contínua e, no Android, busca o ponto escolhido ao soltar o dedo.
+
 Essa execução serve à apresentação acadêmica. Um APK independente, publicação em lojas e hospedagem contínua exigem builds e validações próprias. O áudio nativo em segundo plano e na tela bloqueada precisa de teste em Android/iPhone físicos.
 
 ## Demonstração sem chave

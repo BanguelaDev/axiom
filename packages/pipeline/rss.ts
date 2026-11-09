@@ -1,12 +1,19 @@
 import { XMLParser } from 'fast-xml-parser';
 import { canonicalUrl } from '../core/src/news.ts';
-import { isRecent } from '../core/src/news.ts';
+import { isRecent, publicationTime } from '../core/src/news.ts';
 import { matchesTopic } from './news-policy.ts';
 import type { TopicId } from '../core/src/topics.ts';
 import type { NewsCandidate } from './selection.ts';
 import { selectNews } from './selection.ts';
 
-type Feed = { url: string; publisher: string; domains: string[]; group: string; topics: TopicId[] };
+type Feed = {
+  url: string;
+  publisher: string;
+  domains: string[];
+  group: string;
+  topics: TopicId[];
+  reviewedAt?: string;
+};
 const all: TopicId[] = ['ukraine', 'ai', 'mental-health', 'fraud', 'politics', 'crime'];
 export class InsufficientNewsFault extends Error {
   constructor() {
@@ -14,6 +21,22 @@ export class InsufficientNewsFault extends Error {
   }
 }
 export const rssFeeds: Feed[] = [
+  {
+    url: 'https://g1.globo.com/rss/g1/',
+    publisher: 'g1',
+    domains: ['g1.globo.com'],
+    group: 'globo',
+    topics: ['crime', 'mental-health'],
+    reviewedAt: '2026-11-09T15:00:00.000Z',
+  },
+  {
+    url: 'https://www.psypost.org/exclusive/social/social-media/feed/',
+    publisher: 'PsyPost',
+    domains: ['psypost.org'],
+    group: 'psypost',
+    topics: ['mental-health'],
+    reviewedAt: '2026-11-09T15:00:00.000Z',
+  },
   {
     url: 'https://agenciabrasil.ebc.com.br/rss/geral/feed.xml',
     publisher: 'Agência Brasil',
@@ -188,7 +211,7 @@ export function parseRss(xml: string, feed: Feed): NewsCandidate[] {
         domain = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
       const rawDate = item.pubDate || item['dc:date'];
       if (typeof rawDate !== 'string' || !/(GMT|UTC|Z|[+-]\d{2}:?\d{2})$/i.test(rawDate)) continue;
-      const time = Date.parse(rawDate);
+      const time = rssDate(rawDate);
       if (!Number.isFinite(time) || !feed.domains.includes(domain) || !title || !content) continue;
       result.push({
         title: title.slice(0, 500),
@@ -203,6 +226,25 @@ export function parseRss(xml: string, feed: Feed): NewsCandidate[] {
     }
   }
   return result;
+}
+function rssDate(value: string): number {
+  if (/^\d{4}-/.test(value)) return publicationTime(value);
+  const parts =
+    /^(?:[a-z]{3},\s*)?(\d{1,2})\s+([a-z]{3})\s+(\d{4})\s+(\d{2}):(\d{2}):(\d{2})\s+(GMT|UTC|Z|[+-]\d{2}:?\d{2})$/i.exec(
+      value.trim(),
+    );
+  if (!parts) return NaN;
+  const [, day, month, year, hour, minute, second, offset] = parts;
+  const n =
+    ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'].indexOf(
+      month!.toLowerCase(),
+    ) + 1;
+  const zone = /^(GMT|UTC|Z)$/i.test(offset!)
+    ? 'Z'
+    : offset!.replace(/^([+-]\d{2})(\d{2})$/, '$1:$2');
+  return publicationTime(
+    `${year}-${String(n).padStart(2, '0')}-${day!.padStart(2, '0')}T${hour}:${minute}:${second}${zone}`,
+  );
 }
 async function fetchFeed(feed: Feed, fetcher: typeof fetch) {
   const response = await fetcher(feed.url, {
@@ -236,24 +278,51 @@ async function fetchFeed(feed: Feed, fetcher: typeof fetch) {
 export async function collectRss(topic: TopicId, reference: Date, fetcher: typeof fetch = fetch) {
   const feeds = rssFeeds.filter((feed) => feed.topics.includes(topic));
   const batches = await Promise.allSettled(feeds.map((feed) => fetchFeed(feed, fetcher)));
-  const allCandidates = batches.flatMap((result) =>
-    result.status === 'fulfilled' ? result.value : [],
-  );
+  const received = batches.flatMap((result) => (result.status === 'fulfilled' ? result.value : []));
+  const firstPublication = new Map<string, string>();
+  for (const item of received) {
+    const first = firstPublication.get(item.url);
+    if (!first || Date.parse(item.publishedAt) < Date.parse(first))
+      firstPublication.set(item.url, item.publishedAt);
+  }
+  const allCandidates = received.map((item) => ({
+    ...item,
+    publishedAt: firstPublication.get(item.url)!,
+  }));
   const priority = (item: NewsCandidate) =>
     Number(
       isRecent(item.publishedAt, reference) &&
         matchesTopic(topic, item.title, item.content) &&
         item.content.length >= 500,
     );
-  const candidates = allCandidates
-    .sort(
-      (a, b) => priority(b) - priority(a) || Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
-    )
-    .slice(0, 50);
+  const ordered = allCandidates.sort(
+    (a, b) => priority(b) - priority(a) || Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
+  );
+  // O limite não pode eliminar uma origem inteira só porque outra publica mais.
+  const candidates: NewsCandidate[] = [];
+  const owners = new Map(
+    feeds.flatMap((feed) => feed.domains.map((domain) => [domain, feed.group] as const)),
+  );
+  for (const rank of [1, 0]) {
+    const groups = new Map<string, NewsCandidate[]>();
+    for (const item of ordered) {
+      if (priority(item) !== rank) continue;
+      const owner = owners.get(item.publisherDomain) || item.publisherDomain;
+      const queue = groups.get(owner) || [];
+      queue.push(item);
+      groups.set(owner, queue);
+    }
+    while (candidates.length < 50 && [...groups.values()].some((queue) => queue.length))
+      for (const queue of groups.values()) {
+        if (candidates.length >= 50) break;
+        const next = queue.shift();
+        if (next) candidates.push(next);
+      }
+  }
   const registry = feeds.map((feed) => ({
     domains: feed.domains,
     editorialGroup: feed.group,
-    reviewedAt: '2026-11-08T00:00:00.000Z',
+    reviewedAt: feed.reviewedAt || '2026-11-08T00:00:00.000Z',
   }));
   const result = selectNews(candidates, topic, reference, registry);
   return {

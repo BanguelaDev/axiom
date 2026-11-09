@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Slider } from '@expo/ui';
 import { getTopic } from '@axiom/core/topics';
 import { usePodcast } from '@/state/podcast-state';
 import { useApp } from '@/state/app-state';
 import { Screen, Copy, Button, Notice, Icon } from '@/components/ui';
-import { ControlsHost } from '@/components/controls-host';
+import { AudioProgress } from '@/components/audio-progress';
 import { radius, sizes, spacing } from '@/theme';
 const time = (n: number) =>
   `${Math.floor(Math.max(0, n) / 60)}:${String(Math.floor(Math.max(0, n)) % 60).padStart(2, '0')}`;
@@ -60,17 +59,13 @@ export default function PodcastScreen() {
               {new Date(selected.generatedAt).toLocaleString('pt-BR')} · Narração por IA
             </Copy>
           </View>
-          <ControlsHost>
-            <Slider
-              value={status.currentTime}
-              min={0}
-              max={status.duration || selected.durationSeconds}
-              step={0.1}
-              disabled={disabled}
-              onValueChange={(value) => void seek(value)}
-              testID="podcast-progress"
-            />
-          </ControlsHost>
+          <AudioProgress
+            position={status.currentTime}
+            duration={status.duration || selected.durationSeconds}
+            disabled={disabled}
+            onSeek={seek}
+            testID="podcast-progress"
+          />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Copy variant="caption" tone="muted">
               {time(status.currentTime)}

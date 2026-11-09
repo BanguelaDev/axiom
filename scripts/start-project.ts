@@ -1,21 +1,10 @@
-import { networkInterfaces } from 'node:os';
 import { setTimeout } from 'node:timers';
 import { spawn } from 'node:child_process';
 import { resolve } from 'node:path';
 import { startLocalApi } from '../packages/backend/local-server.ts';
+import { lanAddress } from '../packages/backend/lan-address.ts';
 const lan = process.argv.includes('--lan');
-const addresses = Object.entries(networkInterfaces())
-  .filter(([name]) => !/virtual|vbox|vmware|loopback|wsl|hyper-v/i.test(name))
-  .flatMap(([, items]) => items || [])
-  .filter((item) => item.family === 'IPv4' && !item.internal);
-const address = lan
-  ? addresses.find((item) => /^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(item.address))
-      ?.address
-  : '127.0.0.1';
-if (!address)
-  throw new Error(
-    'Não encontramos um IP da rede local. Conecte o computador e o celular ao mesmo Wi-Fi.',
-  );
+const address = lan ? lanAddress() : '127.0.0.1';
 const url = `http://${address}:8787`;
 const server = await startLocalApi(8787, {
   host: lan ? '0.0.0.0' : '127.0.0.1',

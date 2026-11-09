@@ -21,7 +21,7 @@ export function ControlsHost({ children }: { children: ReactNode }) {
       : {};
   return (
     <Host
-      matchContents
+      matchContents={{ vertical: true }}
       colorScheme={scheme}
       seedColor={colors.accent}
       style={

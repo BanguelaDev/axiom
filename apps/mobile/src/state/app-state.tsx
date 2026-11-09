@@ -1,3 +1,4 @@
+import { nativeAudioControls } from '@/services/audio-capabilities';
 import {
   createContext,
   use,
@@ -133,7 +134,7 @@ function useAppValue() {
       if (!hydrated || !status.isLoaded) throw new Error('Áudio ainda não carregado.');
       await setAudioModeAsync({
         playsInSilentMode: true,
-        shouldPlayInBackground: true,
+        shouldPlayInBackground: nativeAudioControls,
         interruptionMode: 'doNotMix',
       });
       if (request !== playRequest.current) return;
@@ -144,7 +145,7 @@ function useAppValue() {
       const start = resumePosition(saved, status.duration);
       await player.seekTo(start);
       if (request !== playRequest.current) return;
-      if (process.env.EXPO_OS !== 'web')
+      if (nativeAudioControls)
         player.setActiveForLockScreen(true, {
           title: `Amostra · ${getTopic(topicId)?.name}`,
           artist: 'AXIOM · Demonstração',
@@ -196,7 +197,7 @@ function useAppValue() {
   function clearHistory() {
     ++playRequest.current;
     player.pause();
-    if (process.env.EXPO_OS !== 'web') player.setActiveForLockScreen(false);
+    if (nativeAudioControls) player.setActiveForLockScreen(false);
     progress.current = { topic: null, position: 0, starting: false };
     setStartingPlayback(false);
     setActiveTopic(null);

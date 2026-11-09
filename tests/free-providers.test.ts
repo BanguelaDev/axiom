@@ -192,6 +192,36 @@ test('RSS rejeita entidades, links fora da fonte, ausência de publicação e co
     0,
   );
   assert.throws(() => parseRss('<!DOCTYPE rss [<!ENTITY a "x">]><rss/>', feed));
+  for (const invalid of [
+    'Mon, 30 Feb 2026 02:00:00 GMT',
+    '2026-02-30T02:00:00Z',
+    'Mon, 09 Nov 2026 25:00:00 GMT',
+  ])
+    assert.equal(parseRss(xml(invalid), feed).length, 0);
+});
+
+test('um veículo com muitas notícias não elimina outra origem do lote limitado', async () => {
+  const reference = new Date('2026-11-09T16:00:00Z');
+  const result = await collectRss('crime', reference, async (url) => {
+    const feed = rssFeeds.find((item) => item.url === String(url))!;
+    const globo = feed.url === 'https://g1.globo.com/rss/g1/';
+    const ebc = feed.url === 'https://agenciabrasil.ebc.com.br/rss/geral/feed.xml';
+    if (!globo && !ebc) return new Response(null, { status: 503 });
+    const items = Array.from({ length: globo ? 75 : 3 }, (_, index) => {
+      const unique = `${globo ? 'a' : 'b'}${index}`;
+      const content = `Notícia fictícia de crime e investigação policial no Brasil. ${Array.from({ length: 100 }, (_, n) => `contexto${unique}palavra${n}`).join(' ')}`;
+      return `<item><title>Investigação fictícia ${unique} em cidade brasileira</title><link>https://${feed.domains[0]}/noticia/${unique}</link><pubDate>Mon, 09 Nov 2026 ${globo ? '15' : '14'}:00:00 GMT</pubDate><description>${content}</description></item>`;
+    }).join('');
+    const old = globo
+      ? `<item><title>Publicação fictícia original</title><link>https://${feed.domains[0]}/noticia/a0</link><pubDate>Mon, 02 Nov 2026 15:00:00 GMT</pubDate><description>${'Contexto fictício de investigação no Brasil. '.repeat(20)}</description></item>`
+      : '';
+    return new Response(`<rss><channel>${items}${old}</channel></rss>`);
+  });
+  assert.equal(result.report.received, 50);
+  assert.equal(result.report.status, 'ready');
+  assert.equal(result.report.independentSources, 2);
+  assert.ok(result.articles.some((item) => item.editorialGroup === 'ebc'));
+  assert.ok(result.articles.every((item) => item.url !== 'https://g1.globo.com/noticia/a0'));
 });
 test('coleta RSS tolera feeds indisponíveis sem chave de notícias', async () => {
   let calls = 0;

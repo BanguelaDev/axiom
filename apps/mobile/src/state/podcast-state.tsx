@@ -1,3 +1,4 @@
+import { nativeAudioControls } from '@/services/audio-capabilities';
 import {
   createContext,
   use,
@@ -300,7 +301,7 @@ function usePodcastValue() {
       if (Date.parse(selected.expiresAt) <= Date.now()) throw new ApiFault('not_found', 404);
       await setAudioModeAsync({
         playsInSilentMode: true,
-        shouldPlayInBackground: true,
+        shouldPlayInBackground: nativeAudioControls,
         interruptionMode: 'doNotMix',
       });
       if (request !== playbackRequest.current) return;
@@ -312,7 +313,7 @@ function usePodcastValue() {
       canSavePosition.current = true;
       setPositionReady(true);
       claimPlayback('podcast');
-      if (process.env.EXPO_OS !== 'web')
+      if (nativeAudioControls)
         player.setActiveForLockScreen(true, {
           title: selected.title,
           artist: 'AXIOM · Narração por IA',
@@ -352,7 +353,7 @@ function usePodcastValue() {
   function clearHistory() {
     ++playbackRequest.current;
     player.pause();
-    if (process.env.EXPO_OS !== 'web') player.setActiveForLockScreen(false);
+    if (nativeAudioControls) player.setActiveForLockScreen(false);
     player.replace(null);
     canSavePosition.current = false;
     setPositionReady(false);

@@ -37,9 +37,13 @@ export function normalizedText(value: string): string {
 export function matchesTopic(topic: TopicId, title: string, content: string): boolean {
   // Filtro lexical inicial, a calibrar com notícias reais e complementar pela revisão editorial.
   const text = normalizedText(`${title} ${content}`);
+  const opening = normalizedText(`${title} ${content.slice(0, 900)}`);
   const fraud =
-    /\b(golpes?|fraudes?|phishing|scams?)\b/.test(text) && !/\bgolpe de estado\b/.test(text);
-  const brazil = /\b(brasil|brazil|brasileir[oa]s?)\b/.test(text);
+    /\b(golpes?|fraudes?|phishing|scams?)\b/.test(opening) && !/\bgolpe de estado\b/.test(opening);
+  const brazil =
+    /\b(brasil|brazil|brasileir[oa]s?|brasilia|distrito federal|rio de janeiro|sao paulo|policia federal|policia rodoviaria federal|ministerio publico federal|supremo tribunal federal|mpf|stf)\b/.test(
+      text,
+    );
   switch (topic) {
     case 'ukraine':
       return (
@@ -55,8 +59,12 @@ export function matchesTopic(topic: TopicId, title: string, content: string): bo
       );
     case 'mental-health':
       return (
-        /\b(redes sociais|social media|instagram|tiktok)\b/.test(text) &&
-        /\b(saude mental|mental health|ansiedade|anxiety|depressao|depression)\b/.test(text)
+        /\b(redes sociais|social media|social networks?|instagram|tiktok|facebook|youtube|reddit)\b/.test(
+          text,
+        ) &&
+        /\b(saude mental|mental health|ansiedade|anxiety|depressao|depression|bem estar|wellbeing|well being|autoestima|self esteem|solidao|loneliness|insonia|insomnia|vicio|addiction|self harm|automutilacao)\b/.test(
+          text,
+        )
       );
     case 'fraud':
       return fraud;
@@ -71,8 +79,8 @@ export function matchesTopic(topic: TopicId, title: string, content: string): bo
       return (
         brazil &&
         !fraud &&
-        /\b(crimes?|investigacao|investigation|seguranca publica|public safety|policia|police)\b/.test(
-          text,
+        /\b(crimes?|investigacao|investigation|seguranca publica|public safety|policia|police|prisa[oa]|pres[oa]s?|homicidio|morta?s?|assassinad[oa]s?|escravidao|trafico)\b/.test(
+          opening,
         )
       );
   }

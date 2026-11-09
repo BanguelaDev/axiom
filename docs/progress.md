@@ -131,3 +131,13 @@ Permanecem fora do aceite acadêmico local: avaliação humana em escala, teste 
 - 103 testes aprovados, incluindo reinício HTTP, isolamento, cota preservada e recuperação de áudio com FFmpeg real. TypeScript/Deno e lint aprovados.
 
 Próximas pendências locais: cobertura das fontes, operação/retirada e retenção, pacote Android instalável e testes com o aparelho e ouvintes. As amostras reais anteriores não equivalem à avaliação dos seis temas.
+
+## Etapa 10 — Fontes e correções no Android
+
+- Lote distribuído entre grupos editoriais; primeira publicação preservada antes de limitar a coleta e calendário RFC/ISO estrito. Filtros evitam menções incidentais a crimes e golpes.
+- Feed atual do g1 e PsyPost. Auditoria: cinco temas com material suficiente; Saúde Mental sem notícias elegíveis, mantendo 72 horas.
+- QR local com API e manifesto conferidos. Abertura e reprodução confirmadas em Galaxy Note 20 Ultra.
+- Corrigidos largura, proporção e arraste da barra. O responsável confirmou a correção e a ausência de novo aviso. No Expo Go, o serviço de tela bloqueada não é acionado.
+- 108 testes, TypeScript/Deno, lint, exportações e Expo Doctor 20/20. Pela API, Ucrânia, IA e Crimes geraram áudio de 120,03 segundos; Fraudes foi bloqueado pela revisão de atribuição. Política já havia sido validado e foi reproduzido pelo responsável.
+
+Pendente: APK próprio para validar serviço de reprodução, tela bloqueada e segundo plano; operação/retirada e retenção; revisão humana do conteúdo e da voz. A resposta de nota/versão do Android não permitiu registrar uma avaliação de 1 a 5 com segurança.

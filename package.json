@@ -1,6 +1,6 @@
 {
   "name": "axiom",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -16,6 +16,8 @@
     "dev": "tsx --env-file-if-exists=.env scripts/start-project.ts",
     "dev:lan": "tsx --env-file-if-exists=.env scripts/start-project.ts --lan",
     "dev:api": "tsx --env-file-if-exists=.env scripts/dev-api.ts",
+    "phone:qr": "tsx scripts/phone-preview.ts",
+    "check:live": "tsx scripts/check-live.ts",
     "audit:selection": "tsx scripts/audit-selection.ts",
     "audit:editorial": "tsx scripts/audit-editorial.ts",
     "audit:audio": "tsx scripts/audit-audio.ts",
@@ -32,7 +34,9 @@
     "@electric-sql/pglite": "^0.5.15",
     "@trigger.dev/build": "^4.8.3",
     "@types/node": "^26.6.5",
+    "@types/qrcode": "^1.5.6",
     "prettier": "^3.9.10",
+    "qrcode": "^1.5.4",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3"
   },

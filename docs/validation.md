@@ -1,5 +1,14 @@
 # Validações do AXIOM
 
+## Etapa 10 — Fontes e Android físico
+
+- 108 testes, TypeScript/Deno, lint, exportações web/Android/iOS e Expo Doctor aprovados.
+- Regressões de diversidade antes do limite, datas impossíveis, republicação, proporção da barra e capacidades do player no Expo Go.
+- Auditoria dos seis temas: cinco pautas suficientes; Saúde Mental sem conteúdo elegível. Notícias antigas ou textos curtos não completam o tema.
+- Pela API: Ucrânia, IA e Crimes com MP3 de 120,032653 segundos; Fraudes bloqueado na revisão. Relatórios e áudios privados em `work/live-check`.
+- Confirmado pelo responsável em Galaxy Note 20 Ultra: abertura, reprodução e correção da barra após recarregar, sem novo aviso.
+- O Expo Go registrou falha de vínculo do serviço de áudio. O APK deverá validar a configuração nativa; segundo plano e controles não foram presumidos como aprovados.
+
 ## Etapa 9 — Persistência local
 
 - 103 testes aprovados, TypeScript/Deno e lint sem erros.
