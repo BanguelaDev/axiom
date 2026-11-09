@@ -31,7 +31,7 @@ Para a apresentação no celular, consulte o guia de entrega. O telefone precisa
 
 ## Limites gratuitos
 
-Os modelos configurados são Gemini 3.8 Flash e Gemini 3.8 Flash TTS, listados com faixa gratuita na documentação consultada. A disponibilidade e as cotas variam por conta e região. Use um projeto sem faturamento. Se a cota acabar, a preparação é interrompida com uma mensagem; não há fallback para fornecedor pago.
+Os modelos configurados são Gemini 3.5 Flash Lite e Gemini 3.8 Flash Lite TTS, listados com faixa gratuita na documentação consultada. A disponibilidade e as cotas variam por conta e região. Use um projeto sem faturamento. Se a cota acabar, a preparação é interrompida com uma mensagem; não há fallback para fornecedor pago.
 
 A coleta usa o texto publicado nos feeds, com links e crédito aos veículos. Mantém o limite de 72 horas e fontes distintas. Se não houver material suficiente, o tema fica indisponível; não é preenchido com notícias antigas. A revisão automatizada não substitui conferir as notícias e ouvir o resultado.
 

@@ -1,5 +1,13 @@
 # Entregas do AXIOM
 
+## 0.8.0 — 9 de novembro de 2026
+
+**Etapa 8: entrega acadêmica e validação real do fluxo gratuito.** Primeiro episódio com notícias e narração Gemini gerado e medido em 120,03 segundos. Catálogo de evidências literais, descarte auditado de fatos com números sem suporte, créditos antes da revisão e seleção de parágrafos completos para o orçamento de palavras. Uma correção editorial orientada pelo motivo de rejeição, com nova revisão obrigatória. Calibração de ritmo de até 10% para a voz gratuita, sem cortar fala ou acrescentar silêncio.
+
+Corrigidos caminhos temporários longos no Windows e perda do ponto de escuta ao carregar um episódio. Sessão local rejeitada é renovada uma única vez. Atualização compatível com Expo SDK 58, ícone original, guia de apresentação e informações sobre dados.
+
+Verificação: 99 testes, TypeScript/Deno, lint, exportações web/Android/iOS e Expo Doctor 20/20. Episódios reais de IA e Política; reprodução, pausa, busca, fontes, histórico e retomada conferidos na prévia, também em largura de 390 pixels. Avaliação com ouvintes, teste em aparelhos físicos, serviços remotos e lojas continuam pendentes. Os resultados estão em [validação](docs/validation.md). Nenhum fallback pago foi adicionado.
+
 ## 0.7.0 — 8 de novembro de 2026
 
 **Etapa 7: jornada mobile integrada e custo zero.** Geração e consulta de fila pela API, player de episódios com mídia temporária, fontes, retomada e histórico. RSS público e Gemini Free Tier substituem o fluxo pago; não há fallback pago. API/fila local ligadas ao pipeline, comandos de execução no computador e na rede do celular, worker remoto preparado como opção. Guia simplificado de uma única chave gratuita.

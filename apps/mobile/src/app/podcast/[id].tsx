@@ -76,7 +76,7 @@ export default function PodcastScreen() {
               {time(status.currentTime)}
             </Copy>
             <Copy variant="caption" tone="muted">
-              {time(status.duration || selected.durationSeconds)}
+              {time(Math.round(status.duration || selected.durationSeconds))}
             </Copy>
           </View>
           <Button

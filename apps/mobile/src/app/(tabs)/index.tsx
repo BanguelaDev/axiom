@@ -113,8 +113,8 @@ export default function HomeScreen() {
           PROJETO ACADÊMICO · AEMS
         </Copy>
         <Copy variant="caption" tone="muted">
-          Explore as telas e o player. A geração de notícias e a voz final aguardam a configuração
-          dos serviços.
+          Notícias recentes, referências para consultar e narração por inteligência artificial.
+          Um projeto para ouvir e aprender.
         </Copy>
       </View>
     </Screen>

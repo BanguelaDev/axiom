@@ -32,23 +32,24 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 - Política
 - Crimes
 
-## Tecnologias previstas
+## Tecnologias usadas
 
-| Parte do projeto                    | Tecnologias                                            |
-| ----------------------------------- | ------------------------------------------------------ |
-| Aplicativo mobile                   | React Native, Expo e TypeScript                        |
-| Back-end, banco de dados e arquivos | Node.js local; Supabase opcional |
-| Processamento em segundo plano      | Fila local Node.js; Trigger.dev opcional                                  |
-| Busca de notícias                   | Feeds RSS públicos                                              |
-| Criação do roteiro                  | Gemini Free Tier                                   |
-| Geração da voz                      | Gemini TTS Free Tier                                             |
-| Reprodução e tratamento de áudio    | expo-audio e FFmpeg/FFprobe                            |
-| Versionamento e distribuição        | GitHub e Expo EAS                                      |
+| Parte do projeto                    | Tecnologias                              |
+| ----------------------------------- | ---------------------------------------- |
+| Aplicativo mobile                   | React Native, Expo e TypeScript          |
+| Back-end, banco de dados e arquivos | Node.js local; Supabase opcional         |
+| Processamento em segundo plano      | Fila local Node.js; Trigger.dev opcional |
+| Busca de notícias                   | Feeds RSS públicos                       |
+| Criação do roteiro                  | Gemini Free Tier                         |
+| Geração da voz                      | Gemini TTS Free Tier                     |
+| Reprodução e tratamento de áudio    | expo-audio e FFmpeg/FFprobe              |
+| Versionamento e distribuição        | GitHub e Expo EAS                        |
 
 ## Planejamento
 
-Já é possível explorar os seis temas, o player e o histórico. O app também apresenta os critérios de seleção, revisão e áudio. No servidor, a preparação foi dividida em fatos, redação, revisão e tratamento do som, mantendo o roteiro interno. A integração com serviços reais e a validação da qualidade de conteúdo e voz continuam pendentes.
+A versão acadêmica já conecta a escolha do tema à busca de notícias, ao roteiro, à revisão e à narração. O primeiro episódio real foi gerado e medido em 120,03 segundos. O player oferece pausa, controles de 15 segundos, fontes e histórico. O roteiro fica no servidor. A avaliação com ouvintes e os testes em celulares físicos continuam pendentes.
 
+- [Guia de apresentação](ENTREGA.md): preparação e sequência para mostrar o trabalho ao professor.
 - [Roadmap resumido](AXIOM-roadmap-resumido.md): visão rápida da proposta, das tecnologias e das etapas.
 - [Roadmap completo](AXIOM-roadmap.md): detalhes da arquitetura, da geração dos episódios e dos testes previstos.
 
@@ -73,5 +74,6 @@ A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narraç
 - [Roteiro e revisão](docs/editorial.md): evidências, verificações e limites da avaliação por IA.
 - [Áudio e publicação](docs/audio.md): duração, volume, integridade e demonstração de dois minutos.
 - [Registro das entregas](CHANGELOG.md): mudanças e testes de cada etapa.
+- [Dados e funcionamento](docs/dados.md): armazenamento local e processamento pelo Gemini.
 
 A versão acadêmica roda com o computador ligado, sem hospedagem paga. O projeto Gemini precisa permanecer no plano Free, sem faturamento. Se faltar cota ou notícias suficientes, o app informa a indisponibilidade.

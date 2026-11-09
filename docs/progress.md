@@ -1,10 +1,14 @@
 # Acompanhamento das etapas
 
+## Entrega acadêmica — versão 0.8
+
+O fluxo ativo usa RSS público e Gemini Free Tier, com servidor local. A chave já foi configurada e texto e voz foram exercitados com notícias reais. A conferência final da jornada e o resultado do primeiro episódio completo ficam no registro da etapa 8 ao final desta página. Os relatos anteriores descrevem cada versão na data da entrega.
+
 ## Etapa 1 — Notícias, IA e voz: em andamento
 
 Implementados: catálogo dos seis temas; seleção na janela de 72 horas; deduplicação; exigência de veículos distintos; evidências literais por afirmação; revisão estruturada; integrações de GNews, OpenAI e ElevenLabs; medição e ajuste limitado de duração; saída pública sem roteiro.
 
-Pendente: configurar as contas e permissões de conteúdo, executar chamadas reais, avaliar cobertura dos seis temas e aprovar a voz com ouvintes. Não foi gerado nenhum podcast jornalístico real até aqui.
+Pendente: configurar as contas e permissões de conteúdo, executar chamadas reais, avaliar cobertura dos seis temas e aprovar a voz com ouvintes. Na etapa 1 original, ainda não havia podcast jornalístico real; o primeiro fluxo completo está registrado na entrega 0.8.
 
 ## Etapa 2 — UX e identidade: protótipo navegável implementado
 
@@ -98,3 +102,20 @@ Entrega de 8 de novembro de 2026, seguindo a etapa 7 do roadmap e a decisão de 
 - 88 testes aprovados, TypeScript/Deno, lint e exportação web. Coleta RSS real encontrou material em quatro dos seis temas na primeira auditoria; notícias insuficientes continuam bloqueadas.
 
 Pendente nesta entrega: chave Gemini Free Tier do responsável, primeira síntese jornalística real, revisão humana e teste em celular físico. A prévia confirmou a nova navegação e o tratamento de geração não configurada. Supabase completo, fila remota, beta e lojas não foram validados. As etapas históricas acima registram os fornecedores utilizados naquela versão; a configuração ativa agora está em [configurar chaves](configurar-chaves.md).
+
+## Etapa 8 — Preparação da apresentação acadêmica
+
+- Dois episódios jornalísticos reais concluídos, em IA e Política, ambos medidos em 120,03 segundos. Player, controles, referências, mini player e histórico conferidos na prévia. Retomada após recarregar confirmada no episódio de Política, preservando o ponto salvo sem reprodução automática.
+- 99 testes aprovados, TypeScript/Deno e lint sem erros. Revisão da tela em 390 × 844 pixels e captura da prévia.
+- Guia [ENTREGA.md](../ENTREGA.md), informações sobre dados, ícone original e versões alinhadas em 0.8.0.
+- Dependências corrigidas dentro do Expo SDK 58; Expo Doctor aprovado em 20 de 20 verificações. Auditoria npm reduzida para 12 ocorrências moderadas, sem altas ou críticas.
+- Exportações web, Android e iOS aprovadas. Os bundles Android/iOS são JavaScript/Hermes, sem APK/IPA instalado.
+- Extração Gemini com catálogo de trechos literais, descarte auditado de fatos com números sem evidência e créditos de atribuição antes da revisão.
+- Seleção de parágrafos completos para o orçamento de palavras; nova redação calibrada pela duração e quantidade efetiva de palavras da versão narrada.
+- Uma correção editorial por preparação, guiada pelo motivo de rejeição e submetida a nova revisão. Limite de três versões de áudio; cota e indisponibilidade não são repetidas automaticamente.
+- Ritmo calibrado em até 10% para a narração gratuita, após variação observada na fala real. Mantidos o arquivo final de dois minutos, o texto completo e os controles de volume e silêncio; avaliação com ouvintes pendente.
+- Renovação de sessão local rejeitada uma única vez, preservando o pedido. Falhas de servidor não provocam repetição automática da geração.
+- Correção de nomes temporários extensos na conversão de áudio no Windows, com teste de regressão.
+- Auditoria RSS dos seis temas: Ucrânia, IA, Fraudes e Política com material suficiente; Saúde Mental e Crimes insuficientes naquele instante. A janela de 72 horas é preservada.
+
+Permanecem fora do aceite acadêmico local: avaliação humana em escala, teste em aparelhos físicos, segundo plano/Bluetooth, Supabase completo, Trigger.dev implantado, beta e lojas. A configuração ativa não usa GNews, OpenAI ou ElevenLabs e não tem fallback pago.

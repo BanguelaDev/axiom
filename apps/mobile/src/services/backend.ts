@@ -92,7 +92,7 @@ async function getToken(): Promise<string> {
 export const backendMode = useLocal ? 'local' : client ? 'supabase' : 'unconfigured';
 export const backendConnection: ApiConnection | null =
   useLocal && localUrl
-    ? { url: localUrl, getToken }
+    ? { url: localUrl, getToken, renewSession: forgetLocalSession }
     : client && supabaseUrl && publishableKey
       ? { url: `${supabaseUrl}/functions/v1/axiom`, headers: { apikey: publishableKey }, getToken }
       : null;

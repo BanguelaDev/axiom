@@ -17,7 +17,7 @@ export const topics = [
     symbol: 'cpu',
     icon: 'chip',
     color: '#A78BFA',
-    rule: 'Diferencie anúncio comercial, produto disponível e resultado de pesquisa.',
+    rule: 'A inteligência artificial deve ser o assunto central, não apenas o setor de uma empresa citada. Diferencie anúncio comercial, produto disponível e resultado de pesquisa.',
   },
   {
     id: 'mental-health',

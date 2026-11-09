@@ -1,12 +1,12 @@
 # AXIOM — Roadmap de construção do aplicativo mobile
 
-**Versão:** 1.6
+**Versão:** 1.7
 
 **Criado em:** 19 de outubro de 2026
 
-**Atualizado em:** 8 de novembro de 2026
+**Atualizado em:** 9 de novembro de 2026
 
-**Status:** entrega acadêmica de custo zero em integração: RSS público, Gemini Free Tier e servidor local. A jornada mobile está conectada à API; testes com voz real e aparelhos continuam identificados no acompanhamento.
+**Status:** fluxo acadêmico local integrado com RSS público, Gemini Free Tier e servidor local. Primeiro episódio jornalístico real gerado e medido em 120,03 segundos; validação em aparelhos físicos, avaliação com ouvintes e lançamento continuam pendentes.
 
 O escopo abaixo continua sendo a referência do projeto. O andamento e as validações pendentes ficam em [docs/progress.md](docs/progress.md), e as entregas estão registradas no [CHANGELOG.md](CHANGELOG.md). A etapa 1 ainda depende dos fornecedores e da avaliação de notícias e voz reais; o protótipo usa cenários identificados como demonstração.
 
@@ -20,15 +20,15 @@ O conteúdo de cada novo episódio será baseado exclusivamente em matérias pub
 
 ### Decisões já definidas
 
-| Item | Definição |
-| --- | --- |
-| Nome | **AXIOM**, conforme definido pelo idealizador |
-| Produto | Aplicativo mobile de notícias em formato de podcast |
-| Conteúdo | Seis temas predefinidos |
-| Duração | 2 minutos por episódio, na velocidade normal |
-| Atualidade | Notícias publicadas nas últimas 72 horas |
-| Roteiro | Interno; indisponível na interface e nas APIs do aplicativo |
-| Narração | Voz sintética natural, clara e consistente |
+| Item       | Definição                                                   |
+| ---------- | ----------------------------------------------------------- |
+| Nome       | **AXIOM**, conforme definido pelo idealizador               |
+| Produto    | Aplicativo mobile de notícias em formato de podcast         |
+| Conteúdo   | Seis temas predefinidos                                     |
+| Duração    | 2 minutos por episódio, na velocidade normal                |
+| Atualidade | Notícias publicadas nas últimas 72 horas                    |
+| Roteiro    | Interno; indisponível na interface e nas APIs do aplicativo |
+| Narração   | Voz sintética natural, clara e consistente                  |
 
 ### Premissas recomendadas para a primeira versão
 
@@ -47,14 +47,14 @@ Essas premissas permitem planejar a construção e poderão ser ajustadas antes 
 
 Os nomes abaixo serão as categorias apresentadas na tela inicial. A delimitação editorial ajuda a diferenciá-las, mesmo quando uma notícia envolve mais de um assunto.
 
-| Tema | O que o episódio deve cobrir | Delimitação editorial | Identificação visual proposta |
-| --- | --- | --- | --- |
-| **Guerra da Ucrânia** | Acontecimentos do conflito, diplomacia, negociações e impactos humanitários | Foco no conflito e seus efeitos; distinguir declarações das partes e informações confirmadas | Azul `#60A5FA`; ícone de globo |
-| **Inteligência Artificial** | Novos modelos, produtos, pesquisas, aplicações e regulação de IA | Evitar notícias genéricas de tecnologia sem relação central com IA | Violeta `#A78BFA`; ícone de circuito |
-| **Redes Sociais e Saúde Mental** | Estudos, mudanças nas plataformas e acontecimentos sobre bem-estar digital | Exigir relação com redes sociais e saúde mental; evitar transformar associação em causalidade | Verde `#34D399`; ícone de conversa |
-| **Fraudes e Golpes** | Golpes digitais, fraudes financeiras, vazamentos usados em golpes e alertas de prevenção | Priorizar mecanismos de fraude e proteção do público, sem ensinar a executar golpes | Âmbar `#FBBF24`; ícone de escudo |
-| **Política** | Governo, Congresso, eleições, políticas públicas e relações institucionais | Foco inicial no Brasil, com atribuição das falas e separação entre fato e opinião | Ciano `#22D3EE`; ícone de instituição |
-| **Crimes** | Investigações, segurança pública e desdobramentos de casos criminais | Priorizar casos fora de fraudes e golpes; distinguir suspeita, acusação e condenação | Coral `#FB7185`; ícone de lupa |
+| Tema                             | O que o episódio deve cobrir                                                             | Delimitação editorial                                                                         | Identificação visual proposta         |
+| -------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------- |
+| **Guerra da Ucrânia**            | Acontecimentos do conflito, diplomacia, negociações e impactos humanitários              | Foco no conflito e seus efeitos; distinguir declarações das partes e informações confirmadas  | Azul `#60A5FA`; ícone de globo        |
+| **Inteligência Artificial**      | Novos modelos, produtos, pesquisas, aplicações e regulação de IA                         | Evitar notícias genéricas de tecnologia sem relação central com IA                            | Violeta `#A78BFA`; ícone de circuito  |
+| **Redes Sociais e Saúde Mental** | Estudos, mudanças nas plataformas e acontecimentos sobre bem-estar digital               | Exigir relação com redes sociais e saúde mental; evitar transformar associação em causalidade | Verde `#34D399`; ícone de conversa    |
+| **Fraudes e Golpes**             | Golpes digitais, fraudes financeiras, vazamentos usados em golpes e alertas de prevenção | Priorizar mecanismos de fraude e proteção do público, sem ensinar a executar golpes           | Âmbar `#FBBF24`; ícone de escudo      |
+| **Política**                     | Governo, Congresso, eleições, políticas públicas e relações institucionais               | Foco inicial no Brasil, com atribuição das falas e separação entre fato e opinião             | Ciano `#22D3EE`; ícone de instituição |
+| **Crimes**                       | Investigações, segurança pública e desdobramentos de casos criminais                     | Priorizar casos fora de fraudes e golpes; distinguir suspeita, acusação e condenação          | Coral `#FB7185`; ícone de lupa        |
 
 **Regra para sobreposição:** cada matéria terá um tema principal e poderá receber etiquetas secundárias internas. Notícias sobre golpes entrarão prioritariamente em Fraudes e Golpes. Um episódio não repetirá o mesmo acontecimento como se fossem notícias diferentes.
 
@@ -64,23 +64,23 @@ Os nomes abaixo serão as categorias apresentadas na tela inicial. A delimitaç�
 
 ### Tema escuro — padrão recomendado
 
-| Elemento | Cor proposta |
-| --- | --- |
-| Fundo | `#0B1020` |
-| Cartões e superfícies | `#151D30` |
-| Texto principal | `#F8FAFC` |
-| Texto secundário | `#CBD5E1` |
-| Ação principal | `#67E8F9`, com texto escuro |
+| Elemento              | Cor proposta                |
+| --------------------- | --------------------------- |
+| Fundo                 | `#0B1020`                   |
+| Cartões e superfícies | `#151D30`                   |
+| Texto principal       | `#F8FAFC`                   |
+| Texto secundário      | `#CBD5E1`                   |
+| Ação principal        | `#67E8F9`, com texto escuro |
 
 ### Tema claro — alternativa
 
-| Elemento | Cor proposta |
-| --- | --- |
-| Fundo | `#F8FAFC` |
-| Cartões e superfícies | `#FFFFFF` |
-| Texto principal | `#0F172A` |
-| Texto secundário | `#475569` |
-| Ação principal | `#0E7490`, com texto claro |
+| Elemento              | Cor proposta               |
+| --------------------- | -------------------------- |
+| Fundo                 | `#F8FAFC`                  |
+| Cartões e superfícies | `#FFFFFF`                  |
+| Texto principal       | `#0F172A`                  |
+| Texto secundário      | `#475569`                  |
+| Ação principal        | `#0E7490`, com texto claro |
 
 O aplicativo deverá permitir escolher claro, escuro ou acompanhar o sistema. As cores dos temas serão usadas em detalhes e ícones; os nomes continuarão visíveis. O protótipo deverá validar contraste, ampliação de fonte e áreas de toque. A tipografia poderá usar as fontes nativas de cada plataforma para simplificar a implementação.
 
@@ -100,14 +100,14 @@ O aplicativo deverá permitir escolher claro, escuro ou acompanhar o sistema. As
 
 ### Telas previstas
 
-| Tela | Conteúdo principal |
-| --- | --- |
-| Início | Marca AXIOM, proposta do produto e seis cartões de temas |
-| Preparação | Etapa atual, indicação de espera e tratamento de falhas |
-| Player | Tema, título, data de geração, duração real, progresso e controles |
-| Fontes | Referências utilizadas e acesso às matérias originais |
-| Histórico | Episódios ouvidos, data e opção de continuar a escuta |
-| Preferências | Tema visual, informações sobre IA e opções de privacidade |
+| Tela         | Conteúdo principal                                                 |
+| ------------ | ------------------------------------------------------------------ |
+| Início       | Marca AXIOM, proposta do produto e seis cartões de temas           |
+| Preparação   | Etapa atual, indicação de espera e tratamento de falhas            |
+| Player       | Tema, título, data de geração, duração real, progresso e controles |
+| Fontes       | Referências utilizadas e acesso às matérias originais              |
+| Histórico    | Episódios ouvidos, data e opção de continuar a escuta              |
+| Preferências | Tema visual, informações sobre IA e opções de privacidade          |
 
 ### Incluído na primeira versão
 
@@ -130,21 +130,21 @@ Por decisão do responsável em 8 de novembro de 2026, a entrega acadêmica não
 
 A recomendação prioriza ferramentas consolidadas para mobile e serviços gerenciados que reduzam o trabalho de infraestrutura. “Melhor” aqui significa adequação ao AXIOM, facilidade de manutenção e capacidade de crescer; popularidade isolada não resolve essas necessidades.
 
-| Camada | Escolha recomendada | Papel no AXIOM |
-| --- | --- | --- |
-| Aplicativo | **React Native + Expo + TypeScript** | Construir Android e iOS com uma base compartilhada |
-| Navegação e visual | **Expo Router + componentes nativos + StyleSheet** | Organizar telas e manter um sistema visual simples |
-| Player | **expo-audio** | Reproduzir episódios e integrar áudio em segundo plano e tela bloqueada |
-| API do back-end | **Node.js/TypeScript local; Edge Functions opcionais** | Validar sessões, aplicar limites e iniciar ou consultar gerações |
-| Banco de dados | **Memória e arquivos privados na apresentação; PostgreSQL opcional** | Guardar temas, episódios, referências e estado dos trabalhos |
-| Sessões e arquivos | **Sessão opaca local e mídia temporária; Supabase opcional** | Sessões anônimas e armazenamento protegido dos áudios |
-| Processamento em segundo plano | **Fila local Node.js/TypeScript; Trigger.dev opcional** | Executar busca, roteiro, voz e validações com controle de tentativas |
-| Notícias | **Feeds RSS públicos dos veículos** | Encontrar matérias recentes e obter conteúdo suficiente para o resumo |
-| LLM | **Gemini 3.8 Flash na faixa gratuita** | Extrair fatos e gerar o roteiro em estrutura validável |
-| Voz | **Gemini 3.8 Flash TTS na faixa gratuita** | Narrar em português brasileiro com consistência |
-| Tratamento do áudio | **FFmpeg e FFprobe no processamento em segundo plano** | Medir duração, ajustar volume e preparar o arquivo final |
-| Builds e distribuição | **Expo EAS Build e EAS Submit** | Gerar e enviar versões Android e iOS |
-| Código e automação | **GitHub + GitHub Actions** | Versionamento e verificações antes das entregas |
+| Camada                         | Escolha recomendada                                                  | Papel no AXIOM                                                          |
+| ------------------------------ | -------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Aplicativo                     | **React Native + Expo + TypeScript**                                 | Construir Android e iOS com uma base compartilhada                      |
+| Navegação e visual             | **Expo Router + componentes nativos + StyleSheet**                   | Organizar telas e manter um sistema visual simples                      |
+| Player                         | **expo-audio**                                                       | Reproduzir episódios e integrar áudio em segundo plano e tela bloqueada |
+| API do back-end                | **Node.js/TypeScript local; Edge Functions opcionais**               | Validar sessões, aplicar limites e iniciar ou consultar gerações        |
+| Banco de dados                 | **Memória e arquivos privados na apresentação; PostgreSQL opcional** | Guardar temas, episódios, referências e estado dos trabalhos            |
+| Sessões e arquivos             | **Sessão opaca local e mídia temporária; Supabase opcional**         | Sessões anônimas e armazenamento protegido dos áudios                   |
+| Processamento em segundo plano | **Fila local Node.js/TypeScript; Trigger.dev opcional**              | Executar busca, roteiro, voz e validações com controle de tentativas    |
+| Notícias                       | **Feeds RSS públicos dos veículos**                                  | Encontrar matérias recentes e obter conteúdo suficiente para o resumo   |
+| LLM                            | **Gemini 3.5 Flash Lite na faixa gratuita**                          | Extrair fatos e gerar o roteiro em estrutura validável                  |
+| Voz                            | **Gemini 3.8 Flash Lite TTS na faixa gratuita**                      | Narrar em português brasileiro com consistência                         |
+| Tratamento do áudio            | **FFmpeg e FFprobe no processamento em segundo plano**               | Medir duração, ajustar volume e preparar o arquivo final                |
+| Builds e distribuição          | **Expo EAS Build e EAS Submit**                                      | Gerar e enviar versões Android e iOS                                    |
+| Código e automação             | **GitHub + GitHub Actions**                                          | Versionamento e verificações antes das entregas                         |
 
 O [expo-audio documenta reprodução em segundo plano e controles na tela bloqueada](https://docs.expo.dev/versions/latest/sdk/audio/). Essas funções exigem configuração nativa e testes em aparelhos; o [EAS Build permite compilar Android e iOS na nuvem](https://docs.expo.dev/build/), inclusive a partir de um ambiente de desenvolvimento Windows.
 
@@ -177,13 +177,13 @@ O back-end responderá rapidamente com o identificador do episódio ou do trabal
 
 ### Dados mínimos previstos
 
-| Registro | Finalidade |
-| --- | --- |
-| `topics` | As seis categorias, filtros e regras editoriais |
-| `articles` | Referências e metadados das matérias; conteúdo conforme permissão e retenção definida |
-| `episodes` | Tema, título, estado, duração, geração, validade e localização do áudio |
-| `episode_sources` | Relação entre o episódio e as fontes utilizadas |
-| `generation_jobs` | Etapas, tentativas, falhas e consumo estimado |
+| Registro          | Finalidade                                                                             |
+| ----------------- | -------------------------------------------------------------------------------------- |
+| `topics`          | As seis categorias, filtros e regras editoriais                                        |
+| `articles`        | Referências e metadados das matérias; conteúdo conforme permissão e retenção definida  |
+| `episodes`        | Tema, título, estado, duração, geração, validade e localização do áudio                |
+| `episode_sources` | Relação entre o episódio e as fontes utilizadas                                        |
+| `generation_jobs` | Etapas, tentativas, falhas e consumo estimado                                          |
 | `episode_scripts` | Roteiro, versão e vínculos entre afirmações e evidências; acesso exclusivo do servidor |
 
 O histórico local conterá somente identificadores, metadados e progresso da escuta. Credenciais de notícias, LLM, voz e serviços administrativos ficarão no servidor. O cliente terá acesso apenas aos dados e arquivos necessários à reprodução, com políticas de acesso e URLs de áudio temporárias.
@@ -223,12 +223,12 @@ A LLM receberá os conteúdos selecionados e retornará uma estrutura interna co
 
 **Estrutura sugerida para os dois minutos:**
 
-| Trecho | Tempo aproximado | Função |
-| --- | --- | --- |
-| Abertura | 0–8 segundos | Apresentar o tema e situar a edição |
-| Notícias principais | 8–100 segundos | Explicar os acontecimentos com atribuição das informações |
-| Contexto | 100–114 segundos | Mostrar consequências sustentadas pelas fontes |
-| Encerramento | 114–120 segundos | Concluir e indicar que as fontes estão disponíveis no app |
+| Trecho              | Tempo aproximado | Função                                                    |
+| ------------------- | ---------------- | --------------------------------------------------------- |
+| Abertura            | 0–8 segundos     | Apresentar o tema e situar a edição                       |
+| Notícias principais | 8–100 segundos   | Explicar os acontecimentos com atribuição das informações |
+| Contexto            | 100–114 segundos | Mostrar consequências sustentadas pelas fontes            |
+| Encerramento        | 114–120 segundos | Concluir e indicar que as fontes estão disponíveis no app |
 
 Começar com aproximadamente **250 a 290 palavras**, ajustadas à voz escolhida. Essa faixa é uma estimativa de produção; a duração será medida no áudio real.
 
@@ -254,7 +254,7 @@ O roteiro ficará em armazenamento privado, sem endpoint de leitura para o aplic
 2. Gerar a narração a partir do roteiro aprovado.
 3. Medir a duração com FFprobe e verificar áudio ausente, silêncio excessivo e falhas de geração.
 4. Se a duração se afastar da meta, ajustar o roteiro e sintetizar novamente, com limite de duas correções automáticas.
-5. Usar somente pequenos ajustes de ritmo e pausas, preservando clareza e frases completas.
+5. Usar somente pequenos ajustes de ritmo, preservando clareza e frases completas. Na calibração local de 9 de novembro, a voz gratuita admite até 10% de ajuste, sem cortes nem preenchimento com silêncio; a clareza ainda precisa de avaliação com ouvintes.
 6. Preparar o arquivo final para **120 segundos**, com tolerância técnica proposta de **1 segundo** na medição do arquivo.
 7. Padronizar volume e salvar em formato compatível com Android e iOS, inicialmente MP3.
 
@@ -275,34 +275,34 @@ Como o conteúdo inicial depende do tema e não do perfil da pessoa, vários usu
 
 Aplicar limites por sessão e sinais adicionais de abuso, controle global de concorrência e teto de gasto. Uma sessão anônima, sozinha, não é suficiente para limitar consumo abusivo.
 
-| Situação | Comportamento esperado |
-| --- | --- |
-| Notícias insuficientes | Informar indisponibilidade de conteúdo recente, sem inventar pauta |
+| Situação                       | Comportamento esperado                                                           |
+| ------------------------------ | -------------------------------------------------------------------------------- |
+| Notícias insuficientes         | Informar indisponibilidade de conteúdo recente, sem inventar pauta               |
 | Falha temporária de fornecedor | Repetir apenas a etapa necessária, com espera progressiva e limite de tentativas |
-| Quota ou orçamento esgotado | Pausar novas gerações e informar indisponibilidade temporária |
-| App fechado durante a geração | Continuar o trabalho no servidor e recuperar o estado depois |
-| Conexão interrompida na escuta | Preservar progresso e permitir nova tentativa |
-| Episódio corrigido ou retirado | Impedir novo acesso e mostrar sua indisponibilidade no histórico |
+| Quota ou orçamento esgotado    | Pausar novas gerações e informar indisponibilidade temporária                    |
+| App fechado durante a geração  | Continuar o trabalho no servidor e recuperar o estado depois                     |
+| Conexão interrompida na escuta | Preservar progresso e permitir nova tentativa                                    |
+| Episódio corrigido ou retirado | Impedir novo acesso e mostrar sua indisponibilidade no histórico                 |
 
 ## 10. Etapas de construção e entregáveis
 
 **Estimativa inicial:** aproximadamente **6 a 8 semanas de trabalho**, considerando uma pessoa desenvolvedora experiente, dedicação integral e o escopo acima. Prazos de contratação de conteúdo, acesso a contas e revisão das lojas ficam fora dessa estimativa. As etapas são sequenciais, com refinamentos ao longo do trabalho.
 
-| Etapa | Estimativa | Trabalho previsto | Critério de conclusão |
-| --- | --- | --- | --- |
-| **1. Validar notícias, IA e voz** | 3–5 dias úteis | Testar cobertura dos seis temas, datas, conteúdo, permissões, fidelidade do roteiro e vozes em português | Uma amostra completa de busca até áudio; fornecedor viável e limitações registradas |
-| **2. Definir UX e identidade** | 2–3 dias úteis | Refinar marca, claro/escuro, navegação e estados das telas | Protótipo navegável com a jornada principal e estados de erro |
-| **3. Preparar a base técnica** | 3–4 dias úteis | Estruturar app, banco, sessões, Storage, tarefas e ambientes separados | App comunica com API; acesso a dados validado e segredos protegidos |
-| **4. Construir a coleta e seleção** | 4–5 dias úteis | Implementar janela de 72 horas, filtros, deduplicação, agrupamento e fontes | Conjunto auditável de matérias válidas para cada tema |
-| **5. Construir o roteiro e revisão** | 4–5 dias úteis | Extrair fatos, escrever, vincular evidências e bloquear inconsistências | Roteiros avaliados nos seis temas; casos sem suporte são rejeitados |
-| **6. Construir a geração de áudio** | 4–5 dias úteis | Integrar voz, duração, volume, armazenamento, reuso e tentativas | Áudios claros de 120 segundos, dentro da tolerância e com falhas tratadas |
-| **7. Integrar a experiência mobile** | 4–6 dias úteis | Finalizar telas, progresso, player, fontes, histórico e preferências | Jornada completa funcionando em Android e iPhone físicos |
-| **8. Testar e preparar o lançamento** | 5–7 dias úteis | Beta, correções, métricas, controles de consumo e materiais de loja | Versão candidata aprovada nos critérios abaixo e pronta para submissão |
+| Etapa                                 | Estimativa     | Trabalho previsto                                                                                        | Critério de conclusão                                                               |
+| ------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **1. Validar notícias, IA e voz**     | 3–5 dias úteis | Testar cobertura dos seis temas, datas, conteúdo, permissões, fidelidade do roteiro e vozes em português | Uma amostra completa de busca até áudio; fornecedor viável e limitações registradas |
+| **2. Definir UX e identidade**        | 2–3 dias úteis | Refinar marca, claro/escuro, navegação e estados das telas                                               | Protótipo navegável com a jornada principal e estados de erro                       |
+| **3. Preparar a base técnica**        | 3–4 dias úteis | Estruturar app, banco, sessões, Storage, tarefas e ambientes separados                                   | App comunica com API; acesso a dados validado e segredos protegidos                 |
+| **4. Construir a coleta e seleção**   | 4–5 dias úteis | Implementar janela de 72 horas, filtros, deduplicação, agrupamento e fontes                              | Conjunto auditável de matérias válidas para cada tema                               |
+| **5. Construir o roteiro e revisão**  | 4–5 dias úteis | Extrair fatos, escrever, vincular evidências e bloquear inconsistências                                  | Roteiros avaliados nos seis temas; casos sem suporte são rejeitados                 |
+| **6. Construir a geração de áudio**   | 4–5 dias úteis | Integrar voz, duração, volume, armazenamento, reuso e tentativas                                         | Áudios claros de 120 segundos, dentro da tolerância e com falhas tratadas           |
+| **7. Integrar a experiência mobile**  | 4–6 dias úteis | Finalizar telas, progresso, player, fontes, histórico e preferências                                     | Jornada completa funcionando em Android e iPhone físicos                            |
+| **8. Testar e preparar o lançamento** | 5–7 dias úteis | Beta, correções, métricas, controles de consumo e materiais de loja                                      | Versão candidata aprovada nos critérios abaixo e pronta para submissão              |
 
 ### Marcos de acompanhamento
 
 - [ ] **Marco 1 — Viabilidade:** notícias, direitos de uso, roteiro e voz atendem à proposta.
-- [ ] **Marco 2 — Fluxo completo:** escolher um tema resulta em um episódio reproduzível.
+- [x] **Marco 2 — Fluxo completo:** escolher um tema resulta em um episódio reproduzível. Verificado na prévia web com notícias e voz reais; o aceite mobile nativo ainda exige aparelhos físicos.
 - [ ] **Marco 3 — Beta:** os seis temas funcionam nos dois sistemas, com métricas e controle de custo.
 - [ ] **Marco 4 — Versão candidata:** critérios de qualidade cumpridos e materiais de publicação preparados.
 
@@ -339,15 +339,15 @@ Aplicar limites por sessão e sinais adicionais de abuso, controle global de con
 
 ## 12. Métricas e planejamento de custos
 
-| Métrica | Para que acompanhar |
-| --- | --- |
-| Tempo até o áudio ficar pronto | Reduzir a espera; separar episódios reutilizados de novas gerações |
-| Taxa de conclusão da geração | Encontrar falhas em notícias, LLM, voz ou processamento |
-| Falta de notícias por tema | Ajustar fontes e consultas sem afrouxar a janela |
-| Taxa de conclusão da escuta | Avaliar interesse e qualidade dos episódios |
-| Avaliação de voz e conteúdo | Medir clareza, confiança e relevância |
-| Custo por episódio novo e por escuta | Verificar sustentabilidade e efeito do reuso |
-| Episódios retirados ou corrigidos | Acompanhar qualidade editorial |
+| Métrica                              | Para que acompanhar                                                |
+| ------------------------------------ | ------------------------------------------------------------------ |
+| Tempo até o áudio ficar pronto       | Reduzir a espera; separar episódios reutilizados de novas gerações |
+| Taxa de conclusão da geração         | Encontrar falhas em notícias, LLM, voz ou processamento            |
+| Falta de notícias por tema           | Ajustar fontes e consultas sem afrouxar a janela                   |
+| Taxa de conclusão da escuta          | Avaliar interesse e qualidade dos episódios                        |
+| Avaliação de voz e conteúdo          | Medir clareza, confiança e relevância                              |
+| Custo por episódio novo e por escuta | Verificar sustentabilidade e efeito do reuso                       |
+| Episódios retirados ou corrigidos    | Acompanhar qualidade editorial                                     |
 
 **Orçamento da entrega acadêmica: R$ 0.** Usar RSS público, projeto Gemini Free Tier sem faturamento e servidor executado no computador. Hospedagem paga, contas de lojas e assinaturas não fazem parte desta entrega. Não habilitar faturamento para ampliar cotas.
 

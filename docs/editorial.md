@@ -2,6 +2,8 @@
 
 A versão 0.7 usa Gemini Free Tier com as mesmas operações de fatos, redação e revisão. As referências a OpenAI abaixo registram o adaptador anterior, mantido apenas para testes e sem uso no fluxo atual.
 
+Na versão 0.8, o adaptador Gemini seleciona identificadores de trechos literais preparados pelo servidor, em vez de reescrever citações. Fatos com números ausentes nesses trechos são descartados e auditados; conteúdo insuficiente continua bloqueado. A redação recebe os créditos dos fatos vinculados e, quando excede o orçamento, pode selecionar parágrafos completos, preservando referências do título e diversidade. A revisão avalia essa versão final, antes da voz. A seleção automática e a revisão por IA ainda exigem conferência humana.
+
 ## O que foi implementado
 
 A etapa 5 separa o trabalho em três fases no servidor: extração de fatos, redação e revisão. O roteiro continua interno. A prova de viabilidade só chama a voz depois das verificações de estrutura, evidência, fontes e revisão da versão atual.

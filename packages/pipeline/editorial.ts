@@ -30,6 +30,11 @@ export interface EditorialInput {
 export interface DraftInput extends EditorialInput {
   facts: FactBundle;
   targetWords: number;
+  revision?: {
+    reason: EditorialFailure;
+    previousDraft: EditorialDraft;
+    previousReview: EditorialReview | null;
+  };
 }
 export interface ReviewInput extends DraftInput {
   draft: EditorialDraft;
@@ -65,10 +70,12 @@ type Options = { clock?: () => Date; onCheck?: (check: EditorialCheck) => void }
 const digest = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const literal = (value: string) => value.normalize('NFC').replace(/\s+/g, ' ').trim();
 const numbers = (value: string) => value.match(/\d+(?:[.,:/-]\d+)*(?:%)?/g) || [];
-function assertNumbers(text: string, evidence: string) {
+export function numbersAreSupported(text: string, evidence: string): boolean {
   const available = new Set(numbers(evidence));
-  if (numbers(text).some((value) => !available.has(value)))
-    throw new EditorialFault('unsupported_number');
+  return numbers(text).every((value) => available.has(value));
+}
+function assertNumbers(text: string, evidence: string) {
+  if (!numbersAreSupported(text, evidence)) throw new EditorialFault('unsupported_number');
 }
 function assertSources(articles: Article[], now: Date) {
   if (

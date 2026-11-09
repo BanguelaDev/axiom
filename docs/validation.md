@@ -1,5 +1,19 @@
 # Validações do AXIOM
 
+## Etapa 8 — 9 de novembro de 2026
+
+- TypeScript/Deno, lint e Expo Doctor: aprovados, com 20/20 verificações no Doctor.
+- 99 testes automatizados aprovados, incluindo regressões com FFmpeg real e correção editorial limitada.
+- Exportações web e JavaScript/Hermes para Android e iOS aprovadas. Não são APK/IPA ou teste em aparelho físico.
+- Primeiro episódio jornalístico real de IA: 120,032653 segundos, MP3 mono a 44.100 Hz, 1.920.984 bytes, −17,51 LUFS e pico de −1,85 dBTP. Matérias de The Guardian e g1 com datas dentro das 72 horas; roteiro e revisão privados.
+- Na prévia: geração até pronto, acesso ao player sem reprodução automática, reprodução, pausa, avanço/retorno de 15 segundos, fontes, mini player e histórico após recarregar.
+- Segundo episódio real, em Política, também com 120,032653 segundos, −17,31 LUFS e pico de −1,98 dBTP, usando g1 e Agência Brasil. Retomada efetiva após recarregar confirmada a partir do ponto salvo em 26 segundos, sem zerar durante o carregamento. Layout revisto em 390 × 844 pixels.
+- Regressões: nomes temporários longos no Windows, evidências literais, referência inventada, número sem suporte, orçamento de parágrafos, correção editorial limitada e interrupção de cota sem nova chamada.
+- Auditoria RSS atual: quatro temas com material suficiente. Saúde Mental e Crimes continuam sujeitos à insuficiência; a janela não é ampliada.
+- Auditoria npm: 12 ocorrências moderadas, sem altas ou críticas após atualizações compatíveis. Atualização forçada para outro SDK não foi aplicada.
+
+A narração e os roteiros precisam de avaliação humana; os testes técnicos não comprovam fidelidade semântica nem naturalidade. Aparelhos Android/iOS físicos, segundo plano, Bluetooth, beta, Supabase completo, Trigger.dev e lojas continuam pendentes.
+
 ## Etapa 6 — 8 de novembro de 2026
 
 - TypeScript/Deno, lint e exportação web: aprovados.
@@ -66,13 +80,13 @@ O protótipo está pronto para revisão visual. Avaliação com usuários e test
 - Troca para tema claro, persistência e recuperação de tema inválido.
 - Verificação de configuração: identificou corretamente as credenciais e permissões ainda pendentes, sem fazer chamadas externas.
 
-## Ainda não validado
+## Validações que continuam pendentes
 
-Notícias reais dos seis temas, credenciais e quotas dos fornecedores, independência editorial das fontes, fidelidade de roteiros reais, qualidade da voz em português, Supabase, Trigger.dev, acessibilidade nativa, Android/iPhone físicos, segundo plano, Bluetooth, builds e lojas. Não foi gerado um episódio jornalístico real.
+Cobertura e revisão humana dos seis temas, independência editorial das fontes em escala, fidelidade de roteiros, qualidade da voz com ouvintes, Supabase, Trigger.dev, acessibilidade nativa, Android/iPhone físicos, segundo plano, Bluetooth, APK/IPA e lojas.
 
 ## Dependências a acompanhar
 
-Nesta entrega, `npm audit` sinaliza 20 avisos (1 baixo, 16 moderados e 3 altos), propagados pela cadeia Expo: `deepmerge`, `glob`, `minimatch`, `node-forge`, `uuid` e uma versão transitiva de `zod` no CLI. A dependência direta de Zod é 4.6.7. Nenhuma atualização forçada de SDK foi aplicada; a sugestão automática inclui regressão para Expo 52, incompatível com o SDK 58. Reavaliar correções dos fornecedores antes de builds de distribuição. A aprovação das verificações não resolve esses avisos.
+Na versão 0.8, `npm audit` sinaliza 12 ocorrências moderadas nas cadeias de `glob`/`minimatch` do Expo e ESLint. A dependência direta de Zod é 4.6.7. Nenhuma atualização forçada de SDK foi aplicada; a sugestão automática inclui regressão para Expo 52, incompatível com o SDK 58. Reavaliar correções dos fornecedores antes de builds de distribuição.
 
 ## Documentação usada nas integrações
 

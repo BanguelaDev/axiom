@@ -269,3 +269,66 @@ test('cliente rejeita API incompatível e não repassa mensagens arbitrárias do
     ),
   );
 });
+
+test('cliente renova sessão rejeitada uma vez e preserva o pedido sem repetir falhas do servidor', async () => {
+  for (const status of [401, 503]) {
+    let calls = 0,
+      renewals = 0;
+    const connection = {
+      url: 'https://api.example',
+      async getToken() {
+        return renewals ? 'new-session' : 'old-session';
+      },
+      async renewSession() {
+        renewals++;
+      },
+      fetch: (async (_url, init) => {
+        calls++;
+        assert.equal(init?.method, 'POST');
+        assert.equal(init?.body, JSON.stringify({ topicId: 'ai' }));
+        assert.equal(
+          new Headers(init?.headers).get('authorization'),
+          `Bearer ${renewals ? 'new-session' : 'old-session'}`,
+        );
+        return calls === 1
+          ? Response.json({ error: { code: 'unauthorized' } }, { status })
+          : Response.json({ accepted: true });
+      }) as typeof fetch,
+    };
+    const request = requestApi(connection, '/generations', undefined, {
+      method: 'POST',
+      body: { topicId: 'ai' },
+    });
+    if (status === 401) {
+      assert.deepEqual(await request, { accepted: true });
+      assert.equal(calls, 2);
+      assert.equal(renewals, 1);
+    } else {
+      await assert.rejects(request);
+      assert.equal(calls, 1);
+      assert.equal(renewals, 0);
+    }
+  }
+  let renewals = 0,
+    calls = 0;
+  await assert.rejects(
+    requestApi(
+      {
+        url: 'https://api.example',
+        async getToken() {
+          return 'expired';
+        },
+        async renewSession() {
+          renewals++;
+        },
+        fetch: async () => {
+          calls++;
+          return Response.json({ error: { code: 'unauthorized' } }, { status: 401 });
+        },
+      },
+      '/topics',
+    ),
+  );
+  assert.equal(calls, 2);
+  assert.equal(renewals, 1);
+});

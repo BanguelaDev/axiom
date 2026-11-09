@@ -12,6 +12,21 @@ import { matchesTopic, newsQueries } from '../packages/pipeline/news-policy.ts';
 import { selectNews } from '../packages/pipeline/selection.ts';
 
 const now = new Date('2026-11-08T12:00:00Z');
+test('IA exige menção no título ou abertura e rejeita referência distante ao setor', () => {
+  assert.equal(matchesTopic('ai', 'Novo chatbot chega ao mercado', 'Contexto da pesquisa.'), true);
+  assert.equal(
+    matchesTopic('ai', 'Aplicações na educação', 'Pesquisa sobre inteligência artificial.'),
+    true,
+  );
+  assert.equal(
+    matchesTopic(
+      'ai',
+      'Investigação sobre executivo',
+      'Contexto de investigação. '.repeat(40) + ' A empresa atua em inteligência artificial.',
+    ),
+    false,
+  );
+});
 test('publicação exige data possível, horário e fuso, incluindo os limites das 72 horas', () => {
   for (const value of [
     '2026-11-08',

@@ -17,6 +17,7 @@ export interface ApiConnection {
   url: string;
   headers?: Record<string, string>;
   getToken(): Promise<string>;
+  renewSession?(): void | Promise<void>;
   fetch?: Fetch;
 }
 
@@ -82,6 +83,19 @@ export async function requestApi(
       );
     }
     return await response.json();
+  } catch (error) {
+    if (
+      error instanceof ApiFault &&
+      error.code === 'unauthorized' &&
+      error.status === 401 &&
+      connection.renewSession &&
+      !signal?.aborted
+    ) {
+      await connection.renewSession();
+      // Um 401 é devolvido antes de criar trabalhos. Repetir uma única vez com uma sessão nova.
+      return await requestApi({ ...connection, renewSession: undefined }, path, signal, options);
+    }
+    throw error;
   } finally {
     clearTimeout(timeout);
     signal?.removeEventListener('abort', abort);

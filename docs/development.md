@@ -19,7 +19,7 @@ npm run dev
 
 `dev` inicia a API na porta 8787 e o Expo na 8081. Abra http://localhost:8081. Não execute outro servidor nas mesmas portas. Escolha um tema e toque em Gerar podcast de dois minutos. A reprodução começa somente após tocar em ouvir.
 
-O fluxo coleta notícias, extrai fatos, redige, revisa, gera voz e prepara o MP3 de 120 segundos com tolerância de um segundo. Cada correção do texto exige nova revisão, com até três versões. Cota gratuita esgotada e notícias insuficientes geram mensagens; não há fallback pago.
+O fluxo coleta notícias, extrai fatos, redige, revisa, gera voz e prepara o MP3 de 120 segundos com tolerância de um segundo. Cada correção do texto exige nova revisão, com até três versões de áudio. Cada preparação editorial admite uma correção orientada pelo motivo da rejeição. Cota gratuita esgotada e notícias insuficientes geram mensagens; não há fallback pago.
 
 ## Abrir no celular
 
@@ -47,15 +47,15 @@ Sem `GEMINI_API_KEY`, a geração real fica desativada e o protótipo permanece 
 
 ## Estrutura
 
-| Pasta | Conteúdo |
-| --- | --- |
-| apps/mobile | Telas, player, histórico, preferências e cliente HTTP |
-| packages/core | Contratos públicos e regras compartilhadas |
-| packages/pipeline | RSS, Gemini, revisão e áudio exclusivos do servidor |
-| packages/backend | API, fila local e adaptadores remotos opcionais |
-| packages/tasks | Worker Trigger.dev opcional; implantação não obrigatória |
-| supabase | Migrações e Edge Function opcionais |
-| tests | Verificação de conteúdo, áudio, API, dados e contratos do app |
+| Pasta             | Conteúdo                                                      |
+| ----------------- | ------------------------------------------------------------- |
+| apps/mobile       | Telas, player, histórico, preferências e cliente HTTP         |
+| packages/core     | Contratos públicos e regras compartilhadas                    |
+| packages/pipeline | RSS, Gemini, revisão e áudio exclusivos do servidor           |
+| packages/backend  | API, fila local e adaptadores remotos opcionais               |
+| packages/tasks    | Worker Trigger.dev opcional; implantação não obrigatória      |
+| supabase          | Migrações e Edge Function opcionais                           |
+| tests             | Verificação de conteúdo, áudio, API, dados e contratos do app |
 
 ## Verificações
 
@@ -65,6 +65,8 @@ npm run lint
 npm test
 npm run export:web
 ```
+
+`npm run audit:rss` confere a disponibilidade dos seis temas sem chamar a IA. Para verificar os bundles nativos, execute dentro de `apps/mobile`: `npx expo export --platform android` e `npx expo export --platform ios`. Essas exportações verificam JavaScript/Hermes e recursos; não geram APK ou IPA.
 
 `typecheck` inclui Deno da Edge Function. O FFmpeg é fornecido por pacote; em ambientes que bloqueiam scripts npm, consulte `allowScripts` e execute `npm rebuild esbuild ffmpeg-static` quando necessário. Não é preciso liberar scripts de todos os pacotes.
 

@@ -52,6 +52,7 @@ function usePodcastValue() {
   const [audioError, setAudioError] = useState<string | null>(null);
   const [timedOut, setTimedOut] = useState(false);
   const [starting, setStarting] = useState(false);
+  const [positionReady, setPositionReady] = useState(false);
   const player = useAudioPlayer(null, { updateInterval: 250 });
   const status = useAudioPlayerStatus(player);
   const generationRequest = useRef<AbortController | null>(null),
@@ -62,6 +63,7 @@ function usePodcastValue() {
     pendingWrites = useRef(Promise.resolve());
   const playbackRequest = useRef(0),
     busy = useRef(false);
+  const canSavePosition = useRef(false);
   useEffect(
     () =>
       registerPlayback('podcast', () => {
@@ -217,7 +219,7 @@ function usePodcastValue() {
   }, [history, hydrated]);
   const savePosition = useCallback(() => {
     const selected = currentEpisode.current;
-    if (!selected || !player.isLoaded) return;
+    if (!selected || !player.isLoaded || !canSavePosition.current) return;
     const position = Math.max(0, Math.min(selected.durationSeconds, player.currentTime));
     setHistory((items) =>
       items.map((item) =>
@@ -258,6 +260,8 @@ function usePodcastValue() {
       claimPlayback('podcast');
       player.pause();
       savePosition();
+      canSavePosition.current = false;
+      setPositionReady(false);
       player.replace(null);
       setEpisode(null);
       currentEpisode.current = null;
@@ -305,6 +309,8 @@ function usePodcastValue() {
       const start = position >= status.duration - 0.25 ? 0 : Math.min(position, status.duration);
       await player.seekTo(start);
       if (request !== playbackRequest.current) return;
+      canSavePosition.current = true;
+      setPositionReady(true);
       claimPlayback('podcast');
       if (process.env.EXPO_OS !== 'web')
         player.setActiveForLockScreen(true, {
@@ -336,6 +342,8 @@ function usePodcastValue() {
     if (!status.isLoaded || !episode || starting) return;
     try {
       await player.seekTo(Math.max(0, Math.min(status.duration, position)));
+      canSavePosition.current = true;
+      setPositionReady(true);
       savePosition();
     } catch {
       setAudioError('Não foi possível mudar o ponto de reprodução.');
@@ -346,6 +354,8 @@ function usePodcastValue() {
     player.pause();
     if (process.env.EXPO_OS !== 'web') player.setActiveForLockScreen(false);
     player.replace(null);
+    canSavePosition.current = false;
+    setPositionReady(false);
     setEpisode(null);
     currentEpisode.current = null;
     setHistory([]);
@@ -360,7 +370,12 @@ function usePodcastValue() {
     hydrated,
     storageError,
     loading,
-    status,
+    status: {
+      ...status,
+      currentTime: positionReady
+        ? status.currentTime
+        : history.find((item) => item.id === episode?.id)?.position || 0,
+    },
     starting,
     toggle,
     seek,

@@ -1,7 +1,7 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { stat, readFile, rename, unlink } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { resolve, dirname, join } from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { ffmpeg, ffprobe } from './binaries.ts';
 import { audioFailures, type AudioFailure, type AudioMetrics } from '../core/src/audio-report.ts';
@@ -77,9 +77,12 @@ async function probe(file: string) {
 export async function measureDuration(file: string): Promise<number> {
   return (await probe(file)).duration;
 }
-export function correctionRatio(duration: number): number | null {
+export function correctionRatio(duration: number, maxTempoChange = 0.03): number | null {
+  if (!Number.isFinite(maxTempoChange) || maxTempoChange < 0 || maxTempoChange > 0.1) return null;
   const ratio = duration / 120;
-  return Number.isFinite(duration) && ratio >= 0.97 && ratio <= 1.03 ? ratio : null;
+  return Number.isFinite(duration) && ratio >= 1 - maxTempoChange && ratio <= 1 + maxTempoChange
+    ? ratio
+    : null;
 }
 export async function inspectAudio(file: string): Promise<AudioMetrics> {
   if (!ffmpeg) throw new AudioFault('processing_failed');
@@ -169,13 +172,19 @@ export interface PreparedAudio {
   metrics: AudioMetrics;
   sha256: string;
 }
-export async function prepareAudioFile(input: string, output: string): Promise<PreparedAudio> {
+export async function prepareAudioFile(
+  input: string,
+  output: string,
+  maxTempoChange = 0.03,
+): Promise<PreparedAudio> {
   if (!ffmpeg || resolve(input) === resolve(output)) throw new AudioFault('processing_failed');
   const source = await inspectAudio(input);
   assertAudioQuality(source);
-  const ratio = correctionRatio(source.duration);
+  const ratio = correctionRatio(source.duration, maxTempoChange);
   if (ratio === null) throw new AudioFault('duration_out_of_range');
-  const temporary = `${resolve(output)}.${randomUUID()}.mp3`;
+  // FFprobe para Windows não aceita caminhos longos em todos os builds.
+  // Usar um nome curto no mesmo diretório preserva a renomeação atômica.
+  const temporary = join(dirname(resolve(output)), `.axiom-${randomUUID().slice(0, 8)}.mp3`);
   try {
     // Sem corte, preenchimento artificial ou remoção de pausas: só ajuste limitado de ritmo e volume.
     await runAudioTool(ffmpeg, [

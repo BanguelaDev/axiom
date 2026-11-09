@@ -6,7 +6,8 @@ import { publicEpisode } from '../core/src/script.ts';
 import { requireEnv } from './providers.ts';
 import { createGeminiEditorialModel, createGeminiVoice } from './gemini.ts';
 import { renderEpisode, verifyRenderedAudio } from './render-episode.ts';
-import { extractEditorialFacts, prepareEditorial, EditorialFault } from './editorial.ts';
+import { extractEditorialFacts, EditorialFault } from './editorial.ts';
+import { prepareWithRepair } from './editorial-repair.ts';
 import { collectRss, InsufficientNewsFault } from './rss.ts';
 
 export async function generatePodcast(
@@ -33,7 +34,16 @@ export async function generatePodcast(
   const articles = selection.articles;
   assertSufficientSources(articles);
   await onPhase('writing');
-  const model = createGeminiEditorialModel({ key: geminiKey });
+  const model = createGeminiEditorialModel({
+    key: geminiKey,
+    async onResult(stage, value) {
+      if (!['axiom_facts', 'axiom_draft', 'axiom_review', 'axiom_extraction_audit'].includes(stage))
+        throw new Error('Etapa inválida.');
+      await writeFile(resolve(privateDir, `${stage}.json`), JSON.stringify(value, null, 2), {
+        mode: 0o600,
+      });
+    },
+  });
   const context = await extractEditorialFacts(
     { topic, articles, referenceAt: started.toISOString() },
     model,
@@ -47,21 +57,27 @@ export async function generatePodcast(
   const rendered = await renderEpisode({
     directory: privateDir,
     voice,
+    // Calibração da narração gratuita: até 10%, sem corte nem preenchimento com silêncio.
+    maxTempoChange: 0.1,
     async buildApproved(words, attempt) {
       await onPhase('writing');
-      const approved = await prepareEditorial(context, model, words).catch(
-        async (error: unknown) => {
-          await writeFile(
-            resolve(privateDir, `editorial-${attempt}.json`),
-            JSON.stringify({
-              status: 'blocked',
-              code: error instanceof EditorialFault ? error.code : 'model_unavailable',
-            }),
-            { mode: 0o600 },
-          );
-          throw error;
-        },
-      );
+      const approved = await prepareWithRepair(context, model, words, async (revision) => {
+        await writeFile(
+          resolve(privateDir, `editorial-repair-${attempt}.json`),
+          JSON.stringify(revision, null, 2),
+          { mode: 0o600 },
+        );
+      }).catch(async (error: unknown) => {
+        await writeFile(
+          resolve(privateDir, `editorial-${attempt}.json`),
+          JSON.stringify({
+            status: 'blocked',
+            code: error instanceof EditorialFault ? error.code : 'model_unavailable',
+          }),
+          { mode: 0o600 },
+        );
+        throw error;
+      });
       await writeFile(
         resolve(privateDir, `editorial-${attempt}.json`),
         JSON.stringify(

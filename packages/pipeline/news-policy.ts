@@ -49,8 +49,9 @@ export function matchesTopic(topic: TopicId, title: string, content: string): bo
         )
       );
     case 'ai':
-      return /\b(inteligencia artificial|artificial intelligence|modelos de linguagem|large language models?)\b/.test(
-        text,
+      // Uma menção distante no corpo não torna o assunto central da matéria.
+      return /\b(inteligencia artificial|artificial intelligence|modelos de linguagem|large language models?|chatbots?|ia|ai)\b/.test(
+        normalizedText(`${title} ${content.slice(0, 650)}`),
       );
     case 'mental-health':
       return (

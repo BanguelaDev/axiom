@@ -7,6 +7,9 @@ import { createAudioDemo } from './audio-demo.ts';
 import { resolve } from 'node:path';
 import { LocalRepository, type Processor } from './local-repository.ts';
 import { generatePodcast } from '../pipeline/generate-podcast.ts';
+import { GeminiAccessFault, GeminiQuotaFault } from '../pipeline/gemini.ts';
+import { EditorialFault } from '../pipeline/editorial.ts';
+import { AudioFault } from '../pipeline/audio.ts';
 
 /** Runner descartável: não substitui Supabase Auth, banco, Storage nem Trigger.dev. */
 export function startLocalApi(
@@ -23,8 +26,29 @@ export function startLocalApi(
   let actualPort = port;
   const repository = new LocalRepository(
     options.processor ||
-      ((topic, id, onPhase) =>
-        generatePodcast(topic, resolve('work', 'local-episodes', id), onPhase)),
+      (async (topic, id, onPhase) => {
+        try {
+          return await generatePodcast(
+            topic,
+            resolve('work', 'local-episodes', id),
+            async (phase) => {
+              await onPhase(phase);
+              console.log(`[AXIOM] ${id.slice(0, 8)}: ${phase}`);
+            },
+          );
+        } catch (error) {
+          const code =
+            error instanceof GeminiAccessFault
+              ? `gemini_http_${error.status}`
+              : error instanceof GeminiQuotaFault
+                ? 'free_quota'
+                : error instanceof EditorialFault || error instanceof AudioFault
+                  ? error.code
+                  : 'generation_failed';
+          console.log(`[AXIOM] ${id.slice(0, 8)}: ${code}`);
+          throw error;
+        }
+      }),
     (bytes, expiresIn) => {
       const media = audioDemo.issueMedia(bytes, expiresIn);
       return {

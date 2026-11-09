@@ -1,6 +1,6 @@
 import { before, after, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, writeFile, readdir, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, readdir, rm, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname, basename } from 'node:path';
 import { ffmpeg } from '../packages/pipeline/binaries.ts';
@@ -9,6 +9,8 @@ import {
   inspectAudio,
   assertAudioQuality,
   AudioFault,
+  prepareAudioFile,
+  correctionRatio,
 } from '../packages/pipeline/audio.ts';
 import { renderEpisode, verifyRenderedAudio } from '../packages/pipeline/render-episode.ts';
 import { editorialFixture, fixtureEditorialModel } from '../packages/backend/editorial-demo.ts';
@@ -100,6 +102,37 @@ test('áudio real é normalizado, reaproveita a síntese e detecta arquivo alter
     verifyRenderedAudio(second, now),
     (error: unknown) => error instanceof AudioFault && error.code === 'artifact_changed',
   );
+});
+
+test('arquivo temporário de áudio funciona em pastas Windows com caminho extenso', async () => {
+  const nested = join(
+    directory,
+    'presentation-'.repeat(Math.max(1, Math.floor((165 - directory.length) / 13))),
+  );
+  await mkdir(nested, { recursive: true });
+  const output = join(nested, `final-${'a'.repeat(64)}.mp3`);
+  const result = await prepareAudioFile(join(directory, 'normal.mp3'), output);
+  assert.ok(Math.abs(result.metrics.duration - 120) <= 1);
+  assert.ok((await readdir(nested)).every((name) => !name.startsWith('.axiom-')));
+});
+
+test('calibração gratuita permite até 10% de ritmo e mantém dois minutos sem corte', async () => {
+  assert.equal(correctionRatio(110), null);
+  assert.equal(correctionRatio(110, 0.1), 110 / 120);
+  assert.equal(correctionRatio(107.9, 0.1), null);
+  assert.equal(correctionRatio(132.1, 0.1), null);
+  assert.equal(correctionRatio(120, 0.2), null);
+  const input = join(directory, 'calibration.wav');
+  await runAudioTool(ffmpeg!, [
+    '-y',
+    '-f',
+    'lavfi',
+    '-i',
+    'sine=frequency=440:duration=110',
+    input,
+  ]);
+  const result = await prepareAudioFile(input, join(directory, 'calibration.mp3'), 0.1);
+  assert.ok(Math.abs(result.metrics.duration - 120) <= 1);
 });
 
 test('duração fora da margem exige nova revisão, com limite de três versões', async () => {

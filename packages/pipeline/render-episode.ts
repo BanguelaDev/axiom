@@ -46,6 +46,7 @@ export async function renderEpisode(options: {
   buildApproved(targetWords: number, attempt: number): Promise<ApprovedEditorial>;
   clock?: () => Date;
   onAttempt?: (attempt: AudioAttempt) => void;
+  maxTempoChange?: number;
 }): Promise<RenderedEpisode> {
   const clock = options.clock || (() => new Date());
   await mkdir(resolve(options.directory), { recursive: true });
@@ -91,7 +92,7 @@ export async function renderEpisode(options: {
     }
     const source = await inspectAudio(raw);
     assertAudioQuality(source);
-    if (correctionRatio(source.duration) === null) {
+    if (correctionRatio(source.duration, options.maxTempoChange) === null) {
       const report: AudioAttempt = {
         attempt: attempt + 1,
         artifactId: approved.artifactId,
@@ -101,11 +102,15 @@ export async function renderEpisode(options: {
       };
       attempts.push(report);
       options.onAttempt?.(report);
-      words = Math.max(170, Math.min(320, Math.round((words * 120) / source.duration)));
+      const fixedWords = narrationText({ title: '', claims: [] }).trim().split(/\s+/).length;
+      words = Math.max(
+        170,
+        Math.min(320, Math.round((approved.wordCount * 120) / source.duration) - fixedWords),
+      );
       continue;
     }
     const file = resolve(options.directory, `final-${key}.mp3`);
-    const audio = await prepareAudioFile(raw, file);
+    const audio = await prepareAudioFile(raw, file, options.maxTempoChange);
     assertApprovedEditorial(approved, clock());
     const generated = clock();
     const used = new Set(
