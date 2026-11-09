@@ -6,6 +6,10 @@ on:
         description: Rascunho de release com o APK candidato
         required: true
         default: android-local-42655654822-1
+      api_levels:
+        description: Níveis Android em uma lista JSON
+        required: true
+        default: '[29,34]'
 permissions:
   contents: write
 jobs:
@@ -15,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api: [29, 34]
+        api: ${{ fromJSON(inputs.api_levels || '[29,34]') }}
     env:
       CI: 'true'
       AXIOM_E2E: 'true'
