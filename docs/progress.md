@@ -188,3 +188,5 @@ A remoção da abertura e a recalibração passaram em **116 testes**, incluindo
 Execução nativa 42686872673 aprovada no emulador Android 14 para o primeiro pacote: conexão/restauração, reprodução, pausa e avanço, serviço foreground, AudioTrack STARTED e tela realmente desligada (`mWakefulness=Asleep`). O novo APK 0.12.1 segue no build 42686834811, já com rascunho reservado e código em main 67208d5.
 
 Build 42686834811 concluído com sucesso: APK 0.12.1, fonte 67208d5. Verificação final do pacote e dos emuladores em andamento.
+
+Verificação adicional do APK 0.12.1: Android 14 aprovado na execução 42690687582, incluindo serviço foreground, AudioTrack ativo e tela apagada. No Android 10, o seletor composto do teste não encontrou o botão. A árvore nativa contém o botão com filho “Conectar”; o seletor foi ajustado para escolher esse pai diretamente, conforme a documentação do Maestro. Ainda não há aceite Android 10. O pacote está publicado como pré-release v0.12.1 para avaliação física.

@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: Rascunho de release com o APK candidato
+        description: Release com o APK a verificar
         required: true
-        default: android-local-42655654822-1
+        default: v0.12.1
       api_levels:
         description: Níveis Android em uma lista JSON
         required: true
@@ -26,7 +26,7 @@ jobs:
       MAESTRO_CLI_NO_ANALYTICS: 'true'
       MAESTRO_CLI_ANALYSIS_NOTIFICATION_DISABLED: 'true'
       MAESTRO_DISABLE_UPDATE_CHECK: 'true'
-      CANDIDATE_TAG: ${{ inputs.release_tag || 'android-local-42655654822-1' }}
+      CANDIDATE_TAG: ${{ inputs.release_tag || 'v0.12.1' }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v6

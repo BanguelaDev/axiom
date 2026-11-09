@@ -8,7 +8,6 @@ appId: br.com.axiom.mobile
 - inputText: http://10.0.2.2:8787
 - hideKeyboard
 - tapOn:
-    text: "Conectar"
     containsChild:
       text: "Conectar"
 - assertVisible: "(?s)O mundo, em.*"
@@ -20,36 +19,30 @@ appId: br.com.axiom.mobile
 - scrollUntilVisible:
     element: "Gerar podcast de dois minutos"
 - tapOn:
-    text: "Gerar podcast de dois minutos"
     containsChild:
       text: "Gerar podcast de dois minutos"
 - extendedWaitUntil:
     visible: "Abrir podcast"
     timeout: 30000
 - tapOn:
-    text: "Abrir podcast"
     containsChild:
       text: "Abrir podcast"
 - scrollUntilVisible:
     element: "Ouvir podcast"
 - tapOn:
-    text: "Ouvir podcast"
     containsChild:
       text: "Ouvir podcast"
 - assertVisible: "Pausar podcast"
 - scrollUntilVisible:
     element: "Avançar 15 s"
 - tapOn:
-    text: "Avançar 15 s"
     containsChild:
       text: "Avançar 15 s"
 - tapOn:
-    text: "Pausar podcast"
     containsChild:
       text: "Pausar podcast"
 - assertVisible: "Continuar podcast"
 - tapOn:
-    text: "Continuar podcast"
     containsChild:
       text: "Continuar podcast"
 - assertVisible: "Pausar podcast"
