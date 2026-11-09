@@ -9,6 +9,14 @@ import {
 import { editorialFixture } from '../packages/backend/editorial-demo.ts';
 import { parseRss, rssFeeds, collectRss } from '../packages/pipeline/rss.ts';
 const fixture = editorialFixture('ai', new Date('2026-11-09T02:00:00Z'));
+
+test('RSS decodifica HTML escapado antes de remover marcação e conteúdo de scripts', () => {
+  const feed = rssFeeds[0]!;
+  const xml = `<rss><channel><item><title>Teste</title><link>https://${feed.domains[0]}/noticia/teste</link><pubDate>Mon, 09 Nov 2026 15:00:00 GMT</pubDate><description>&amp;lt;p&amp;gt;Texto &amp;amp; contexto&amp;lt;/p&amp;gt;&amp;lt;script&amp;gt;instrução indevida&amp;lt;/script&amp;gt; &#60;style&#62;oculto&#60;/style&#62;</description></item></channel></rss>`;
+  const parsed = parseRss(xml, feed);
+  assert.equal(parsed.length, 1);
+  assert.equal(parsed[0]!.content, 'Texto & contexto');
+});
 const interaction = (type: string, value: unknown) => ({
   status: 'completed',
   steps: [

@@ -6,6 +6,8 @@ APK 0.12.0 compilado pelo GitHub Actions a partir de 914f341. Assinatura verific
 
 Testes nativos preparados com Maestro CLI e emuladores Android 10/API 29 e Android 14/API 34. Exercitam conexão, restauração, geração com fixture, pausa, avanço, serviço de mídia e continuidade fora do app e com tela bloqueada. O servidor do teste usa conteúdo fictício e áudio técnico, sem Gemini ou chaves. Evidências ficam junto ao candidato; o resultado será registrado após a execução.
 
+Limpeza RSS corrigida para remover HTML escapado depois da decodificação, incluindo blocos de script/style. 27 testes direcionados aprovados. Nova edição real de IA gerada em 120,03 segundos após indisponibilidade temporária do fornecedor. A versão do APK continua 0.12.0 porque essa alteração pertence ao servidor.
+
 ## 0.12.0 — 9 de novembro de 2026
 
 **Etapa 12: operação do servidor local.** Relatos por episódio e notas de voz de 1 a 5, sem cadastro ou texto livre. Comando administrativo local para retirar edições e impedir novas leituras de links já emitidos. Player confere disponibilidade ao iniciar/retomar e periodicamente. Registro da primeira publicação entre coletas, com hash da URL.

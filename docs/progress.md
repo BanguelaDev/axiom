@@ -172,3 +172,5 @@ Revisão final do recorte: uma inspeção de notícias reais identificou “golp
 - CI do código aprovada nos commits 914f341 e 189327f. O último altera somente o recorte editorial do servidor.
 - Testes de instalação e mídia nativa em preparação com Maestro CLI e emuladores API 29 e 34 no executor público padrão. Sem serviço Maestro Cloud, chaves ou conteúdo real; o servidor injeta uma fixture identificada e um áudio técnico.
 - O candidato continua em rascunho até a verificação. Aceite no Galaxy Note 20 Ultra e avaliação humana de voz/conteúdo permanecem separados.
+
+Conferência adicional: nenhuma das quatro credenciais locais ou o IP pessoal apareceu no bundle do APK. Após HTTP 503 temporário, uma segunda tentativa gerou IA em 120,03 segundos às 15:14, horário local. A inspeção encontrou HTML escapado em um feed; a limpeza agora decodifica antes de remover tags e scripts, com regressão aprovada entre 27 testes direcionados. Mudança somente no servidor.

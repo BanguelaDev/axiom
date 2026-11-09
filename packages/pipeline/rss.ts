@@ -173,21 +173,30 @@ export const rssFeeds: Feed[] = [
 ];
 function plain(value: unknown): string {
   if (typeof value !== 'string') return '';
-  return value
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+  let text = value;
+  // Alguns feeds escapam o HTML dentro do XML. Decodificar antes de remover as tags.
+  for (let pass = 0; pass < 3; pass++) {
+    const decoded = text
+      .replace(
+        /&(?:nbsp|amp|quot|apos|lt|gt);/g,
+        (entity) =>
+          ({ '&nbsp;': ' ', '&amp;': '&', '&quot;': '"', '&apos;': "'", '&lt;': '<', '&gt;': '>' })[
+            entity
+          ] || entity,
+      )
+      .replace(/&#(x[\da-f]+|\d+);/gi, (_, code: string) => {
+        const n = code[0]?.toLowerCase() === 'x' ? parseInt(code.slice(1), 16) : Number(code);
+        return n >= 32 && n <= 0x10ffff && !(n >= 0xd800 && n <= 0xdfff)
+          ? String.fromCodePoint(n)
+          : ' ';
+      });
+    if (decoded === text) break;
+    text = decoded;
+  }
+  return text
+    .replace(/<script\b[^>]*>[\s\S]*?(?:<\/script\s*>|$)/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?(?:<\/style\s*>|$)/gi, ' ')
     .replace(/<[^>]*>/g, ' ')
-    .replace(
-      /&(?:nbsp|amp|quot|apos|lt|gt);/g,
-      (entity) =>
-        ({ '&nbsp;': ' ', '&amp;': '&', '&quot;': '"', '&apos;': "'", '&lt;': '<', '&gt;': '>' })[
-          entity
-        ] || entity,
-    )
-    .replace(/&#(x[\da-f]+|\d+);/gi, (_, code: string) => {
-      const n = code[0]?.toLowerCase() === 'x' ? parseInt(code.slice(1), 16) : Number(code);
-      return n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : ' ';
-    })
     .replace(/\s+/g, ' ')
     .trim();
 }
