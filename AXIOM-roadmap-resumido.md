@@ -25,13 +25,13 @@ O roteiro será interno. O usuário terá um player com reprodução, pausa e na
 | --- | --- |
 | Aplicativo e interface | React Native, Expo e TypeScript |
 | Back-end | Node.js e TypeScript; Supabase opcional |
-| Banco de dados e arquivos de áudio | Arquivos locais; PostgreSQL e Supabase opcionais |
+| Banco de dados e arquivos de áudio | SQLite e arquivos no computador |
 | Processamento em segundo plano | Fila local Node.js; Trigger.dev opcional |
 | Busca de notícias | Feeds RSS públicos |
 | Geração do roteiro | Gemini Free Tier |
 | Síntese de voz | Gemini TTS Free Tier |
 | Reprodução e tratamento de áudio | expo-audio e FFmpeg/FFprobe |
-| Versionamento e distribuição | GitHub e Expo EAS |
+| Versionamento e distribuição | GitHub Actions, Expo Prebuild e Gradle; EAS opcional |
 
 ## Etapas de desenvolvimento
 

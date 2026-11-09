@@ -25,7 +25,7 @@ A apresentação usa a faixa gratuita, sem hospedar um servidor pago. A chave Ge
 1. Instalar Node.js 22.14 ou superior e executar `npm ci` na raiz.
 2. Preencher `GEMINI_API_KEY` no `.env`, seguindo [o guia gratuito](docs/configurar-chaves.md).
 3. Executar `npm run dev` e abrir http://localhost:8081.
-4. Para o celular, usar `npm run dev:lan`, com Expo Go compatível com SDK 58 e a mesma rede do computador.
+4. Para o celular, usar `npm run dev:lan` com Expo Go compatível com SDK 58. O [candidato APK](docs/android-apk.md) usa `npm run server:lan`, sem Expo Go. Em ambos, mantenha celular e computador na mesma rede.
 
 ## Mostrar ao professor
 
@@ -41,4 +41,4 @@ A primeira preparação pode levar alguns minutos. Preparar a edição antes da 
 
 Ouvir o episódio e conferir as fontes. Manter o computador e o terminal ligados. Verificar a conexão do celular e a disponibilidade da cota gratuita. Em Preferências → Apresentação do projeto há cenários técnicos identificados, que continuam acessíveis sem a chave.
 
-A exportação de código para Android/iOS não equivale a um APK instalado ou a teste em aparelho físico. A implantação em loja e os serviços remotos opcionais seguem critérios próprios. Os resultados efetivamente verificados estão em [docs/validation.md](docs/validation.md).
+Abertura, reprodução e barra foram confirmadas no Galaxy Note 20 Ultra pelo Expo Go. Há um candidato APK 0.12.0 compilado, com checksum conferido. Seu aceite nativo e a avaliação humana de voz/conteúdo são registrados separadamente em [docs/validation.md](docs/validation.md). Lojas e hospedagem remota são evoluções opcionais.

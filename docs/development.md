@@ -35,7 +35,7 @@ Para gerar uma imagem, execute `npm run phone:qr` em outro terminal. O QR fica e
 
 No Expo Go, o player permite testar a escuta com o aplicativo aberto. Os controles de tela bloqueada exigem o APK com o serviço nativo configurado. A barra é contínua e, no Android, busca o ponto escolhido ao soltar o dedo.
 
-Essa execução serve à apresentação acadêmica. Um APK independente, publicação em lojas e hospedagem contínua exigem builds e validações próprias. O áudio nativo em segundo plano e na tela bloqueada precisa de teste em Android/iPhone físicos.
+Para usar o APK independente, execute `npm run server:lan` e informe no app o endereço exibido no terminal. Veja o [guia Android](android-apk.md). O áudio nativo em segundo plano e na tela bloqueada precisa de teste no aparelho; a confirmação no Expo Go não substitui esse aceite. Lojas e hospedagem contínua ficam fora da entrega local.
 
 ## Demonstração sem chave
 

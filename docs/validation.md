@@ -1,5 +1,15 @@
 # Validações do AXIOM
 
+## Situação atual — candidato 0.12.0
+
+- APK compilado com Gradle no build [42655654822](https://github.com/BanguelaDev/axiom/actions/runs/42655654822), fonte 914f341. Assinatura verificada no executor e SHA-256 conferido após download.
+- Inspeção do APK: arm64-v8a e x86_64, sem `.env`, sem os marcadores do pipeline privado, sem o endereço pessoal do servidor e sem nenhuma das quatro chaves locais verificadas. Os valores das chaves não foram exibidos.
+- CI de código aprovada nos commits 914f341, 189327f e 8141647. A correção editorial 189327f é do servidor e não altera o APK.
+- Testes nativos em execução nos emuladores API 29 e 34. Até o registro do resultado, não considerar segundo plano ou tela bloqueada aprovados no binário.
+- Tentativa real de IA às 15:09, horário de Três Lagoas/Cuiabá: fornecedor respondeu HTTP 503 na preparação editorial; nenhuma voz foi liberada. O relatório local registrou fases, tokens retornados e a falha. Episódios aprovados anteriormente continuam sendo a evidência de voz real.
+
+As seções por etapa abaixo preservam o histórico das verificações. Supabase/Trigger.dev, lojas e iPhone físico pertencem às evoluções opcionais da entrega local escolhida.
+
 ## Etapa 10 — Fontes e Android físico
 
 - 108 testes, TypeScript/Deno, lint, exportações web/Android/iOS e Expo Doctor aprovados.
