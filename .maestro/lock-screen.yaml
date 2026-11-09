@@ -1,0 +1,4 @@
+appId: br.com.axiom.mobile
+---
+- pressKey: lock
+- takeScreenshot: work/native-evidence/locked

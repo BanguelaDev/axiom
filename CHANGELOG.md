@@ -1,5 +1,11 @@
 # Entregas do AXIOM
 
+## Validação do candidato Android — 9 de novembro de 2026
+
+APK 0.12.0 compilado pelo GitHub Actions a partir de 914f341. Assinatura verificada no build e checksum conferido após download. Pacote ainda em rascunho de release.
+
+Testes nativos preparados com Maestro CLI e emuladores Android 10/API 29 e Android 14/API 34. Exercitam conexão, restauração, geração com fixture, pausa, avanço, serviço de mídia e continuidade fora do app e com tela bloqueada. O servidor do teste usa conteúdo fictício e áudio técnico, sem Gemini ou chaves. Evidências ficam junto ao candidato; o resultado será registrado após a execução.
+
 ## 0.12.0 — 9 de novembro de 2026
 
 **Etapa 12: operação do servidor local.** Relatos por episódio e notas de voz de 1 a 5, sem cadastro ou texto livre. Comando administrativo local para retirar edições e impedir novas leituras de links já emitidos. Player confere disponibilidade ao iniciar/retomar e periodicamente. Registro da primeira publicação entre coletas, com hash da URL.

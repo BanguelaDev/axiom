@@ -1,0 +1,89 @@
+name: Teste do APK Android
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Rascunho de release com o APK candidato
+        required: true
+        default: android-local-42655654822-1
+  push:
+    branches: [test/android-candidato]
+permissions:
+  contents: write
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [29, 34]
+    env:
+      CI: 'true'
+      AXIOM_E2E: 'true'
+      MAESTRO_CLI_NO_ANALYTICS: 'true'
+      MAESTRO_CLI_ANALYSIS_NOTIFICATION_DISABLED: 'true'
+      MAESTRO_DISABLE_UPDATE_CHECK: 'true'
+      CANDIDATE_TAG: ${{ inputs.release_tag || 'android-local-42655654822-1' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci
+      - name: Baixar e conferir candidato
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "$CANDIDATE_TAG" --dir work/candidate
+          cd work/candidate
+          sha256sum -c SHA256SUMS.txt
+      - name: Instalar Maestro CLI oficial
+        run: |
+          curl -fsSL https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip -o /tmp/maestro.zip
+          printf '%s  %s\n' '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7' '/tmp/maestro.zip' | sha256sum -c -
+          unzip -q /tmp/maestro.zip -d /tmp/maestro-cli
+          echo /tmp/maestro-cli/maestro/bin >> "$GITHUB_PATH"
+      - name: Preparar fixture local sem chaves
+        run: |
+          npx tsx scripts/e2e-server.ts > work/e2e-server.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:8787/health; then exit 0; fi
+            sleep 2
+          done
+          cat work/e2e-server.log
+          exit 1
+      - name: Habilitar aceleração do emulador
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Instalar e exercitar o APK
+        uses: reactivecircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808
+        with:
+          api-level: ${{ matrix.api }}
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          script: |
+            adb install work/candidate/AXIOM-android-local.apk
+            maestro test --debug-output work/native-evidence/debug .maestro/android-local.yaml
+            node scripts/check-native-media.mjs background
+            maestro test --debug-output work/native-evidence/debug-lock .maestro/lock-screen.yaml
+            node scripts/check-native-media.mjs locked
+      - name: Guardar evidências do teste
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p work/native-evidence
+          cp work/e2e-server.log work/native-evidence/ || true
+          adb logcat -d > work/native-evidence/logcat.txt || true
+          git rev-parse HEAD > work/native-evidence/test-commit.txt
+          cp work/candidate/source-commit.txt work/native-evidence/apk-commit.txt
+          zip -qr "work/android-test-api-${{ matrix.api }}.zip" work/native-evidence
+          gh release upload "$CANDIDATE_TAG" "work/android-test-api-${{ matrix.api }}.zip" --clobber

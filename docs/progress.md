@@ -165,3 +165,10 @@ Próximas pendências: concluir o candidato Android, operação/retirada e reten
 Restam o candidato Android instalado, validações nativas no aparelho e revisão humana de conteúdo e voz. A cobertura por RSS pode resultar em indisponibilidade legítima em alguns temas.
 
 Revisão final do recorte: uma inspeção de notícias reais identificou “golpes de faca” como falso positivo de Fraudes. O termo genérico passou a exigir contexto financeiro/digital, com teste de regressão. Os 26 testes de seleção e fornecedores passaram. Auditoria dos seis temas confirmou Ucrânia, IA, Política e Crimes com material; Saúde Mental e Fraudes insuficientes naquele momento. Novos feeds inspecionados tinham apenas excertos curtos ou nenhuma pauta elegível e não foram adicionados para forçar a cobertura.
+
+## Etapa 13 — Candidato Android
+
+- Build 42655654822 concluído com sucesso para o commit 914f341. APK 0.12.0 de 58,1 MB, arm64 e x86_64. Assinatura conferida no build; SHA-256 local confere com o arquivo produzido (`f8cdcb21eacb9fea6989bbda0acaa42a9793960c082ca8e6dc62e58d3f89088d`).
+- CI do código aprovada nos commits 914f341 e 189327f. O último altera somente o recorte editorial do servidor.
+- Testes de instalação e mídia nativa em preparação com Maestro CLI e emuladores API 29 e 34 no executor público padrão. Sem serviço Maestro Cloud, chaves ou conteúdo real; o servidor injeta uma fixture identificada e um áudio técnico.
+- O candidato continua em rascunho até a verificação. Aceite no Galaxy Note 20 Ultra e avaliação humana de voz/conteúdo permanecem separados.

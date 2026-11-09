@@ -1,0 +1,34 @@
+appId: br.com.axiom.mobile
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Conecte ao seu computador."
+- tapOn:
+    id: server-url-input
+- inputText: http://10.0.2.2:8787
+- hideKeyboard
+- tapOn: Conectar
+- assertVisible: "(?s)O mundo, em.*"
+- launchApp
+- assertVisible: "(?s)O mundo, em.*"
+- scrollUntilVisible:
+    element: "Explorar Inteligência Artificial"
+- tapOn: "Explorar Inteligência Artificial"
+- scrollUntilVisible:
+    element: "Gerar podcast de dois minutos"
+- tapOn: "Gerar podcast de dois minutos"
+- extendedWaitUntil:
+    visible: "Abrir podcast"
+    timeout: 30000
+- tapOn: "Abrir podcast"
+- scrollUntilVisible:
+    element: "Ouvir podcast"
+- tapOn: "Ouvir podcast"
+- assertVisible: "Pausar podcast"
+- tapOn: "Avançar 15 s"
+- tapOn: "Pausar podcast"
+- assertVisible: "Continuar podcast"
+- tapOn: "Continuar podcast"
+- assertVisible: "Pausar podcast"
+- takeScreenshot: work/native-evidence/player
+- pressKey: home
