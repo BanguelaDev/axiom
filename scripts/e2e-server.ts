@@ -47,5 +47,13 @@ const server = await startLocalApi(8787, {
   },
 });
 console.log('E2E pronto: fixture fictícia e áudio técnico, sem fornecedor externo.');
+server.on('request', (request) => {
+  const path = new URL(request.url || '/', 'http://localhost').pathname;
+  console.log(
+    'E2E HTTP',
+    request.method,
+    path.startsWith('/dev/media/') ? '/dev/media/[ticket]' : path,
+  );
+});
 for (const signal of ['SIGINT', 'SIGTERM'] as const)
   process.on(signal, () => server.close(() => process.exit(0)));

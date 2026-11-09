@@ -6,13 +6,6 @@ on:
         description: Rascunho de release com o APK candidato
         required: true
         default: android-local-42655654822-1
-  push:
-    branches: [test/android-candidato]
-    paths:
-      - '.maestro/**'
-      - 'scripts/e2e-server.ts'
-      - 'scripts/check-native-media.mjs'
-      - 'scripts/native-test.sh'
 permissions:
   contents: write
 jobs:

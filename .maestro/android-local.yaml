@@ -25,6 +25,8 @@ appId: br.com.axiom.mobile
     element: "Ouvir podcast"
 - tapOn: "Ouvir podcast"
 - assertVisible: "Pausar podcast"
+- scrollUntilVisible:
+    element: "Avançar 15 s"
 - tapOn: "Avançar 15 s"
 - tapOn: "Pausar podcast"
 - assertVisible: "Continuar podcast"
