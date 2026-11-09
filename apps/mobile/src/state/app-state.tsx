@@ -26,6 +26,7 @@ import {
   type ThemePreference,
 } from '@axiom/core/listening';
 import { palettes, topicColors } from '@/theme';
+import { claimPlayback, registerPlayback } from '@/services/playback';
 
 export type { ThemePreference } from '@axiom/core/listening';
 const storageKey = 'axiom:preferences:v1';
@@ -43,6 +44,7 @@ function useAppValue() {
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [generation, dispatchGeneration] = useReducer(demoGenerationReducer, initialDemoGeneration);
   const player = useAudioPlayer(audioSample, { updateInterval: 250 });
+  useEffect(() => registerPlayback('demo', () => player.pause()), [player]);
   const status = useAudioPlayerStatus(player);
   const playRequest = useRef(0);
   const writes = useRef(Promise.resolve());
@@ -148,6 +150,7 @@ function useAppValue() {
           artist: 'AXIOM · Demonstração',
         });
       setActiveTopic(topicId);
+      claimPlayback('demo');
       player.play();
       setHistory((items) =>
         [

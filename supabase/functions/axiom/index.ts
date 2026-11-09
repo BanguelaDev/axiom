@@ -15,8 +15,8 @@ if (environment !== 'staging' && environment !== 'production')
 Deno.serve(
   createApi({
     environment,
-    // A tarefa desta etapa valida infraestrutura; não produz notícias. Habilitar na integração futura.
-    generationAvailable: false,
+    // Opt-in depois de aplicar as migrações e implantar o worker com seus secrets.
+    generationAvailable: Deno.env.get('AXIOM_GENERATION_ENABLED') === 'true' && !!triggerKey,
     allowedOrigins: (Deno.env.get('ALLOWED_ORIGINS') || '')
       .split(',')
       .map((value) => value.trim())

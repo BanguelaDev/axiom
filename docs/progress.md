@@ -84,3 +84,17 @@ Pendente: testar a narração real em português e com ouvintes, aplicar a migra
 ## Etapas 7 e 8
 
 As integrações locais são a base para a coleta e geração de produção. Filas remotas, controle distribuído de consumo, streaming de notícias geradas, builds de aparelhos, beta e publicação continuam pendentes. Nenhum marco de produção foi marcado como concluído.
+
+## Etapa 7 — Jornada mobile e fluxo gratuito integrados
+
+Entrega de 8 de novembro de 2026, seguindo a etapa 7 do roadmap e a decisão de custo zero:
+
+- Escolha do tema conectada à API, consulta de fila, reuso e recuperação do identificador do trabalho após fechar/reabrir o app.
+- Player de episódios com fonte HTTP temporária, controles de reprodução/pausa/busca, retomada, mini player e referências com links.
+- Histórico de episódios separado das amostras, sem roteiro ou URL assinada. Sessão local preservada e renovação após rejeição do servidor.
+- RSS público substitui GNews. Gemini Free Tier substitui OpenAI/ElevenLabs no fluxo ativo. Não há fallback para fornecedores pagos.
+- Orquestração compartilhada entre prova de viabilidade, API/fila local e worker remoto opcional. Geração remota depende de implantação e opt-in; não foi ativada.
+- Comandos `npm run dev` e `npm run dev:lan`; a segunda opção fornece ao celular um endereço de rede alcançável para API e áudio, mantendo os segredos no servidor.
+- 88 testes aprovados, TypeScript/Deno, lint e exportação web. Coleta RSS real encontrou material em quatro dos seis temas na primeira auditoria; notícias insuficientes continuam bloqueadas.
+
+Pendente nesta entrega: chave Gemini Free Tier do responsável, primeira síntese jornalística real, revisão humana e teste em celular físico. A prévia confirmou a nova navegação e o tratamento de geração não configurada. Supabase completo, fila remota, beta e lojas não foram validados. As etapas históricas acima registram os fornecedores utilizados naquela versão; a configuração ativa agora está em [configurar chaves](configurar-chaves.md).

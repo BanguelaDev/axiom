@@ -1,5 +1,7 @@
 # Coleta e seleção de notícias
 
+A versão 0.7 usa RSS público e cadastro embutido de veículos. Somente o texto distribuído nos feeds fornece evidências; o app não contorna paywalls. As referências a GNews abaixo registram a implementação anterior, sem uso no fluxo gratuito atual.
+
 ## O que foi implementado
 
 A etapa 4 prepara uma pauta auditável antes de chamar a IA e a voz. O código usa consultas próprias em português e inglês para cada um dos seis temas, valida datas e conteúdo, remove cópias e seleciona até três acontecimentos, com três a seis matérias de suporte. Quando não encontra material e fontes independentes suficientes, bloqueia a pauta.

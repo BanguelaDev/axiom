@@ -73,3 +73,9 @@ Os testes executam as migrações em PostgreSQL embarcado, com PGlite e contrato
 Isso não valida Supabase Auth, Storage ou Trigger.dev reais, nem concorrência entre processos e comportamento do gateway. Docker e Supabase CLI não estavam disponíveis neste computador; esses aceites permanecem pendentes.
 
 Referências: [Auth anônimo](https://supabase.com/docs/guides/auth/auth-anonymous), [Auth no React Native](https://supabase.com/docs/guides/auth/quickstarts/react-native), [getUser](https://supabase.com/docs/reference/javascript/auth-getuser), [URLs assinadas](https://supabase.com/docs/reference/javascript/storage-from-createsignedurl), [tarefas Trigger.dev](https://trigger.dev/docs/tasks/overview).
+
+## Atualização 0.7 — RSS e Gemini Free Tier
+
+A entrega acadêmica usa API e fila locais com sessões opacas, reuso por tema, limites por sessão/global e expiração. O pipeline é real quando GEMINI_API_KEY está configurada em projeto gratuito sem faturamento. Não usa chaves de GNews/OpenAI/ElevenLabs. `npm run dev` inicia API e Expo; `dev:lan` permite apresentação no celular da mesma rede. Estado da API é descartado ao reiniciar.
+
+O worker remoto agora chama a mesma orquestração, reserva somente um trabalho queued, renova sua atividade e publica via complete_generation. A tarefa inteira não é repetida automaticamente, para evitar síntese duplicada. Diretórios temporários são removidos após a publicação. O build opcional prepara FFmpeg/FFprobe via extensão oficial. Essa integração foi preparada em código, sem implantação remota. AXIOM_GENERATION_ENABLED é false por padrão e só deve mudar após validar o ambiente.

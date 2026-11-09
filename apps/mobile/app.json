@@ -3,12 +3,21 @@
     "name": "AXIOM",
     "slug": "axiom",
     "scheme": "axiom",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
-    "ios": { "supportsTablet": true, "bundleIdentifier": "br.com.axiom.mobile" },
-    "android": { "package": "br.com.axiom.mobile" },
-    "web": { "bundler": "metro", "output": "single", "name": "AXIOM" },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.axiom.mobile"
+    },
+    "android": {
+      "package": "br.com.axiom.mobile"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "name": "AXIOM"
+    },
     "plugins": [
       "expo-router",
       [
@@ -21,6 +30,8 @@
         }
       ]
     ],
-    "experiments": { "typedRoutes": true }
+    "experiments": {
+      "typedRoutes": true
+    }
   }
 }

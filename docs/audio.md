@@ -5,7 +5,7 @@ A etapa 6 prepara o áudio no servidor e demonstra as medições com arquivos re
 ## Como o arquivo é preparado
 
 1. Conferir a aprovação da versão do roteiro e a validade das fontes antes da síntese.
-2. Solicitar MP3 à ElevenLabs, com Multilingual v2 e uma voz configurada. Uma falha de rede não provoca repetição automática que possa cobrar duas vezes.
+2. Solicitar WAV ao Gemini 3.8 Flash TTS na faixa gratuita, com voz Kore. O arquivo final continua sendo MP3. Uma falha de rede não provoca repetição automática que possa cobrar duas vezes.
 3. Guardar a síntese por versão do roteiro e identidade da voz, com checksum. Um arquivo incompleto ou alterado interrompe o reaproveitamento.
 4. Medir codec, duração, volume e silêncio com FFprobe/FFmpeg.
 5. Se a diferença permitir ajuste de ritmo de até 3%, normalizar e gerar o MP3 final. Fora dessa margem, solicitar nova redação e revisão, até três versões no total.

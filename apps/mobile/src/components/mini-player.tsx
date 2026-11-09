@@ -4,10 +4,52 @@ import { getTopic } from '@axiom/core/topics';
 import { Copy, Icon } from '@/components/ui';
 import { useApp } from '@/state/app-state';
 import { spacing, sizes } from '@/theme';
+import { usePodcast } from '@/state/podcast-state';
 
 export function MiniPlayer() {
   const { activeTopic, colors, topicColors, status, play, pause, startingPlayback } = useApp();
+  const podcast = usePodcast();
   const topic = activeTopic ? getTopic(activeTopic) : null;
+  if (podcast.episode)
+    return (
+      <View
+        style={{
+          backgroundColor: colors.surface,
+          padding: spacing.md,
+          gap: spacing.sm,
+          borderTopWidth: 1,
+          borderColor: colors.line,
+        }}
+      >
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Abrir podcast atual"
+          onPress={() =>
+            router.push({ pathname: '/podcast/[id]', params: { id: podcast.episode!.id } })
+          }
+        >
+          <Copy variant="caption" tone="accent">
+            {getTopic(podcast.episode.topicId)?.name} · Narração por IA
+          </Copy>
+          <Copy variant="headline" numberOfLines={1}>
+            {podcast.episode.title}
+          </Copy>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={podcast.status.playing ? 'Pausar podcast' : 'Continuar podcast'}
+          disabled={!podcast.status.isLoaded || podcast.starting}
+          onPress={() => void podcast.toggle()}
+          style={{ minHeight: sizes.touch, justifyContent: 'center' }}
+        >
+          <Copy tone="accent">
+            {podcast.status.playing ? 'Pausar' : 'Continuar'} ·{' '}
+            {Math.floor(podcast.status.currentTime)} de{' '}
+            {Math.round(podcast.episode.durationSeconds)} s
+          </Copy>
+        </Pressable>
+      </View>
+    );
   if (!topic) return null;
   return (
     <View

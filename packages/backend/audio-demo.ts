@@ -61,6 +61,14 @@ export function createAudioDemo(directory: string, clock = () => Date.now()) {
     }
   }
   return {
+    issueMedia(bytes:Uint8Array,expiresIn=300) {
+      for(const [ticket,value] of tickets)if(value.expires<=clock())tickets.delete(ticket);
+      if(tickets.size>=64)tickets.delete(tickets.keys().next().value!);
+      const ticket=randomBytes(24).toString('hex');
+      const ttl=Math.max(1,Math.min(600,Math.floor(expiresIn)));
+      tickets.set(ticket,{bytes,expires:clock()+ttl*1000});
+      return {path:`/dev/media/${ticket}`,expiresIn:ttl};
+    },
     async prepare(scenario: AudioScenario): Promise<AudioDemoReport> {
       if (!builds.has(scenario))
         builds.set(

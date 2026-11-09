@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   ApiFault,
+  generationMessages,
   type GenerationResult,
   type PublicJob,
   type PublicEpisode,
@@ -49,7 +50,7 @@ export class SupabaseRepository implements BackendRepository {
     if (timeout.error) throw timeout.error;
     const { data, error } = await this.client
       .from('generation_jobs')
-      .select('id, topic_id, stage, episode_id')
+      .select('id, topic_id, stage, episode_id, safe_error')
       .eq('id', id)
       .maybeSingle();
     if (error) throw error;
@@ -59,7 +60,11 @@ export class SupabaseRepository implements BackendRepository {
           topicId: data.topic_id,
           stage: data.stage,
           episodeId: data.episode_id,
-          message: data.stage === 'failed' ? safeJobMessage : null,
+          message:
+            data.stage === 'failed'
+              ? generationMessages[data.safe_error as keyof typeof generationMessages] ||
+                safeJobMessage
+              : null,
         }
       : null;
   }

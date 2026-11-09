@@ -82,3 +82,12 @@ Nesta entrega, `npm audit` sinaliza 20 avisos (1 baixo, 16 moderados e 3 altos),
 - [GNews: endpoint de busca](https://docs.gnews.io/endpoints/search-endpoint)
 - [ElevenLabs: síntese de voz](https://elevenlabs.io/docs/api-reference/text-to-speech/convert)
 - [Supabase: Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)
+
+## Etapa 7 — Integração e custo zero
+
+- TypeScript/Deno, lint, 88 testes e exportação web aprovados.
+- Novos testes: saída estruturada Gemini, chave no header, store=false, interrupção em 429 sem retry/fallback pago, voz WAV, RSS sem entidades e links fora da fonte, contratos do player, POST autenticado, mídia temporária e histórico sem dados privados.
+- Fila local exercitada com áudio real: trabalho compartilhado, uma execução, isolamento de sessões, metadados sem roteiro, cache e expiração.
+- Coleta RSS real consultada sem chaves: Ucrânia, IA, Fraudes e Política com material suficiente na primeira auditoria. Saúde mental e Crimes insuficientes naquele instante. Essa leitura não garante cobertura futura nem qualidade editorial aprovada.
+- Prévia: navegação do tema ao novo fluxo e tratamento de geração desativada. Gemini real ainda não foi chamado; chave Free Tier pendente. Reprodução jornalística, avaliação humana e aparelhos físicos ainda não aprovados.
+- A configuração do build opcional Trigger.dev acrescenta duas ocorrências altas à auditoria de dependências: total 22 (1 baixa, 16 moderadas, 5 altas). Sem atualização forçada de SDK; não usar esta entrega como aprovação de distribuição em loja.

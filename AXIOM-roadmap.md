@@ -1,12 +1,12 @@
 # AXIOM — Roadmap de construção do aplicativo mobile
 
-**Versão:** 1.5
+**Versão:** 1.6
 
 **Criado em:** 19 de outubro de 2026
 
 **Atualizado em:** 8 de novembro de 2026
 
-**Status:** desenvolvimento em andamento; coleta, roteiro e processamento de áudio implementados para validação local. A amostra técnica de dois minutos foi medida com FFmpeg. Fornecedores, qualidade editorial e de voz reais e integração remota continuam pendentes.
+**Status:** entrega acadêmica de custo zero em integração: RSS público, Gemini Free Tier e servidor local. A jornada mobile está conectada à API; testes com voz real e aparelhos continuam identificados no acompanhamento.
 
 O escopo abaixo continua sendo a referência do projeto. O andamento e as validações pendentes ficam em [docs/progress.md](docs/progress.md), e as entregas estão registradas no [CHANGELOG.md](CHANGELOG.md). A etapa 1 ainda depende dos fornecedores e da avaliação de notícias e voz reais; o protótipo usa cenários identificados como demonstração.
 
@@ -124,7 +124,9 @@ O aplicativo deverá permitir escolher claro, escuro ou acompanhar o sistema. As
 
 Conta com sincronização, favoritos, downloads para ouvir offline, notificações, escolha de voz, temas personalizados, múltiplos narradores, assinaturas e compartilhamento de episódios.
 
-## 5. Tecnologias recomendadas
+## 5. Tecnologias e entrega sem gastos
+
+Por decisão do responsável em 8 de novembro de 2026, a entrega acadêmica não utilizará serviços pagos. O fluxo ativo é RSS → Gemini Free Tier (fatos, roteiro e revisão) → Gemini Free Tier TTS → FFmpeg → aplicativo. Uma única chave de projeto Google AI Studio sem faturamento é necessária. Cotas esgotadas interrompem a geração; não existe fallback pago. Supabase e Trigger.dev ficam opcionais para uma implantação futura. Veja [configuração gratuita](docs/configurar-chaves.md).
 
 A recomendação prioriza ferramentas consolidadas para mobile e serviços gerenciados que reduzam o trabalho de infraestrutura. “Melhor” aqui significa adequação ao AXIOM, facilidade de manutenção e capacidade de crescer; popularidade isolada não resolve essas necessidades.
 
@@ -133,32 +135,26 @@ A recomendação prioriza ferramentas consolidadas para mobile e serviços geren
 | Aplicativo | **React Native + Expo + TypeScript** | Construir Android e iOS com uma base compartilhada |
 | Navegação e visual | **Expo Router + componentes nativos + StyleSheet** | Organizar telas e manter um sistema visual simples |
 | Player | **expo-audio** | Reproduzir episódios e integrar áudio em segundo plano e tela bloqueada |
-| API do back-end | **Supabase Edge Functions, em TypeScript** | Validar sessões, aplicar limites e iniciar ou consultar gerações |
-| Banco de dados | **PostgreSQL no Supabase** | Guardar temas, episódios, referências e estado dos trabalhos |
-| Sessões e arquivos | **Supabase Auth + Storage** | Sessões anônimas e armazenamento protegido dos áudios |
-| Processamento em segundo plano | **Trigger.dev, com tarefas Node.js/TypeScript** | Executar busca, roteiro, voz e validações com controle de tentativas |
-| Notícias | **GNews API em plano pago**, condicionada à validação de cobertura e permissões | Encontrar matérias recentes e obter conteúdo suficiente para o resumo |
-| LLM | **OpenAI Responses API; GPT-5.4 mini como candidato inicial** | Extrair fatos e gerar o roteiro em estrutura validável |
-| Voz | **ElevenLabs; Multilingual v2 como candidato inicial** | Narrar em português brasileiro com consistência |
+| API do back-end | **Node.js/TypeScript local; Edge Functions opcionais** | Validar sessões, aplicar limites e iniciar ou consultar gerações |
+| Banco de dados | **Memória e arquivos privados na apresentação; PostgreSQL opcional** | Guardar temas, episódios, referências e estado dos trabalhos |
+| Sessões e arquivos | **Sessão opaca local e mídia temporária; Supabase opcional** | Sessões anônimas e armazenamento protegido dos áudios |
+| Processamento em segundo plano | **Fila local Node.js/TypeScript; Trigger.dev opcional** | Executar busca, roteiro, voz e validações com controle de tentativas |
+| Notícias | **Feeds RSS públicos dos veículos** | Encontrar matérias recentes e obter conteúdo suficiente para o resumo |
+| LLM | **Gemini 3.8 Flash na faixa gratuita** | Extrair fatos e gerar o roteiro em estrutura validável |
+| Voz | **Gemini 3.8 Flash TTS na faixa gratuita** | Narrar em português brasileiro com consistência |
 | Tratamento do áudio | **FFmpeg e FFprobe no processamento em segundo plano** | Medir duração, ajustar volume e preparar o arquivo final |
 | Builds e distribuição | **Expo EAS Build e EAS Submit** | Gerar e enviar versões Android e iOS |
 | Código e automação | **GitHub + GitHub Actions** | Versionamento e verificações antes das entregas |
 
 O [expo-audio documenta reprodução em segundo plano e controles na tela bloqueada](https://docs.expo.dev/versions/latest/sdk/audio/). Essas funções exigem configuração nativa e testes em aparelhos; o [EAS Build permite compilar Android e iOS na nuvem](https://docs.expo.dev/build/), inclusive a partir de um ambiente de desenvolvimento Windows.
 
-As [Edge Functions do Supabase](https://supabase.com/docs/guides/functions) atenderão requisições curtas. A geração completa ficará no [Trigger.dev](https://trigger.dev/docs/introduction), que possui [integração com FFmpeg](https://trigger.dev/docs/config/extensions/ffmpeg). Essa divisão evita depender dos limites de execução de uma única requisição HTTP.
+As [Edge Functions do Supabase](https://supabase.com/docs/guides/functions) atenderão requisições curtas. Em uma implantação remota opcional, a geração completa ficará no [Trigger.dev](https://trigger.dev/docs/introduction), que possui [integração com FFmpeg](https://trigger.dev/docs/config/extensions/ffmpeg). Essa divisão evita depender dos limites de execução de uma única requisição HTTP.
 
-O [GPT-5.4 mini](https://developers.openai.com/api/docs/models/gpt-5.4-mini) será avaliado com [saídas estruturadas](https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses). O modelo e sua versão serão fixados após medir fidelidade, tempo e custo em exemplos dos seis temas. Uma resposta no formato correto ainda pode conter erros factuais e precisa passar pelas verificações editoriais.
+O [Gemini lista uma faixa gratuita para texto e voz](https://ai.google.dev/gemini-api/docs/pricing.md). Usar projeto Free Tier sem faturamento, respeitando as cotas da conta. Dados do plano gratuito podem ser usados para melhoria de produtos pelo fornecedor; não enviar dados pessoais dos ouvintes. O formato estruturado e a revisão automatizada não garantem ausência de erros.
 
-O [Multilingual v2 da ElevenLabs](https://elevenlabs.io/docs/overview/models) oferece suporte a português do Brasil e é uma opção para narração consistente. A escolha da voz dependerá de teste de escuta; não será tratada como aprovada apenas pela documentação. Usar uma voz com licença adequada ao produto.
+### Fonte de notícias
 
-### Escolha da fonte de notícias
-
-O [GNews informa que seus planos pagos oferecem notícias em tempo real e conteúdo completo](https://gnews.io/pricing). A primeira etapa avaliará a cobertura real dos seis temas, especialmente Redes Sociais e Saúde Mental, além da qualidade das datas e da independência das fontes.
-
-Há uma dependência a resolver antes da publicação: os [termos do GNews distinguem a assinatura da API dos direitos sobre conteúdo de terceiros](https://gnews.io/legal/terms-of-service). Confirmar as permissões necessárias para processar, resumir, narrar e reter conteúdo. Se não atenderem ao produto, selecionar um fornecedor ou fontes com autorização adequada.
-
-A NewsAPI poderá ser comparada na avaliação, mas não será a escolha inicial: seu [endpoint Everything limita o campo de conteúdo a 200 caracteres](https://newsapi.org/docs/endpoints/everything), e seu [plano gratuito é restrito a desenvolvimento](https://newsapi.org/pricing). Não elaborar episódios apenas a partir de manchetes e trechos insuficientes.
+O servidor usa somente o texto disponibilizado nos feeds RSS de veículos identificados. Mantém datas verificáveis, janela de 72 horas, deduplicação, pauta limitada e grupos editoriais distintos. Não segue links para contornar paywalls. Quando o material não sustenta a edição, informa indisponibilidade. GNews, OpenAI e ElevenLabs permanecem apenas como adaptadores anteriores; não são usados na geração atual.
 
 ## 6. Arquitetura do sistema
 
@@ -353,7 +349,7 @@ Aplicar limites por sessão e sinais adicionais de abuso, controle global de con
 | Custo por episódio novo e por escuta | Verificar sustentabilidade e efeito do reuso |
 | Episódios retirados ou corrigidos | Acompanhar qualidade editorial |
 
-**Estrutura de custo mensal:** serviços de infraestrutura + fornecedor de notícias + uso de LLM + síntese de voz + armazenamento e transferência de áudio + builds e contas de distribuição, quando aplicáveis.
+**Orçamento da entrega acadêmica: R$ 0.** Usar RSS público, projeto Gemini Free Tier sem faturamento e servidor executado no computador. Hospedagem paga, contas de lojas e assinaturas não fazem parte desta entrega. Não habilitar faturamento para ampliar cotas.
 
 Na etapa 1, medir tokens, caracteres narrados, duração do processamento, volume dos arquivos e novas tentativas. Usar essas medidas para projetar cenários de 100, 1.000 e 10.000 escutas por dia, explicitando quantas gerações novas cada cenário exige. O número de escutas e o número de episódios gerados não são equivalentes.
 
@@ -372,6 +368,6 @@ Os valores finais dependerão do plano contratado, cobertura de conteúdo, volum
 
 ## 14. Ordem recomendada de execução
 
-Começar pela validação de uma edição completa: **notícias recentes → fatos verificáveis → roteiro → voz → áudio de dois minutos**. Após comprovar cobertura, qualidade e custo nos seis temas, avançar para a base técnica e a experiência mobile. O próximo entregável de desenvolvimento será a prova de viabilidade descrita na etapa 1.
+Começar pela validação de uma edição completa: **notícias recentes → fatos verificáveis → roteiro → voz → áudio de dois minutos**. Após comprovar cobertura, qualidade e custo nos seis temas, avançar para a base técnica e a experiência mobile. A entrega atual conecta a jornada mobile ao fluxo gratuito e prepara a apresentação acadêmica; os resultados e limitações reais ficam em docs/progress.md.
 
 Este documento orienta a construção. A implementação e seus testes são acompanhados por etapa; serviços externos e contratação de fornecedores dependem de configuração própria e não são presumidos como concluídos.

@@ -1,5 +1,7 @@
 # Roteiro e revisão editorial
 
+A versão 0.7 usa Gemini Free Tier com as mesmas operações de fatos, redação e revisão. As referências a OpenAI abaixo registram o adaptador anterior, mantido apenas para testes e sem uso no fluxo atual.
+
 ## O que foi implementado
 
 A etapa 5 separa o trabalho em três fases no servidor: extração de fatos, redação e revisão. O roteiro continua interno. A prova de viabilidade só chama a voz depois das verificações de estrutura, evidência, fontes e revisão da versão atual.

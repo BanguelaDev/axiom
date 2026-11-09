@@ -1,68 +1,61 @@
-# Desenvolvimento do AXIOM
+# Desenvolver e apresentar o AXIOM
 
-## Executar a demonstração
+O projeto usa React Native, Expo SDK 58 e TypeScript. O fluxo ativo gratuito usa RSS público, Gemini Free Tier e FFmpeg. A chave de IA fica somente no servidor.
 
-Requisitos: Node.js 22.14 ou superior e npm. Na raiz do repositório:
+## Executar no computador
+
+Requisitos: Node.js 22.14 ou superior e npm.
 
 ```sh
 npm ci
-npm start
 ```
 
-Escaneie o QR code com o Expo Go compatível com o SDK 58. Para testar no navegador, use `npm run web`. O navegador é uma prévia da interface; a entrega principal continua sendo Android e iOS. Os testes de áudio em segundo plano e tela bloqueada precisam ser feitos em aparelhos físicos e em builds adequadas.
+Copie `.env.example` para `.env`, se ainda não existir, e configure `GEMINI_API_KEY` com uma chave de projeto Google AI Studio Free Tier sem faturamento. Siga [configurar chaves](configurar-chaves.md). Não sobrescreva um arquivo já preenchido.
 
-A versão inicial permite explorar os seis temas, testar reprodução, pausa e busca no áudio, consultar o estado vazio de fontes, salvar histórico local e escolher o tema visual. Ela usa um sinal sonoro original de 12 segundos para testar o player. Não contém narração nem notícias simuladas. A duração exibida corresponde ao arquivo real. O arquivo pode ser recriado com `npx tsx scripts/create-player-sample.ts`.
+```sh
+npm run validate:providers
+npm run dev
+```
 
-Na versão 0.2, a jornada começa no detalhe do tema e passa por uma preparação simulada antes do player. O mini player permite controlar a escuta nas abas. Para apresentar os estados pronto, sem notícias e falha com recuperação, abra Preferências → Apresentação do projeto. Esses passos didáticos não chamam fornecedores.
+`dev` inicia a API na porta 8787 e o Expo na 8081. Abra http://localhost:8081. Não execute outro servidor nas mesmas portas. Escolha um tema e toque em Gerar podcast de dois minutos. A reprodução começa somente após tocar em ouvir.
 
-## Acompanhar ao vivo e registrar etapas
+O fluxo coleta notícias, extrai fatos, redige, revisa, gera voz e prepara o MP3 de 120 segundos com tolerância de um segundo. Cada correção do texto exige nova revisão, com até três versões. Cota gratuita esgotada e notícias insuficientes geram mensagens; não há fallback pago.
 
-Durante as alterações de interface, mantenha `npm start` em execução e uma aba de `http://localhost:8081` aberta. O Fast Refresh mostra as edições de código. Se o computador ou o servidor for desligado, execute o comando novamente; a aba, sozinha, não mantém o servidor em execução.
+## Abrir no celular
 
-Antes de cada etapa, leia `AXIOM-roadmap.md` e `docs/progress.md`. Ao entregar, atualize o acompanhamento e o `CHANGELOG.md`, execute as verificações e crie um commit com a etapa, mudanças, testes e pendências. Envie ao mesmo repositório sem reescrever o histórico. As instruções também estão no `AGENTS.md` da raiz.
+Conecte o telefone e o computador à mesma rede e execute:
 
-## Testar a API local
+```sh
+npm run dev:lan
+```
 
-Na versão 0.3, execute `npm run dev:api` em outro terminal e mantenha a prévia web na porta 8081. Abra Preferências → Apresentação do projeto → Verificar integração com o servidor. A API local cria uma sessão temporária e entrega o catálogo, sem notícias, voz ou cobrança. Leia [base técnica](backend.md) para o contrato, limitações e configuração futura de Supabase/Trigger.dev.
+Use o QR code do terminal no Expo Go compatível com SDK 58. O comando escolhe um IP privado do computador e fornece esse endereço ao app e à mídia. A chave permanece no servidor. Mantenha o terminal e o computador ligados. VPN, isolamento de Wi-Fi ou firewall podem impedir a conexão; a prévia web continua disponível.
 
-## Validar notícias, roteiro e voz reais
+Essa execução serve à apresentação acadêmica. Um APK independente, publicação em lojas e hospedagem contínua exigem builds e validações próprias. O áudio nativo em segundo plano e na tela bloqueada precisa de teste em Android/iPhone físicos.
 
-1. Copie `.env.example` para `.env` na raiz.
-2. Configure as chaves de GNews, OpenAI, ElevenLabs e o identificador de uma voz licenciada em português brasileiro. Defina também `NEWS_PUBLISHERS_FILE` com os domínios e grupos editoriais revisados; veja [coleta e seleção](news-selection.md). Nunca use `EXPO_PUBLIC_` para essas chaves.
-3. Confirme permissões para processar, resumir, narrar e reter o conteúdo. Ter uma assinatura de agregador não equivale a licença de todo conteúdo de terceiros.
-4. Execute `npm run validate:providers`. Esse comando verifica a configuração local, sem revelar segredos e sem testar credenciais por chamadas externas.
-5. Depois de confirmar os direitos, ajuste `CONTENT_RIGHTS_CONFIRMED=true` e execute `npm run poc -- ai` para gerar uma amostra. Isso consome as quotas dos fornecedores.
+## Demonstração sem chave
 
-IDs: `ukraine`, `ai`, `mental-health`, `fraud`, `politics`, `crime`.
+Sem `GEMINI_API_KEY`, a geração real fica desativada e o protótipo permanece navegável. Em Preferências → Apresentação do projeto há cenários de preparação, coleta e revisão, uma amostra original de 12 segundos e a verificação técnica de dois minutos. Os cenários são identificados; não são podcasts jornalísticos.
 
-A prova de viabilidade busca notícias, filtra 72 horas, remove duplicatas, exige conteúdo suficiente e veículos distintos, cria roteiro estruturado com evidências literais, faz uma segunda revisão por LLM e gera voz. Há no máximo três versões de roteiro/voz para ajustar a duração. Ajustes de ritmo maiores que 3% são rejeitados. O arquivo final deve ter 120 segundos, com tolerância de um segundo. As datas são revalidadas antes e depois da síntese.
+## Arquivos e privacidade
 
-As amostras ficam em `work/episode-*`, ignorado pelo Git. `episode.json` contém apenas metadados e referências. O roteiro fica em `private/script.json`. A revisão automatizada e a diversidade de domínios não provam independência editorial nem eliminam erros: conferir conteúdo e ouvir a amostra antes de considerar a etapa 1 concluída.
-
-A versão 0.4 também grava `private/selection-report.json`, com decisões e metadados da coleta. O pipeline exige fontes revisadas, confere vínculos editoriais/agências identificados e revalida a diversidade das fontes efetivamente usadas pelo roteiro. Para apresentar os critérios sem credenciais, use a nova opção em Apresentação do projeto ou execute `npm run audit:selection`; todos esses exemplos são fictícios.
-
-Na versão 0.5, o pipeline extrai fatos uma vez e separa redação e revisão por afirmação. Cada nova redação para corrigir duração precisa de nova revisão. Os arquivos de fatos e revisão ficam em `private/`; não entram nas respostas do app. Veja [roteiro e revisão](editorial.md). A apresentação dos controles fica em Apresentação do projeto → Entender a revisão do roteiro, ou pelo comando `npm run audit:editorial`, sem IA real.
-
-## Verificar o áudio
-
-Na versão 0.6, abra Preferências → Apresentação do projeto → Conferir o áudio de dois minutos, com `npm run dev:api` em execução. A preparação usa FFmpeg real e não inicia a reprodução automaticamente. É um sinal técnico, sem voz nem notícias. Para verificar os três arquivos pelo terminal, execute `npm run audit:audio`; os resultados ficam em `work/audio-audit`, fora do Git. Veja [áudio e publicação](audio.md).
-
-Na prova de viabilidade, a síntese de cada versão aprovada é guardada em `private/`, com checksum e identidade da voz. `private/audio-report.json` registra tentativas e medições. Voz com resultado de rede incerto não é repetida automaticamente; é preciso verificar o consumo antes de uma nova execução. A publicação em Supabase está preparada como módulo, ainda sem conexão com a tarefa remota.
+- `work/local-episodes`: MP3 final, metadados públicos e pasta `private` com seleção, fatos, revisão, roteiro e medições. Ignorado pelo Git.
+- Sessões, fila e cache do servidor local ficam em memória. Reiniciar a API descarta esses estados; não equivale a Supabase completo.
+- O app guarda preferências, histórico e o identificador de uma preparação pendente. URLs de mídia temporárias e roteiros não entram no histórico.
+- No modo local, a sessão temporária é guardada separadamente no aparelho para recuperar o pedido após recarregar. Ela é renovada quando o servidor a rejeita.
+- Áudio e metadados são revalidados antes do acesso. Episódios expirados ou retirados podem continuar listados no histórico, mas não recebem novo acesso.
 
 ## Estrutura
 
-| Pasta               | Conteúdo                                                                        |
-| ------------------- | ------------------------------------------------------------------------------- |
-| `apps/mobile`       | Aplicativo Expo com Expo Router e tema compartilhado                            |
-| `packages/core`     | Catálogo e regras de seleção, validade e evidência                              |
-| `packages/pipeline` | Integrações de notícias, LLM, voz e tratamento de áudio, exclusivas do servidor |
-| `scripts`           | Verificação de configuração e prova de viabilidade                              |
-| `packages/backend`  | Handler HTTP, runner local e adaptador de banco/Storage do servidor             |
-| `packages/tasks`    | Contrato inicial da tarefa Trigger.dev; geração ainda desativada                |
-| `tests`             | Testes editoriais, áudio, API, banco e proteção de dados                        |
-| `supabase`          | Migrações, configuração local e Edge Function; sem aplicação remota             |
-
-O app importa contratos e regras públicas de `@axiom/core`. Não importa os adaptadores do servidor nem seus segredos. Apenas URL e chave publishable do Supabase podem ser públicas; a chave service_role e as credenciais dos fornecedores são exclusivas do servidor.
+| Pasta | Conteúdo |
+| --- | --- |
+| apps/mobile | Telas, player, histórico, preferências e cliente HTTP |
+| packages/core | Contratos públicos e regras compartilhadas |
+| packages/pipeline | RSS, Gemini, revisão e áudio exclusivos do servidor |
+| packages/backend | API, fila local e adaptadores remotos opcionais |
+| packages/tasks | Worker Trigger.dev opcional; implantação não obrigatória |
+| supabase | Migrações e Edge Function opcionais |
+| tests | Verificação de conteúdo, áudio, API, dados e contratos do app |
 
 ## Verificações
 
@@ -73,10 +66,6 @@ npm test
 npm run export:web
 ```
 
-`typecheck` inclui a verificação da Edge Function com Deno 2.9.6, também executada pela automação existente do GitHub. Para executá-la separadamente, use `npm run typecheck:edge`. Na primeira execução, o npm baixa o runtime Deno fixado nessa versão.
+`typecheck` inclui Deno da Edge Function. O FFmpeg é fornecido por pacote; em ambientes que bloqueiam scripts npm, consulte `allowScripts` e execute `npm rebuild esbuild ffmpeg-static` quando necessário. Não é preciso liberar scripts de todos os pacotes.
 
-O FFmpeg é uma dependência oficial de pacote para a prova de áudio. Em ambientes que bloqueiam scripts de instalação do npm, revise a configuração `allowScripts` e execute `npm rebuild esbuild ffmpeg-static` após autorizar esses dois pacotes. Não é necessário habilitar scripts de todos os pacotes.
-
-## Próxima integração
-
-Após a validação dos seis temas e da voz, substituir a tarefa inicial do Trigger.dev pela orquestração real e validar a base já implementada em Supabase completo. As migrações passaram em PostgreSQL embarcado com contratos mínimos; isso não substitui o teste de Auth/Storage, gateway, fila e concorrência distribuída. A geração segue desativada até essa integração.
+Antes e depois de cada etapa, consulte `AXIOM-roadmap.md` e `docs/progress.md`. Registre mudanças e limites no CHANGELOG, crie commit explicativo e envie ao repositório, mantendo a prévia aberta.

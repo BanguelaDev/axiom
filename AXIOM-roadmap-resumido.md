@@ -24,12 +24,12 @@ O roteiro será interno. O usuário terá um player com reprodução, pausa e na
 | Área | Tecnologia |
 | --- | --- |
 | Aplicativo e interface | React Native, Expo e TypeScript |
-| Back-end | Supabase Edge Functions, em TypeScript |
-| Banco de dados e arquivos de áudio | PostgreSQL e Supabase Storage |
-| Processamento em segundo plano | Trigger.dev, com Node.js e TypeScript |
-| Busca de notícias | GNews API |
-| Geração do roteiro | LLM da OpenAI, pela Responses API |
-| Síntese de voz | ElevenLabs |
+| Back-end | Node.js e TypeScript; Supabase opcional |
+| Banco de dados e arquivos de áudio | Arquivos locais; PostgreSQL e Supabase opcionais |
+| Processamento em segundo plano | Fila local Node.js; Trigger.dev opcional |
+| Busca de notícias | Feeds RSS públicos |
+| Geração do roteiro | Gemini Free Tier |
+| Síntese de voz | Gemini TTS Free Tier |
 | Reprodução e tratamento de áudio | expo-audio e FFmpeg/FFprobe |
 | Versionamento e distribuição | GitHub e Expo EAS |
 
@@ -44,3 +44,5 @@ O roteiro será interno. O usuário terá um player com reprodução, pausa e na
 **Visual proposto:** interface simples, com modos claro e escuro e uma cor de identificação para cada tema.
 
 **Prazo inicial estimado:** 6 a 8 semanas, sujeito à validação das integrações e aos testes.
+
+A entrega acadêmica usa a faixa gratuita do Gemini e servidor local, sem contratar serviços. Cotas esgotadas são informadas pelo app.

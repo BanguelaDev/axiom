@@ -5,9 +5,11 @@ import { ControlsHost } from '@/components/controls-host';
 import { Copy, Screen, Button, Notice } from '@/components/ui';
 import { useApp, type ThemePreference } from '@/state/app-state';
 import { spacing } from '@/theme';
+import { usePodcast } from '@/state/podcast-state';
 export default function SettingsScreen() {
   const { colors, themePreference, setThemePreference, clearHistory, storageError, history } =
     useApp();
+  const podcast = usePodcast();
   return (
     <Screen>
       <View style={{ gap: spacing.sm }}>
@@ -51,13 +53,17 @@ export default function SettingsScreen() {
       >
         <Copy variant="headline">Seus dados</Copy>
         <Copy tone="secondary">
-          As preferências e o histórico desta demonstração ficam somente neste aparelho.
+          As preferências e o histórico de escuta ficam neste aparelho. Notícias e roteiros são
+          processados pelos serviços do servidor; as chaves não ficam no aplicativo.
         </Copy>
         <Button
           title="Limpar histórico de escuta"
           secondary
-          disabled={!history.length}
-          onPress={clearHistory}
+          disabled={!history.length && !podcast.history.length}
+          onPress={() => {
+            clearHistory();
+            podcast.clearHistory();
+          }}
         />
       </View>
       <View style={{ gap: spacing.sm }}>
@@ -66,13 +72,12 @@ export default function SettingsScreen() {
           Projeto de Programação para Dispositivos Móveis da AEMS. TADS, 6º período, Três Lagoas.
         </Copy>
         <Copy variant="caption" tone="muted">
-          Professor Bruno · Versão 0.6.0
+          Professor Bruno · Versão 0.7.0
         </Copy>
       </View>
       <Button title="Apresentação do projeto" secondary onPress={() => router.push('/prototype')} />
       <Notice>
-        Versão inicial para explorar a experiência. A coleta de notícias e a voz final ainda estão
-        em validação. Nenhuma notícia é gerada nesta demonstração.
+        RSS público e Gemini Free Tier preparam os episódios no servidor. O roteiro é interno. As amostras de apresentação não contêm notícias nem narração.
       </Notice>
       {storageError ? <Copy tone="notice">{storageError}</Copy> : null}
     </Screen>

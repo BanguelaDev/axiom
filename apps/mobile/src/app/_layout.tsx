@@ -5,6 +5,7 @@ import { typography } from '@/theme';
 import { useEffect } from 'react';
 import { AppState } from 'react-native';
 import { setAuthActive } from '@/services/backend';
+import { PodcastProvider } from '@/state/podcast-state';
 function Navigation() {
   const { colors, scheme } = useApp();
   useEffect(() => {
@@ -40,6 +41,8 @@ function Navigation() {
         />
         <Stack.Screen name="episode/[id]" options={{ title: 'Seu podcast' }} />
         <Stack.Screen name="sources/[id]" options={{ title: 'Fontes do episódio' }} />
+        <Stack.Screen name="generate/[id]" options={{ title: 'Preparando seu podcast' }} />
+        <Stack.Screen name="podcast/[id]" options={{ title: 'Seu podcast' }} />
         <Stack.Screen
           name="prototype"
           options={{ title: 'Apresentação do projeto', headerBackTitle: 'Voltar' }}
@@ -67,7 +70,9 @@ function Navigation() {
 export default function RootLayout() {
   return (
     <AppProvider>
-      <Navigation />
+      <PodcastProvider>
+        <Navigation />
+      </PodcastProvider>
     </AppProvider>
   );
 }

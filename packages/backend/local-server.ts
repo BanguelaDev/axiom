@@ -5,15 +5,37 @@ import { createSelectionDemo } from './selection-demo.ts';
 import { createEditorialDemo } from './editorial-demo.ts';
 import { createAudioDemo } from './audio-demo.ts';
 import { resolve } from 'node:path';
+import { LocalRepository, type Processor } from './local-repository.ts';
+import { generatePodcast } from '../pipeline/generate-podcast.ts';
 
-const allowedOrigins = ['http://localhost:8081', 'http://127.0.0.1:8081'];
 /** Runner descartável: não substitui Supabase Auth, banco, Storage nem Trigger.dev. */
-export function startLocalApi(port = 8787): Promise<Server> {
+export function startLocalApi(
+  port = 8787,
+  options: { generation?: boolean; processor?: Processor; host?: string; publicUrl?: string } = {},
+): Promise<Server> {
   const sessions = new Map<string, { id: string; expires: number }>();
+  const allowedOrigins = [
+    'http://localhost:8081',
+    'http://127.0.0.1:8081',
+    ...(options.publicUrl ? [options.publicUrl.replace(/:8787\/?$/, ':8081')] : []),
+  ];
   const audioDemo = createAudioDemo(resolve('work', 'audio-demo'));
+  let actualPort = port;
+  const repository = new LocalRepository(
+    options.processor ||
+      ((topic, id, onPhase) =>
+        generatePodcast(topic, resolve('work', 'local-episodes', id), onPhase)),
+    (bytes, expiresIn) => {
+      const media = audioDemo.issueMedia(bytes, expiresIn);
+      return {
+        url: `${options.publicUrl || `http://127.0.0.1:${actualPort}`}${media.path}`,
+        expiresIn: media.expiresIn,
+      };
+    },
+  );
   const api = createApi({
     environment: 'development',
-    generationAvailable: false,
+    generationAvailable: !!options.generation,
     allowedOrigins,
     developmentAudio: (scenario) => audioDemo.prepare(scenario),
     developmentEditorial: (topicId, scenario) => createEditorialDemo(topicId, scenario, new Date()),
@@ -23,22 +45,9 @@ export function startLocalApi(port = 8787): Promise<Server> {
       const session = sessions.get(token);
       return session && session.expires > Date.now() ? session.id : null;
     },
-    repository: {
-      async request() {
-        throw new Error('Geração não configurada.');
-      },
-      async job() {
-        return null;
-      },
-      async episode() {
-        return null;
-      },
-      async audio() {
-        return null;
-      },
-    },
-    async enqueue() {
-      throw new Error('Fila não configurada.');
+    repository,
+    async enqueue(id) {
+      await repository.enqueue(id);
     },
   });
   const server = createServer(async (incoming, outgoing) => {
@@ -110,6 +119,10 @@ export function startLocalApi(port = 8787): Promise<Server> {
   server.requestTimeout = 10_000;
   return new Promise((resolve, reject) => {
     server.once('error', reject);
-    server.listen(port, '127.0.0.1', () => resolve(server));
+    server.listen(port, options.host || '127.0.0.1', () => {
+      const address = server.address();
+      if (address && typeof address !== 'string') actualPort = address.port;
+      resolve(server);
+    });
   });
 }

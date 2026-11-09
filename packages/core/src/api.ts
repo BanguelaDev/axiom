@@ -31,6 +31,13 @@ export interface PublicEpisode {
 }
 export type GenerationResult =
   { kind: 'job'; job: PublicJob } | { kind: 'episode'; episode: PublicEpisode };
+export const generationMessages = {
+  failed: 'Não foi possível preparar este episódio. Tente novamente mais tarde.',
+  free_quota:
+    'A cota gratuita da IA foi atingida. Aguarde a renovação e tente novamente. Nenhum serviço pago será usado.',
+  insufficient_news:
+    'Não há notícias recentes suficientes de fontes distintas para este tema. Tente outro assunto; a janela de 72 horas é mantida.',
+} as const;
 
 export const apiMessages = {
   unauthorized: 'Sua sessão precisa ser renovada. Tente novamente.',

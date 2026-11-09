@@ -16,6 +16,7 @@ import { extractEditorialFacts, prepareEditorial } from '../packages/pipeline/ed
 import { createAudioDemo } from '../packages/backend/audio-demo.ts';
 import { createClient } from '@supabase/supabase-js';
 import { publishEpisode } from '../packages/pipeline/publish-episode.ts';
+import { LocalRepository } from '../packages/backend/local-repository.ts';
 
 let directory: string;
 let normal: Uint8Array, long: Uint8Array;
@@ -270,4 +271,59 @@ test('falha de confirmação preserva o objeto privado e a repetição confere o
     (error: unknown) => error instanceof AudioFault && error.code === 'artifact_changed',
   );
   assert.equal(rpcCalls, 2);
+});
+
+test('fila local compartilha trabalho, isola sessões e só publica áudio verificado', async () => {
+  const rendered = await renderEpisode({
+    directory: join(directory, 'local-repo'),
+    clock: () => now,
+    buildApproved: await approvedBuilder(),
+    voice: {
+      identity: 'test-local',
+      async synthesize() {
+        return normal;
+      },
+    },
+  });
+  let time = now.getTime(),
+    calls = 0;
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const repository = new LocalRepository(
+    async () => {
+      calls++;
+      await gate;
+      return rendered;
+    },
+    (_bytes, expiresIn) => ({ url: 'https://media.example/temporary', expiresIn }),
+    () => time,
+  );
+  const first = await repository.request('user-one', 'ai');
+  assert.equal(first.kind, 'job');
+  if (first.kind !== 'job') throw new Error();
+  const second = await repository.request('user-two', 'ai');
+  assert.equal(second.kind, 'job');
+  if (second.kind !== 'job') throw new Error();
+  assert.equal(first.job.id, second.job.id);
+  assert.equal(await repository.job('unknown', first.job.id), null);
+  await repository.enqueue(first.job.id);
+  await repository.enqueue(first.job.id);
+  release();
+  for (let attempt = 0; attempt < 50; attempt++) {
+    if ((await repository.job('user-one', first.job.id))?.stage === 'ready') break;
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+  assert.equal(calls, 1);
+  assert.equal((await repository.job('user-two', first.job.id))?.stage, 'ready');
+  const episode = await repository.episode(first.job.id);
+  assert.ok(episode);
+  assert.ok(Math.abs(episode.durationSeconds - 120) <= 1);
+  assert.doesNotMatch(JSON.stringify(episode), /"script"|"quote"|"narration"|"artifactId"/);
+  assert.equal((await repository.audio(first.job.id))?.expiresIn, 300);
+  assert.equal((await repository.request('user-three', 'ai')).kind, 'episode');
+  time += 3_600_001;
+  assert.equal(await repository.episode(first.job.id), null);
+  assert.equal(await repository.audio(first.job.id), null);
 });

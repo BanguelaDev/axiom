@@ -4,11 +4,14 @@ import { getTopic } from '@axiom/core/topics';
 import { Screen, Copy, Icon, Button, Notice } from '@/components/ui';
 import { useApp } from '@/state/app-state';
 import { spacing, sizes, radius } from '@/theme';
+import { usePodcast } from '@/state/podcast-state';
 
 export default function TopicScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const topic = getTopic(id || '');
   const { colors, topicColors, prepareDemo } = useApp();
+  const { begin, preparation } = usePodcast();
+  const pending = preparation.status === 'loading' || preparation.status === 'waiting';
   if (!topic)
     return (
       <Screen>
@@ -54,16 +57,27 @@ export default function TopicScreen() {
       >
         <Copy variant="headline">O que você vai encontrar</Copy>
         <Copy tone="secondary">
-          Na versão completa, um resumo de dois minutos com os acontecimentos das últimas 72 horas,
-          narrado em português e acompanhado das fontes.
+          Um resumo de dois minutos com os acontecimentos das últimas 72 horas, narrado em português
+          e acompanhado das fontes.
         </Copy>
       </View>
       <Notice>
-        Por enquanto, você pode conhecer o caminho até o player e ouvir uma amostra sonora original.
-        Esta demonstração não busca notícias nem gera voz.
+        O podcast usa notícias e narração por IA quando o servidor está configurado. Você também
+        pode conhecer o player com uma amostra identificada como demonstração.
       </Notice>
       <Button
+        title={pending ? 'Acompanhar preparação atual' : 'Gerar podcast de dois minutos'}
+        onPress={() => {
+          if (!pending) void begin(topic.id);
+          router.push({
+            pathname: '/generate/[id]',
+            params: { id: pending ? preparation.topicId : topic.id },
+          });
+        }}
+      />
+      <Button
         title="Preparar demonstração"
+        secondary
         onPress={() => {
           prepareDemo(topic.id);
           router.push({ pathname: '/prepare/[id]', params: { id: topic.id } });

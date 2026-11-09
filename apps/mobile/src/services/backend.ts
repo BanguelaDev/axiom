@@ -25,11 +25,30 @@ const client =
     : null;
 let tokenRequest: Promise<string> | null = null;
 let localSession: { token: string; expires: number } | null = null;
+let localSessionLoaded = false;
+const localSessionKey = 'axiom:local-session:v1';
 
 async function getToken(): Promise<string> {
   if (tokenRequest) return tokenRequest;
   tokenRequest = (async () => {
     if (useLocal && localUrl) {
+      if (!localSessionLoaded) {
+        localSessionLoaded = true;
+        try {
+          const raw = await AsyncStorage.getItem(localSessionKey);
+          const saved = raw ? JSON.parse(raw) : null;
+          if (
+            saved?.url === localUrl &&
+            /^[a-f0-9]{64}$/.test(saved.token) &&
+            Number.isFinite(saved.expires) &&
+            saved.expires > Date.now() &&
+            saved.expires <= Date.now() + 3_600_000
+          )
+            localSession = { token: saved.token, expires: saved.expires };
+        } catch {
+          /* Uma sessão inválida é substituída por outra, sem quebrar o aplicativo. */
+        }
+      }
       if (localSession && localSession.expires > Date.now()) return localSession.token;
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 8000);
@@ -46,6 +65,10 @@ async function getToken(): Promise<string> {
           token: result.accessToken,
           expires: Date.now() + (result.expiresIn - 30) * 1000,
         };
+        await AsyncStorage.setItem(
+          localSessionKey,
+          JSON.stringify({ ...localSession, url: localUrl }),
+        ).catch(() => {});
         return localSession.token;
       } finally {
         clearTimeout(timer);
@@ -82,4 +105,6 @@ export function setAuthActive(active: boolean) {
 }
 export function forgetLocalSession() {
   localSession = null;
+  localSessionLoaded = true;
+  void AsyncStorage.removeItem(localSessionKey).catch(() => {});
 }

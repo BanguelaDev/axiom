@@ -24,6 +24,7 @@ export async function requestApi(
   connection: ApiConnection,
   path: string,
   signal?: AbortSignal,
+  options: { method?: 'GET' | 'POST'; body?: unknown } = {},
 ): Promise<unknown> {
   const controller = new AbortController();
   const abort = () => controller.abort();
@@ -47,7 +48,13 @@ export async function requestApi(
     const response = await (connection.fetch || fetch)(
       `${connection.url.replace(/\/$/, '')}${path}`,
       {
-        headers: { ...connection.headers, Authorization: `Bearer ${token}` },
+        method: options.method || 'GET',
+        headers: {
+          ...connection.headers,
+          ...(options.body === undefined ? {} : { 'Content-Type': 'application/json' }),
+          Authorization: `Bearer ${token}`,
+        },
+        body: options.body === undefined ? undefined : JSON.stringify(options.body),
         signal: controller.signal,
       },
     );

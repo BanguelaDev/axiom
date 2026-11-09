@@ -9,6 +9,7 @@ import { Screen, Copy, Button, Notice } from '@/components/ui';
 import { backendConnection, backendMode, forgetLocalSession } from '@/services/backend';
 import { useApp } from '@/state/app-state';
 import { radius, spacing } from '@/theme';
+import { claimPlayback, registerPlayback } from '@/services/playback';
 
 type State =
   | { status: 'idle' | 'loading' }
@@ -17,6 +18,7 @@ type State =
 export default function AudioLabScreen() {
   const { colors, pause } = useApp();
   const player = useAudioPlayer(null, { updateInterval: 250 });
+  useEffect(() => registerPlayback('audio-lab', () => player.pause()), [player]);
   const status = useAudioPlayerStatus(player);
   const [state, setState] = useState<State>({ status: 'idle' });
   const [playbackError, setPlaybackError] = useState<string | null>(null);
@@ -77,6 +79,7 @@ export default function AudioLabScreen() {
         return;
       }
       pause();
+      claimPlayback('audio-lab');
       if (status.currentTime >= status.duration - 0.1) await player.seekTo(0);
       player.play();
     } catch {

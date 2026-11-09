@@ -1,11 +1,13 @@
 import { View, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { topics } from '@axiom/core/topics';
-import { Copy, Icon, Screen, Notice } from '@/components/ui';
+import { Copy, Icon, Screen, Notice, Button } from '@/components/ui';
+import { usePodcast } from '@/state/podcast-state';
 import { useApp } from '@/state/app-state';
 import { spacing, radius, sizes } from '@/theme';
 export default function HomeScreen() {
   const { colors, topicColors } = useApp();
+  const { preparation } = usePodcast();
   return (
     <Screen>
       <View style={{ gap: spacing.md, paddingTop: spacing.sm }}>
@@ -17,10 +19,21 @@ export default function HomeScreen() {
           Escolha um assunto. A gente transforma as notícias recentes em algo que você pode ouvir.
         </Copy>
         <Notice>
-          Você está explorando o protótipo. O player usa uma amostra de 12 segundos; as notícias e a
-          voz final ainda estão em validação.
+          Resumos e voz gerados por IA, com referências para consultar. A geração depende do
+          servidor configurado. As amostras de apresentação são identificadas separadamente.
         </Notice>
       </View>
+      {preparation.status !== 'idle' ? (
+        <Button
+          title={
+            preparation.status === 'ready' ? 'Seu podcast está pronto' : 'Acompanhar sua preparação'
+          }
+          secondary
+          onPress={() =>
+            router.push({ pathname: '/generate/[id]', params: { id: preparation.topicId } })
+          }
+        />
+      ) : null}
       <View
         style={{
           flexDirection: 'row',
@@ -97,7 +110,7 @@ export default function HomeScreen() {
         }}
       >
         <Copy variant="eyebrow" tone="muted">
-          PRIMEIRA VERSÃO · DEMONSTRAÇÃO
+          PROJETO ACADÊMICO · AEMS
         </Copy>
         <Copy variant="caption" tone="muted">
           Explore as telas e o player. A geração de notícias e a voz final aguardam a configuração

@@ -18,9 +18,9 @@ const registrySchema = z
     const domains = items.flatMap((item) => item.domains);
     return new Set(domains).size === domains.length;
   });
-export async function loadPublisherRegistry(path: string) {
+export async function loadPublisherRegistry(path: string, inline?: string) {
   try {
-    return registrySchema.parse(JSON.parse(await readFile(path, 'utf8')));
+    return registrySchema.parse(JSON.parse(inline || await readFile(path, 'utf8')));
   } catch {
     throw new Error(
       'Cadastro de fontes ausente ou inválido. Revise NEWS_PUBLISHERS_FILE no servidor.',
@@ -30,9 +30,9 @@ export async function loadPublisherRegistry(path: string) {
 export async function collectNews(
   topicId: TopicId,
   reference: Date,
-  options: GNewsOptions & { registryPath: string },
+  options: GNewsOptions & { registryPath: string; registryJson?: string },
 ) {
-  const registry = await loadPublisherRegistry(options.registryPath);
+  const registry = await loadPublisherRegistry(options.registryPath,options.registryJson);
   if (!registry.length)
     throw new Error(
       'Cadastre as fontes e seus grupos editoriais antes de consultar notícias reais.',

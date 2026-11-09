@@ -37,11 +37,11 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 | Parte do projeto                    | Tecnologias                                            |
 | ----------------------------------- | ------------------------------------------------------ |
 | Aplicativo mobile                   | React Native, Expo e TypeScript                        |
-| Back-end, banco de dados e arquivos | Supabase Edge Functions, PostgreSQL e Supabase Storage |
-| Processamento em segundo plano      | Trigger.dev e Node.js                                  |
-| Busca de notícias                   | GNews API                                              |
-| Criação do roteiro                  | OpenAI Responses API                                   |
-| Geração da voz                      | ElevenLabs                                             |
+| Back-end, banco de dados e arquivos | Node.js local; Supabase opcional |
+| Processamento em segundo plano      | Fila local Node.js; Trigger.dev opcional                                  |
+| Busca de notícias                   | Feeds RSS públicos                                              |
+| Criação do roteiro                  | Gemini Free Tier                                   |
+| Geração da voz                      | Gemini TTS Free Tier                                             |
 | Reprodução e tratamento de áudio    | expo-audio e FFmpeg/FFprobe                            |
 | Versionamento e distribuição        | GitHub e Expo EAS                                      |
 
@@ -58,12 +58,12 @@ Com Node.js 22.14 ou superior, na raiz do projeto:
 
 ```sh
 npm ci
-npm start
+npm run dev
 ```
 
-Use o Expo Go compatível com o SDK 58 para abrir no celular. Para uma prévia no navegador, execute `npm run web`.
+Crie uma chave Gemini em projeto Free Tier sem faturamento e preencha GEMINI_API_KEY no .env da raiz. Veja o [passo a passo gratuito](docs/configurar-chaves.md). Para testar no celular, use `npm run dev:lan` e o Expo Go compatível com o SDK 58, na mesma rede do computador.
 
-A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narração. Em Preferências → Apresentação do projeto, a verificação de áudio também oferece um sinal técnico de dois minutos, com a API local em execução. Os podcasts com notícias e voz reais ainda precisam de validação.
+A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narração. Em Preferências → Apresentação do projeto, a verificação de áudio também oferece um sinal técnico de dois minutos, com a API local em execução. O fluxo real usa RSS e a chave gratuita Gemini no servidor. Não há fallback para fornecedores pagos.
 
 - [Guia de desenvolvimento](docs/development.md): configuração e testes.
 - [Andamento das etapas](docs/progress.md): o que já foi feito e o que falta validar.
@@ -73,3 +73,5 @@ A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narraç
 - [Roteiro e revisão](docs/editorial.md): evidências, verificações e limites da avaliação por IA.
 - [Áudio e publicação](docs/audio.md): duração, volume, integridade e demonstração de dois minutos.
 - [Registro das entregas](CHANGELOG.md): mudanças e testes de cada etapa.
+
+A versão acadêmica roda com o computador ligado, sem hospedagem paga. O projeto Gemini precisa permanecer no plano Free, sem faturamento. Se faltar cota ou notícias suficientes, o app informa a indisponibilidade.

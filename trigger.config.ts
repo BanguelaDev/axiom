@@ -1,9 +1,11 @@
 import { defineConfig } from '@trigger.dev/sdk';
+import { ffmpeg } from '@trigger.dev/build/extensions/core';
 
 export default defineConfig({
   project: process.env.TRIGGER_PROJECT_REF || 'proj_configure_antes_de_implantar',
   dirs: ['./packages/tasks'],
   maxDuration: 600,
+  build: { extensions: [ffmpeg()], external: ['ffmpeg-static', 'ffprobe-static'] },
   retries: {
     enabledInDev: false,
     default: {

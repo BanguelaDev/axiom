@@ -1,5 +1,11 @@
 # Entregas do AXIOM
 
+## 0.7.0 — 8 de novembro de 2026
+
+**Etapa 7: jornada mobile integrada e custo zero.** Geração e consulta de fila pela API, player de episódios com mídia temporária, fontes, retomada e histórico. RSS público e Gemini Free Tier substituem o fluxo pago; não há fallback pago. API/fila local ligadas ao pipeline, comandos de execução no computador e na rede do celular, worker remoto preparado como opção. Guia simplificado de uma única chave gratuita.
+
+Verificação: TypeScript/Deno, lint, 88 testes e exportação web. Coleta RSS real e navegação de configuração pendente verificadas. Chave Gemini, síntese real, avaliação humana e aparelho físico ainda pendentes; nenhuma chamada paga realizada.
+
 ## 0.6.0 — 8 de novembro de 2026
 
 **Etapa 6: processamento de áudio e preparação da publicação.** Voz com limites e erros seguros, reaproveitamento da síntese por versão, até três roteiros revisados e medição real de duração, silêncio e volume. Arquivo final normalizado, com ajuste de ritmo de até 3%. Adaptador de publicação privada e migração transacional, com conferência de integridade e repetição sem duplicar o episódio. Nova apresentação com sinal técnico de dois minutos e exemplos de bloqueio.
