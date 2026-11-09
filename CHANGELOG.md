@@ -1,5 +1,11 @@
 # Entregas do AXIOM
 
+## 0.4.0 — 8 de novembro de 2026
+
+**Etapa 4: coleta e seleção auditável.** Consultas em português/inglês para os seis temas, coleta limitada com tratamento de falhas, datas estritas, janela de 72 horas, filtros, deduplicação e agrupamento. Cadastro de fontes revisadas e contagem conservadora de vínculos editoriais e créditos de agência. Relatório privado conectado à prova de viabilidade. Nova apresentação no app e auditoria por terminal com exemplos fictícios.
+
+Verificação: TypeScript/Deno, lint, 50 testes, auditoria dos seis temas e exportação web. Cobertura real, classificação por LLM, calibração editorial, direitos de conteúdo e persistência remota continuam pendentes. Geração desativada e nenhuma chamada real de notícias, IA ou voz nesta entrega.
+
 ## 0.3.0 — 8 de novembro de 2026
 
 **Etapa 3: base técnica e conexão local.** API com validação de sessão, cliente anônimo Supabase, verificação de conexão no app e runner HTTP descartável. Migração transacional para associação de sessões, reuso, quotas e uma reserva ativa por tema. Metadados operacionais restritos, bucket privado e URLs temporárias. Configuração inicial do Trigger.dev, com geração desativada até a integração validada do pipeline.

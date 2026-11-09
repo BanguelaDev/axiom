@@ -1,20 +1,16 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { getTopic } from '../packages/core/src/topics.ts';
-import {
-  selectArticles,
-  assertSufficientSources,
-  episodeExpiresAt,
-} from '../packages/core/src/news.ts';
+import { assertSufficientSources, episodeExpiresAt } from '../packages/core/src/news.ts';
 import { narrationText, validateEvidence, publicEpisode } from '../packages/core/src/script.ts';
 import {
-  fetchNews,
   createScript,
   reviewScript,
   synthesize,
   requireEnv,
 } from '../packages/pipeline/providers.ts';
 import { correctionRatio, finalizeAudio, measureDuration } from '../packages/pipeline/audio.ts';
+import { collectNews } from '../packages/pipeline/collect-news.ts';
 
 async function main() {
   const topic = getTopic(process.argv[2] || 'ai');
@@ -36,7 +32,20 @@ async function main() {
   const privateDir = resolve(directory, 'private');
   await mkdir(privateDir, { recursive: true });
   console.log(`Buscando notícias: ${topic.name}`);
-  const articles = selectArticles(await fetchNews(topic, started), started);
+  const selection = await collectNews(topic.id, started, {
+    key: requireEnv('GNEWS_API_KEY'),
+    registryPath: requireEnv('NEWS_PUBLISHERS_FILE'),
+  });
+  await writeFile(
+    resolve(privateDir, 'selection-report.json'),
+    JSON.stringify({ ...selection.report, collection: selection.collection }, null, 2),
+    { mode: 0o600 },
+  );
+  if (selection.report.status !== 'ready')
+    throw new Error(
+      'Não encontramos notícias recentes suficientes para este tema. A seleção foi registrada para revisão.',
+    );
+  const articles = selection.articles;
   assertSufficientSources(articles);
   let words = 260;
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -51,6 +60,7 @@ async function main() {
       script.claims.flatMap((claim) => claim.evidence.map((evidence) => evidence.articleId)),
     );
     const usedArticles = articles.filter((article) => used.has(article.id));
+    assertSufficientSources(usedArticles);
     episodeExpiresAt(usedArticles, new Date());
     const rawPath = resolve(privateDir, `raw-${attempt}.mp3`);
     await writeFile(rawPath, await synthesize(narration));

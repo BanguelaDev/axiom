@@ -28,7 +28,7 @@ Na versão 0.3, execute `npm run dev:api` em outro terminal e mantenha a prévia
 ## Validar notícias, roteiro e voz reais
 
 1. Copie `.env.example` para `.env` na raiz.
-2. Configure as chaves de GNews, OpenAI, ElevenLabs e o identificador de uma voz licenciada em português brasileiro. Nunca use `EXPO_PUBLIC_` para essas chaves.
+2. Configure as chaves de GNews, OpenAI, ElevenLabs e o identificador de uma voz licenciada em português brasileiro. Defina também `NEWS_PUBLISHERS_FILE` com os domínios e grupos editoriais revisados; veja [coleta e seleção](news-selection.md). Nunca use `EXPO_PUBLIC_` para essas chaves.
 3. Confirme permissões para processar, resumir, narrar e reter o conteúdo. Ter uma assinatura de agregador não equivale a licença de todo conteúdo de terceiros.
 4. Execute `npm run validate:providers`. Esse comando verifica a configuração local, sem revelar segredos e sem testar credenciais por chamadas externas.
 5. Depois de confirmar os direitos, ajuste `CONTENT_RIGHTS_CONFIRMED=true` e execute `npm run poc -- ai` para gerar uma amostra. Isso consome as quotas dos fornecedores.
@@ -38,6 +38,8 @@ IDs: `ukraine`, `ai`, `mental-health`, `fraud`, `politics`, `crime`.
 A prova de viabilidade busca notícias, filtra 72 horas, remove duplicatas, exige conteúdo suficiente e veículos distintos, cria roteiro estruturado com evidências literais, faz uma segunda revisão por LLM e gera voz. Há no máximo três versões de roteiro/voz para ajustar a duração. Ajustes de ritmo maiores que 3% são rejeitados. O arquivo final deve ter 120 segundos, com tolerância de um segundo. As datas são revalidadas antes e depois da síntese.
 
 As amostras ficam em `work/episode-*`, ignorado pelo Git. `episode.json` contém apenas metadados e referências. O roteiro fica em `private/script.json`. A revisão automatizada e a diversidade de domínios não provam independência editorial nem eliminam erros: conferir conteúdo e ouvir a amostra antes de considerar a etapa 1 concluída.
+
+A versão 0.4 também grava `private/selection-report.json`, com decisões e metadados da coleta. O pipeline exige fontes revisadas, confere vínculos editoriais/agências identificados e revalida a diversidade das fontes efetivamente usadas pelo roteiro. Para apresentar os critérios sem credenciais, use a nova opção em Apresentação do projeto ou execute `npm run audit:selection`; todos esses exemplos são fictícios.
 
 ## Estrutura
 

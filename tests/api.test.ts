@@ -160,6 +160,18 @@ test('app conversa por HTTP com sessão descartável e catálogo da API local', 
     assert.equal(result.health.environment, 'development');
     assert.equal(result.health.generationAvailable, false);
     assert.equal(result.topics.length, 6);
+    const selection = (await requestApi(
+      {
+        url,
+        async getToken() {
+          return session.accessToken;
+        },
+      },
+      '/dev/selection/ai',
+    )) as { simulated: boolean; report: { status: string; selected: number } };
+    assert.equal(selection.simulated, true);
+    assert.equal(selection.report.status, 'ready');
+    assert.equal(selection.report.selected, 3);
     await assert.rejects(
       requestApi(
         {
@@ -181,6 +193,16 @@ test('app conversa por HTTP com sessão descartável e catálogo da API local', 
     server.close();
     await once(server, 'close');
   }
+});
+
+test('amostras de seleção não existem na API de staging e exigem sessão no desenvolvimento', async () => {
+  const { call } = setup();
+  assert.equal((await call('/dev/selection/ai')).status, 404);
+  const local = setup({ environment: 'development' });
+  assert.equal(
+    (await local.call('/dev/selection/ai', { headers: { Authorization: '' } })).status,
+    401,
+  );
 });
 
 test('cliente rejeita API incompatível e não repassa mensagens arbitrárias do servidor', async () => {

@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { zodTextFormat } from 'openai/helpers/zod';
 import { z } from 'zod';
-import { articleId, type Article } from '../core/src/news.ts';
+import type { Article } from '../core/src/news.ts';
 import { scriptSchema, narrationText, type EpisodeScript } from '../core/src/script.ts';
 import type { Topic } from '../core/src/topics.ts';
 
@@ -10,60 +10,6 @@ export function requireEnv(name: string): string {
   if (!value)
     throw new Error(`Configure ${name} no .env local. Não envie chaves ao app ou ao GitHub.`);
   return value;
-}
-const newsResponse = z.object({
-  articles: z.array(
-    z.object({
-      title: z.string(),
-      content: z.string(),
-      url: z.url(),
-      publishedAt: z.iso.datetime({ offset: true }),
-      source: z.object({ name: z.string(), url: z.url() }),
-    }),
-  ),
-});
-
-export async function fetchNews(topic: Topic, now: Date): Promise<Article[]> {
-  const articles: Article[] = [];
-  const key = requireEnv('GNEWS_API_KEY');
-  for (const lang of ['pt', 'en']) {
-    const url = new URL('https://gnews.io/api/v4/search');
-    const query =
-      lang === 'en' && topic.id === 'ukraine' ? 'Ukraine AND (war OR diplomacy)' : topic.query;
-    url.search = new URLSearchParams({
-      q: query,
-      lang,
-      max: '25',
-      from: new Date(now.getTime() - 72 * 3600000).toISOString(),
-      to: now.toISOString(),
-      sortby: 'publishedAt',
-      apikey: key,
-    }).toString();
-    let response: Response;
-    try {
-      response = await fetch(url, { signal: AbortSignal.timeout(30000) });
-    } catch {
-      throw new Error('Falha de conexão com o fornecedor de notícias.');
-    }
-    if (!response.ok)
-      throw new Error(
-        `O fornecedor de notícias respondeu com HTTP ${response.status}. Confira plano e quota.`,
-      );
-    const data = newsResponse.parse(await response.json());
-    for (const item of data.articles) {
-      if (/\[\+?\d+\s*(chars|characters|caracteres)\]/i.test(item.content)) continue;
-      articles.push({
-        id: articleId(item.url),
-        title: item.title,
-        content: item.content,
-        url: item.url,
-        publishedAt: item.publishedAt,
-        publisher: item.source.name,
-        publisherDomain: new URL(item.source.url).hostname.replace(/^www\./, ''),
-      });
-    }
-  }
-  return articles;
 }
 function client() {
   return new OpenAI({ apiKey: requireEnv('OPENAI_API_KEY'), timeout: 90000, maxRetries: 1 });

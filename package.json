@@ -1,6 +1,6 @@
 {
   "name": "axiom",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -14,6 +14,7 @@
     "start": "npm run start --workspace apps/mobile",
     "web": "npm run web --workspace apps/mobile",
     "dev:api": "tsx scripts/dev-api.ts",
+    "audit:selection": "tsx scripts/audit-selection.ts",
     "typecheck": "tsc --noEmit && npm run typecheck --workspace apps/mobile && npm run typecheck:edge",
     "typecheck:edge": "npx --yes deno@2.9.6 check --config supabase/functions/deno.json --frozen supabase/functions/axiom/index.ts",
     "lint": "npm run lint --workspace apps/mobile",

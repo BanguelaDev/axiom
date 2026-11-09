@@ -7,6 +7,7 @@ import {
   type GenerationResult,
 } from '../core/src/api.ts';
 import { getTopic, topics, type TopicId } from '../core/src/topics.ts';
+import type { DemoSelection } from '../core/src/selection-report.ts';
 
 export interface BackendRepository {
   request(userId: string, topicId: TopicId): Promise<GenerationResult>;
@@ -21,6 +22,7 @@ export interface BackendOptions {
   authenticate(token: string): Promise<string | null>;
   repository: BackendRepository;
   enqueue(jobId: string): Promise<void>;
+  developmentSelection?(topicId: TopicId, insufficient: boolean): DemoSelection;
 }
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -62,6 +64,20 @@ export function createApi(options: BackendOptions) {
       if (!token || token.length > 8192) throw new ApiFault('unauthorized', 401);
       const userId = await options.authenticate(token);
       if (!userId) throw new ApiFault('unauthorized', 401);
+
+      const selection = path.match(/^\/dev\/selection\/([^/]+)$/);
+      if (
+        selection &&
+        request.method === 'GET' &&
+        options.environment === 'development' &&
+        options.developmentSelection
+      ) {
+        const topic = getTopic(selection[1]!);
+        const scenario = new URL(request.url).searchParams.get('scenario') || 'ready';
+        if (!topic || !['ready', 'insufficient'].includes(scenario))
+          throw new ApiFault('invalid_request', 400);
+        return json(options.developmentSelection(topic.id, scenario === 'insufficient'));
+      }
 
       if (path === '/topics' && request.method === 'GET')
         return json({

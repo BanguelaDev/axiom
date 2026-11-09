@@ -7,6 +7,7 @@
     "./topics": "./src/topics.ts",
     "./api": "./src/api.ts",
     "./api-client": "./src/api-client.ts",
+    "./selection-report": "./src/selection-report.ts",
     "./demo-generation": "./src/demo-generation.ts",
     "./listening": "./src/listening.ts"
   }

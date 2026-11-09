@@ -48,6 +48,10 @@ function Navigation() {
           name="integration"
           options={{ title: 'Conexão com o servidor', headerBackTitle: 'Voltar' }}
         />
+        <Stack.Screen
+          name="selection"
+          options={{ title: 'Seleção de notícias', headerBackTitle: 'Voltar' }}
+        />
       </Stack>
     </>
   );

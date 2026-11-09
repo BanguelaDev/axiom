@@ -1,5 +1,15 @@
 # Validações do AXIOM
 
+## Etapa 4 — 8 de novembro de 2026
+
+- TypeScript/Deno, lint e exportação web: aprovados.
+- 50 testes aprovados: os 31 anteriores e 19 novos sobre datas estritas, seleção dos seis temas, cópias/agrupamentos, fontes e agência, cadastro, API de apresentação e chamadas GNews controladas.
+- Auditoria local gera os seis relatórios fictícios com decisões de seleção/descarte, sem notícias reais, roteiro ou conteúdo completo na resposta do app.
+- Prévia web em 390 pixels: seleção pronta, troca para o tema longo de Redes Sociais e Saúde Mental, cenário de fontes insuficientes e retomada após sessão descartada. As decisões e datas são exibidas; não há reprodução ou geração automática de áudio.
+- A mesma URL preserva a publicação mais antiga observada no lote; um teste impede renovar uma notícia antiga com outra data. A comparação entre lotes ainda requer histórico persistente.
+- Filtros e agrupamento são heurísticos. Ainda não validam pertinência semântica, propriedade editorial ou cobertura dos seis temas com notícias reais.
+- Não houve chamadas reais ao fornecedor nem alteração de serviços remotos. A geração continua desativada.
+
 ## Etapa 3 — 8 de novembro de 2026
 
 - TypeScript, ESLint e exportação web: aprovados.

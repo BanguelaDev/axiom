@@ -30,6 +30,11 @@ export default function PrototypeScreen() {
         secondary
         onPress={() => router.push('/integration')}
       />
+      <Button
+        title="Entender a seleção de notícias"
+        secondary
+        onPress={() => router.push('/selection')}
+      />
       <Button title="Voltar aos temas" secondary onPress={() => router.replace('/')} />
     </Screen>
   );

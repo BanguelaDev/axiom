@@ -33,6 +33,8 @@ Abra Preferências → Apresentação do projeto → Verificar integração com 
 
 No Supabase, o prefixo é `/functions/v1/axiom`. O runner local acrescenta `POST /dev/session`; essa rota não existe na Edge Function. Respostas são privadas (`no-store`), erros não incluem exceções dos fornecedores e origens web devem constar em `ALLOWED_ORIGINS`.
 
+Na etapa 4, o runner também oferece uma [apresentação da seleção](news-selection.md) em `/dev/selection/:topicId`, com sessão e dados fictícios. Essa rota não está disponível na API de staging/produção nem permite consultar relatórios de notícias reais.
+
 ## Banco e acesso
 
 - Roteiros ficam no schema `private`; o app não tem leitura ou escrita.

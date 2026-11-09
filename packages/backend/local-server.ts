@@ -1,6 +1,7 @@
 import { createServer, type Server } from 'node:http';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { createApi } from './handler.ts';
+import { createSelectionDemo } from './selection-demo.ts';
 
 const allowedOrigins = ['http://localhost:8081', 'http://127.0.0.1:8081'];
 /** Runner descartável: não substitui Supabase Auth, banco, Storage nem Trigger.dev. */
@@ -10,6 +11,8 @@ export function startLocalApi(port = 8787): Promise<Server> {
     environment: 'development',
     generationAvailable: false,
     allowedOrigins,
+    developmentSelection: (topicId, insufficient) =>
+      createSelectionDemo(topicId, new Date(), insufficient),
     async authenticate(token) {
       const session = sessions.get(token);
       return session && session.expires > Date.now() ? session.id : null;
