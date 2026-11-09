@@ -1,5 +1,13 @@
 # Entregas do AXIOM
 
+## 0.12.0 — 9 de novembro de 2026
+
+**Etapa 12: operação do servidor local.** Relatos por episódio e notas de voz de 1 a 5, sem cadastro ou texto livre. Comando administrativo local para retirar edições e impedir novas leituras de links já emitidos. Player confere disponibilidade ao iniciar/retomar e periodicamente. Registro da primeira publicação entre coletas, com hash da URL.
+
+Relatório local com reuso, fases, falhas, tentativas, caracteres e tokens informados pela IA. Política de retenção com simulação, quarentena e limpeza restrita às pastas do pipeline. Dados financeiros não são estimados como se fossem medidos.
+
+113 testes aprovados, TypeScript/Deno, lint, exportações web/Android/iOS e Expo Doctor 20/20. A primeira compilação nativa identificou Reanimated indireto 4.2.2 incompatível com React Native 0.88.1; dependências alinhadas ao Expo SDK 58 (Reanimated 4.7.1 e Worklets 0.13.0). APK será recompilado. Fraudes ficou sem fontes recentes suficientes na nova coleta, mantendo o bloqueio editorial.
+
 ## 0.11.0 — 9 de novembro de 2026
 
 **Etapa 11: candidato Android com servidor configurável.** Tela para conectar ao computador, validação da API e persistência do endereço. Trocar de servidor remonta o player e cancela pedidos da conexão anterior. Sessões separadas por endereço. Modo local explicitamente habilitado no build, sem incorporar endereço pessoal ou chaves.

@@ -7,6 +7,7 @@ import { useApp } from '@/state/app-state';
 import { Screen, Copy, Button, Notice, Icon } from '@/components/ui';
 import { AudioProgress } from '@/components/audio-progress';
 import { radius, sizes, spacing } from '@/theme';
+import { backendMode } from '@/services/backend';
 const time = (n: number) =>
   `${Math.floor(Math.max(0, n) / 60)}:${String(Math.floor(Math.max(0, n)) % 60).padStart(2, '0')}`;
 export default function PodcastScreen() {
@@ -111,6 +112,15 @@ export default function PodcastScreen() {
             Resumo e voz gerados por inteligência artificial. Consulte as matérias originais para
             conhecer os detalhes. A edição corresponde à data de geração.
           </Notice>
+          {backendMode === 'local' ? (
+            <Button
+              title="Avaliar ou relatar problema"
+              secondary
+              onPress={() =>
+                router.push({ pathname: '/feedback/[id]', params: { id: selected.id } })
+              }
+            />
+          ) : null}
         </>
       ) : null}
       {audioError ? (

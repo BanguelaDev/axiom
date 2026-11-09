@@ -43,11 +43,11 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 | Criação do roteiro                  | Gemini Free Tier                |
 | Geração da voz                      | Gemini TTS Free Tier            |
 | Reprodução e tratamento de áudio    | expo-audio e FFmpeg/FFprobe     |
-| Versionamento e distribuição        | GitHub e Expo EAS               |
+| Versionamento e distribuição        | GitHub Actions, Expo Prebuild e Gradle |
 
 ## Planejamento
 
-A versão acadêmica já conecta a escolha do tema à busca de notícias, ao roteiro, à revisão e à narração. O primeiro episódio real foi gerado e medido em 120,03 segundos. O player oferece pausa, controles de 15 segundos, fontes e histórico. O roteiro fica no servidor. A avaliação com ouvintes e os testes em celulares físicos continuam pendentes.
+A versão acadêmica conecta a escolha do tema à busca de notícias, ao roteiro, à revisão e à narração. Episódios reais foram medidos em 120,03 segundos. O player oferece pausa, barra, controles de 15 segundos, fontes e histórico, com reprodução confirmada em Galaxy Note 20 Ultra no Expo Go. O roteiro fica no servidor. O APK próprio e a avaliação humana de conteúdo e voz continuam em validação.
 
 - [Guia de apresentação](ENTREGA.md): preparação e sequência para mostrar o trabalho ao professor.
 - [Roadmap resumido](AXIOM-roadmap-resumido.md): visão rápida da proposta, das tecnologias e das etapas.
@@ -68,6 +68,8 @@ A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narraç
 
 - [Guia de desenvolvimento](docs/development.md): configuração e testes.
 - [Andamento das etapas](docs/progress.md): o que já foi feito e o que falta validar.
+- [Android com servidor no computador](docs/android-apk.md): conexão sem Expo Go, conforme disponibilidade do candidato.
+- [Operação local](docs/operacao-local.md): relatos, métricas, retirada e retenção.
 - [Experiência e identidade](docs/ux.md): decisões e caminhos do protótipo.
 - [Base técnica](docs/backend.md): API local, banco, sessões e próximos passos da integração.
 - [Coleta e seleção](docs/news-selection.md): janela de 72 horas, fontes e auditoria.

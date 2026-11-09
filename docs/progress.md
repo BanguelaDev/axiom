@@ -151,3 +151,15 @@ Pendente: APK próprio para validar serviço de reprodução, tela bloqueada e s
 - Workflow para compilar e guardar um candidato em rascunho de release, sem conta Expo ou artifacts pagos. O responsável concedeu o escopo `workflow` após a recusa inicial. Compilação remota iniciada; instalação e aceite nativo continuam pendentes.
 
 Próximas pendências: concluir o candidato Android, operação/retirada e retenção, registrar avaliação humana e validar controles nativos no aparelho. O responsável confirmou que barra e reprodução no Expo Go agora funcionam.
+
+## Etapa 12 — Operação e relatos
+
+- Memória da primeira publicação em SQLite, sem guardar a URL original nessa tabela. Republicação posterior não renova as 72 horas enquanto a origem permanece no registro.
+- Relatos e avaliações com notas de 1 a 5 no player. API autenticada, entradas limitadas, sem texto livre ou identificação pessoal. Relatório administrativo somente no computador.
+- Retirada editorial bloqueia metadados, reuso e novas leituras de mídia, inclusive tickets anteriores. Player revalida ao iniciar/retomar e a cada 30 segundos enquanto ativo; bytes já recebidos não podem ser recolhidos.
+- Tempos por fase, reuso, falhas, tentativas, caracteres e tokens retornados pelo fornecedor. Nenhuma estimativa é apresentada como valor financeiro medido.
+- Retenção documentada, simulação e quarentena de sete dias antes da exclusão. Limpeza de arquivos manual; tabelas vencidas também são limpas na inicialização.
+- 113 testes, TypeScript/Deno, lint, exportações web/Android/iOS e Expo Doctor 20/20. Simulação real de retenção não encontrou arquivos antigos. Fraudes sem fontes suficientes na coleta de 16:25 UTC; corretamente não gerou áudio.
+- Primeira compilação APK falhou pela versão indireta do Reanimated. Alinhados Reanimated 4.7.1 e Worklets 0.13.0 à matriz oficial do Expo SDK 58. CI de código da etapa 11 aprovada; nova compilação nativa pendente.
+
+Restam o candidato Android instalado, validações nativas no aparelho e revisão humana de conteúdo e voz. A cobertura por RSS pode resultar em indisponibilidade legítima em alguns temas.

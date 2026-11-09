@@ -105,6 +105,10 @@ Cobertura e revisão humana dos seis temas, independência editorial das fontes 
 
 ## Dependências a acompanhar
 
+Etapas 10–12: abertura, reprodução e barra/arraste confirmados pelo responsável no Galaxy Note 20 Ultra usando Expo Go. O aviso de serviço nativo deixou de ocorrer nesse ambiente. A versão do Android e a nota de voz de 1 a 5 não foram confirmadas. Reanimated foi alinhado a 4.7.1 após a compilação Gradle detectar incompatibilidade na dependência indireta anterior. Serviço de tela bloqueada exige teste no APK próprio.
+
+Etapa 12: 113 testes aprovados; novos casos cobrem publicação original entre reinícios, retirada de tickets de áudio, avaliação autenticada e retenção com quarentena. TypeScript/Deno, lint, exportações web e Hermes Android/iOS aprovadas. Expo Doctor 20/20. A nova coleta de Fraudes não tinha fontes suficientes; não foi produzida narração.
+
 Na versão 0.8, `npm audit` sinaliza 12 ocorrências moderadas nas cadeias de `glob`/`minimatch` do Expo e ESLint. A dependência direta de Zod é 4.6.7. Nenhuma atualização forçada de SDK foi aplicada; a sugestão automática inclui regressão para Expo 52, incompatível com o SDK 58. Reavaliar correções dos fornecedores antes de builds de distribuição.
 
 ## Documentação usada nas integrações

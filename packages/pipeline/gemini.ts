@@ -17,6 +17,10 @@ export interface GeminiOptions {
   fetch?: typeof fetch;
   signal?: AbortSignal;
   onResult?(stage: string, value: unknown): Promise<void>;
+  onUsage?(
+    model: string,
+    usage: { inputTokens: number | null; outputTokens: number | null },
+  ): Promise<void>;
 }
 const endpoint = 'https://generativelanguage.googleapis.com/v1beta/interactions';
 const textModel = 'gemini-3.5-flash-lite',
@@ -90,6 +94,14 @@ async function interact(
   }
   const data = Buffer.concat(chunks).toString('utf8');
   const result = JSON.parse(data) as Interaction;
+  const input = result.usage?.total_input_tokens,
+    output = result.usage?.total_output_tokens;
+  await options.onUsage?.(String(body.model), {
+    inputTokens:
+      typeof input === 'number' && Number.isSafeInteger(input) && input >= 0 ? input : null,
+    outputTokens:
+      typeof output === 'number' && Number.isSafeInteger(output) && output >= 0 ? output : null,
+  });
   if (
     result.status !== 'completed' ||
     !Array.isArray(result.steps) ||

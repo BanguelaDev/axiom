@@ -24,8 +24,12 @@ const interaction = (type: string, value: unknown) => ({
 });
 test('Gemini usa saída estruturada, chave em header e modo sem estado, sem chamadas a fornecedor pago', async () => {
   let calls = 0;
+  const usages: unknown[] = [];
   const model = createGeminiEditorialModel({
     key: 'test-private-key',
+    onUsage: async (model, usage) => {
+      usages.push({ model, ...usage });
+    },
     fetch: async (url, init) => {
       calls++;
       assert.equal(String(url), 'https://generativelanguage.googleapis.com/v1beta/interactions');
@@ -52,7 +56,10 @@ test('Gemini usa saída estruturada, chave em header e modo sem estado, sem cham
           ],
         })),
       };
-      return Response.json(interaction('text', grounded));
+      return Response.json({
+        ...interaction('text', grounded),
+        usage: { total_input_tokens: 100, total_output_tokens: 50 },
+      });
     },
   });
   const result = (await model.extract(fixture.input)).value as typeof fixture.facts;
@@ -65,6 +72,9 @@ test('Gemini usa saída estruturada, chave em header e modo sem estado, sem cham
           ?.content.includes(evidence.quote),
       );
   assert.equal(calls, 1);
+  assert.deepEqual(usages, [
+    { model: 'gemini-3.5-flash-lite', inputTokens: 100, outputTokens: 50 },
+  ]);
 });
 test('cota gratuita interrompe a IA sem repetir ou migrar para um fornecedor pago', async () => {
   let calls = 0;

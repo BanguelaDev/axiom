@@ -381,6 +381,9 @@ test('fila local compartilha trabalho, persiste áudio aprovado, isola sessões 
   assert.equal((await repository.audio(first.job.id))?.url, 'https://media.example/restored');
   assert.equal((await repository.request('user-four', 'ai')).kind, 'episode');
   assert.equal(calls, 1);
+  store.withdraw(first.job.id,time);
+  assert.equal(await repository.episode(first.job.id),null);
+  assert.equal(await repository.audio(first.job.id),null);
   time += 3_600_001;
   assert.equal(await repository.episode(first.job.id), null);
   assert.equal(await repository.audio(first.job.id), null);

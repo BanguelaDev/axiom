@@ -9,11 +9,17 @@ import { renderEpisode, verifyRenderedAudio } from './render-episode.ts';
 import { extractEditorialFacts, EditorialFault } from './editorial.ts';
 import { prepareWithRepair } from './editorial-repair.ts';
 import { collectRss, InsufficientNewsFault } from './rss.ts';
+import type { GeminiOptions } from './gemini.ts';
 
 export async function generatePodcast(
   topicId: string,
   directory: string,
   onPhase: (phase: string) => Promise<void> = async () => {},
+  options: {
+    rememberPublication?: (url: string, publishedAt: string) => string;
+    onUsage?: GeminiOptions['onUsage'];
+    onNarration?: (characters: number) => Promise<void>;
+  } = {},
 ) {
   const topic = getTopic(topicId);
   if (!topic)
@@ -24,7 +30,7 @@ export async function generatePodcast(
   const privateDir = resolve(directory, 'private');
   await mkdir(privateDir, { recursive: true });
   await onPhase('collecting');
-  const selection = await collectRss(topic.id, started);
+  const selection = await collectRss(topic.id, started, fetch, options.rememberPublication);
   await writeFile(
     resolve(privateDir, 'selection-report.json'),
     JSON.stringify({ ...selection.report, collection: selection.collection }, null, 2),
@@ -36,6 +42,7 @@ export async function generatePodcast(
   await onPhase('writing');
   const model = createGeminiEditorialModel({
     key: geminiKey,
+    onUsage: options.onUsage,
     async onResult(stage, value) {
       if (!['axiom_facts', 'axiom_draft', 'axiom_review', 'axiom_extraction_audit'].includes(stage))
         throw new Error('Etapa inválida.');
@@ -53,7 +60,14 @@ export async function generatePodcast(
     JSON.stringify({ sourceDigest: context.sourceDigest, facts: context.facts }, null, 2),
     { mode: 0o600 },
   );
-  const voice = createGeminiVoice({ key: geminiKey });
+  const provider = createGeminiVoice({ key: geminiKey, onUsage: options.onUsage });
+  const voice = {
+    identity: provider.identity,
+    async synthesize(text: string) {
+      await options.onNarration?.(text.length);
+      return provider.synthesize(text);
+    },
+  };
   const rendered = await renderEpisode({
     directory: privateDir,
     voice,

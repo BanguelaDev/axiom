@@ -1,6 +1,6 @@
 # AXIOM — Roadmap de construção do aplicativo mobile
 
-**Versão:** 1.9
+**Versão:** 1.10
 
 **Criado em:** 19 de outubro de 2026
 
@@ -312,13 +312,13 @@ Aplicar limites por sessão e sinais adicionais de abuso, controle global de con
 
 ### Conteúdo e atualidade
 
-- [ ] Todos os seis temas têm busca e regras editoriais próprias.
+- [x] Todos os seis temas têm busca e regras editoriais próprias.
 - [ ] Toda matéria utilizada em uma nova edição tem data verificável dentro das últimas 72 horas.
-- [ ] Há testes para os limites exatos da janela, fusos, datas futuras e expiração durante fila ou reuso.
-- [ ] Republicações da mesma origem não contam como fontes independentes.
-- [ ] Episódios sem material suficiente não são gerados.
+- [x] Há testes para os limites exatos da janela, fusos, datas futuras e expiração durante fila ou reuso.
+- [x] Republicações da mesma origem não contam como fontes independentes.
+- [x] Episódios sem material suficiente não são gerados.
 - [ ] Cada afirmação verificável do roteiro possui referência interna.
-- [ ] As fontes utilizadas podem ser consultadas pelo usuário.
+- [x] As fontes utilizadas podem ser consultadas pelo usuário.
 - [ ] Uma amostra de pelo menos cinco episódios por tema passa por revisão humana no beta, sem erros factuais críticos pendentes.
 
 ### Áudio e experiência mobile
@@ -334,10 +334,10 @@ Aplicar limites por sessão e sinais adicionais de abuso, controle global de con
 
 - [ ] Roteiros e credenciais não aparecem no pacote do app, respostas da API ou registros expostos.
 - [ ] Políticas de banco e Storage impedem acesso indevido a roteiros e trabalhos de outras sessões.
-- [ ] Pedidos concorrentes não geram episódios duplicados para a mesma edição.
+- [x] Pedidos concorrentes não geram episódios duplicados para a mesma edição.
 - [ ] Falhas, novas tentativas e encerramento do app não deixam trabalhos indefinidamente em processamento.
 - [ ] Consumo por etapa, tempo de geração e custos ficam registrados para acompanhamento.
-- [ ] Há procedimento para retirar ou corrigir episódios e prazos definidos para retenção de textos, áudios e histórico.
+- [x] Há procedimento para retirar ou corrigir episódios e prazos definidos para retenção de textos, áudios e histórico. Ver [operação local](docs/operacao-local.md).
 
 ## 12. Métricas e planejamento de custos
 
@@ -363,7 +363,7 @@ Os valores finais dependerão do plano contratado, cobertura de conteúdo, volum
 - [ ] Definir a licença de uso do conteúdo e da voz, além da política de retenção.
 - [ ] Preparar política de privacidade e informações sobre os serviços que processam dados e conteúdo.
 - [ ] Identificar claramente a narração e o resumo como gerados por IA.
-- [ ] Disponibilizar canal para reportar erro e solicitar correção de episódio.
+- [x] Disponibilizar canal para reportar erro e solicitar correção de episódio no servidor local.
 - [ ] Preparar ícone, capturas de tela, descrição e classificação etária compatível com os assuntos cobertos.
 - [ ] Validar os requisitos vigentes de cada loja no momento da submissão.
 - [ ] Distribuir beta, corrigir problemas e produzir a versão candidata.

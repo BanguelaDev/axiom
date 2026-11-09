@@ -17,7 +17,10 @@ export function createAudioDemo(directory: string, clock = () => Date.now()) {
     AudioScenario,
     Promise<{ metrics: AudioMetrics; bytes: Uint8Array | null; reason: AudioDemoReport['reason'] }>
   >();
-  const tickets = new Map<string, { bytes: Uint8Array; expires: number }>();
+  const tickets = new Map<
+    string,
+    { bytes: Uint8Array; expires: number; canRead?: () => boolean }
+  >();
   async function build(scenario: AudioScenario) {
     if (!ffmpeg) throw new AudioFault('processing_failed');
     await mkdir(directory, { recursive: true });
@@ -61,13 +64,13 @@ export function createAudioDemo(directory: string, clock = () => Date.now()) {
     }
   }
   return {
-    issueMedia(bytes:Uint8Array,expiresIn=300) {
-      for(const [ticket,value] of tickets)if(value.expires<=clock())tickets.delete(ticket);
-      if(tickets.size>=64)tickets.delete(tickets.keys().next().value!);
-      const ticket=randomBytes(24).toString('hex');
-      const ttl=Math.max(1,Math.min(600,Math.floor(expiresIn)));
-      tickets.set(ticket,{bytes,expires:clock()+ttl*1000});
-      return {path:`/dev/media/${ticket}`,expiresIn:ttl};
+    issueMedia(bytes: Uint8Array, expiresIn = 300, canRead?: () => boolean) {
+      for (const [ticket, value] of tickets) if (value.expires <= clock()) tickets.delete(ticket);
+      if (tickets.size >= 64) tickets.delete(tickets.keys().next().value!);
+      const ticket = randomBytes(24).toString('hex');
+      const ttl = Math.max(1, Math.min(600, Math.floor(expiresIn)));
+      tickets.set(ticket, { bytes, expires: clock() + ttl * 1000, canRead });
+      return { path: `/dev/media/${ticket}`, expiresIn: ttl };
     },
     async prepare(scenario: AudioScenario): Promise<AudioDemoReport> {
       if (!builds.has(scenario))
@@ -103,7 +106,7 @@ export function createAudioDemo(directory: string, clock = () => Date.now()) {
     },
     media(ticket: string, range: string | null, head = false): Response {
       const stored = tickets.get(ticket);
-      if (!stored || stored.expires <= clock()) {
+      if (!stored || stored.expires <= clock() || (stored.canRead && !stored.canRead())) {
         tickets.delete(ticket);
         return new Response(null, { status: 404 });
       }

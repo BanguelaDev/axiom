@@ -33,9 +33,11 @@ export class LocalRepository implements BackendRepository {
     private readonly issueAudio: (
       bytes: Uint8Array,
       expiresIn: number,
+      episodeId: string,
     ) => { url: string; expiresIn: number },
     private readonly clock = () => Date.now(),
-    private readonly store?: Pick<LocalStore, 'load' | 'save'>,
+    private readonly store?: Pick<LocalStore, 'load' | 'save'> &
+      Partial<Pick<LocalStore, 'isWithdrawn' | 'event'>>,
   ) {
     const raw = store?.load();
     if (raw == null) return;
@@ -135,11 +137,13 @@ export class LocalRepository implements BackendRepository {
       if (work.job.stage === 'ready') {
         const episode = this.currentEpisode(id);
         if (episode) {
+          this.store?.event?.('request', { topicId, kind: 'reused', episodeId: id });
           this.persist();
           return { kind: 'episode', episode };
         }
       }
       if (['queued', 'processing'].includes(work.job.stage) && work.updated > now - 600_000) {
+        this.store?.event?.('request', { topicId, kind: 'shared', episodeId: id });
         work.users.add(userId);
         this.persist();
         return { kind: 'job', job: { ...work.job } };
@@ -160,6 +164,7 @@ export class LocalRepository implements BackendRepository {
     const job: PublicJob = { id, topicId, stage: 'queued', episodeId: null, message: null };
     this.jobs.set(id, { job, users: new Set([userId]), updated: now });
     this.reservations.push(now);
+    this.store?.event?.('request', { topicId, kind: 'new', episodeId: id });
     this.persist();
     return { kind: 'job', job: { ...job } };
   }
@@ -234,6 +239,7 @@ export class LocalRepository implements BackendRepository {
       rendered = work?.rendered;
     if (
       !work ||
+      this.store?.isWithdrawn?.(id) ||
       work.job.stage !== 'ready' ||
       !rendered ||
       Date.parse(rendered.expiresAt) <= this.clock()
@@ -270,9 +276,8 @@ export class LocalRepository implements BackendRepository {
       Math.floor((Date.parse(work.rendered!.expiresAt) - this.clock()) / 1000),
     );
     if (expiresIn < 1) return null;
-    return this.issueAudio(
-      await verifyRenderedAudio(work.rendered!, new Date(this.clock())),
-      expiresIn,
-    );
+    const bytes = await verifyRenderedAudio(work.rendered!, new Date(this.clock()));
+    if (!this.currentEpisode(id)) return null;
+    return this.issueAudio(bytes, expiresIn, id);
   }
 }

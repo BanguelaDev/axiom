@@ -9,6 +9,7 @@ import { generatePodcast } from '../pipeline/generate-podcast.ts';
 import { GeminiAccessFault, GeminiQuotaFault } from '../pipeline/gemini.ts';
 import { EditorialFault } from '../pipeline/editorial.ts';
 import { AudioFault } from '../pipeline/audio.ts';
+import { InsufficientNewsFault } from '../pipeline/rss.ts';
 import { LocalStore } from './local-store.ts';
 
 /** Servidor local com SQLite; a infraestrutura remota continua opcional. */
@@ -23,6 +24,7 @@ export function startLocalApi(
   } = {},
 ): Promise<Server> {
   const store = new LocalStore(options.statePath);
+  store.prune();
   const allowedOrigins = [
     'http://localhost:8081',
     'http://127.0.0.1:8081',
@@ -35,30 +37,72 @@ export function startLocalApi(
     repository = new LocalRepository(
       options.processor ||
         (async (topic, id, onPhase) => {
+          const started = Date.now();
+          let phaseStarted = started,
+            previousPhase = 'starting';
+          store.event('generation-start', { id, topicId: topic });
           try {
-            return await generatePodcast(
+            const rendered = await generatePodcast(
               topic,
               resolve('work', 'local-episodes', id),
               async (phase) => {
+                store.event('phase', {
+                  id,
+                  phase: previousPhase,
+                  milliseconds: Date.now() - phaseStarted,
+                });
+                previousPhase = phase;
+                phaseStarted = Date.now();
                 await onPhase(phase);
                 console.log(`[AXIOM] ${id.slice(0, 8)}: ${phase}`);
               },
+              {
+                rememberPublication: (url, published) => store.firstPublication(url, published),
+                onUsage: async (model, usage) => {
+                  store.event('provider-usage', { id, model, ...usage });
+                },
+                onNarration: async (characters) => {
+                  store.event('narration', { id, characters });
+                },
+              },
             );
+            store.event('phase', {
+              id,
+              phase: previousPhase,
+              milliseconds: Date.now() - phaseStarted,
+            });
+            store.event('generation-ready', {
+              id,
+              topicId: topic,
+              milliseconds: Date.now() - started,
+              duration: rendered.audio.metrics.duration,
+              attempts: rendered.attempts.length,
+            });
+            return rendered;
           } catch (error) {
             const code =
               error instanceof GeminiAccessFault
                 ? `gemini_http_${error.status}`
                 : error instanceof GeminiQuotaFault
                   ? 'free_quota'
-                  : error instanceof EditorialFault || error instanceof AudioFault
-                    ? error.code
-                    : 'generation_failed';
+                  : error instanceof InsufficientNewsFault
+                    ? 'insufficient_news'
+                    : error instanceof EditorialFault || error instanceof AudioFault
+                      ? error.code
+                      : 'generation_failed';
             console.log(`[AXIOM] ${id.slice(0, 8)}: ${code}`);
+            store.event('generation-failed', {
+              id,
+              topicId: topic,
+              code,
+              milliseconds: Date.now() - started,
+            });
             throw error;
           }
         }),
-      (bytes, expiresIn) => {
-        const media = audioDemo.issueMedia(bytes, expiresIn);
+      (bytes, expiresIn, id) => {
+        const media = audioDemo.issueMedia(bytes, expiresIn, () => !store.isWithdrawn(id));
+        store.event('audio-access', { id, bytes: bytes.length });
         return {
           url: `${options.publicUrl || `http://127.0.0.1:${actualPort}`}${media.path}`,
           expiresIn: media.expiresIn,
@@ -83,6 +127,7 @@ export function startLocalApi(
       return store.session(token);
     },
     repository,
+    feedback: async (userId, id, value) => store.feedback(userId, id, value),
     async enqueue(id) {
       await repository.enqueue(id);
     },

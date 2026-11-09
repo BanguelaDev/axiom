@@ -23,7 +23,10 @@ import {
   type PodcastHistory,
 } from '@axiom/core/podcast';
 import { getTopic, type TopicId } from '@axiom/core/topics';
-import { backendConnection as initialBackendConnection, forgetLocalSession } from '@/services/backend';
+import {
+  backendConnection as initialBackendConnection,
+  forgetLocalSession,
+} from '@/services/backend';
 import { registerPlayback, claimPlayback } from '@/services/playback';
 
 type Preparation =
@@ -247,6 +250,25 @@ function usePodcastValue() {
     const timer = setTimeout(() => setTimedOut(true), 12000);
     return () => clearTimeout(timer);
   }, [episode, loading, status.isLoaded, status.error]);
+  useEffect(() => {
+    if (!status.playing || !episode || !backendConnection) return;
+    const controller = new AbortController();
+    const timer = setInterval(() => {
+      void getEpisode(backendConnection, episode.id, controller.signal).catch((error) => {
+        if (!controller.signal.aborted && error instanceof ApiFault && error.code === 'not_found') {
+          ++playbackRequest.current;
+          player.pause();
+          setAudioError(
+            'Este episódio foi retirado ou perdeu a validade. Escolha uma nova edição.',
+          );
+        }
+      });
+    }, 30_000);
+    return () => {
+      clearInterval(timer);
+      controller.abort();
+    };
+  }, [status.playing, episode, backendConnection, player]);
   const openEpisode = useCallback(
     async (id: string, force = false) => {
       if (
@@ -301,6 +323,9 @@ function usePodcastValue() {
     setAudioError(null);
     try {
       if (Date.parse(selected.expiresAt) <= Date.now()) throw new ApiFault('not_found', 404);
+      if (!backendConnection) throw new ApiFault('generation_unavailable', 503);
+      await getEpisode(backendConnection, selected.id);
+      if (request !== playbackRequest.current) return;
       await setAudioModeAsync({
         playsInSilentMode: true,
         shouldPlayInBackground: nativeAudioControls,

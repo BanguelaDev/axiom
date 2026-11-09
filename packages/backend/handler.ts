@@ -10,6 +10,7 @@ import { getTopic, topics, type TopicId } from '../core/src/topics.ts';
 import type { DemoSelection } from '../core/src/selection-report.ts';
 import type { EditorialDemoReport, EditorialScenario } from '../core/src/editorial-report.ts';
 import type { AudioDemoReport } from '../core/src/audio-report.ts';
+import { parseFeedback, type EpisodeFeedback } from '../core/src/feedback.ts';
 
 export interface BackendRepository {
   request(userId: string, topicId: TopicId): Promise<GenerationResult>;
@@ -24,6 +25,7 @@ export interface BackendOptions {
   authenticate(token: string): Promise<string | null>;
   repository: BackendRepository;
   enqueue(jobId: string): Promise<void>;
+  feedback?(userId: string, episodeId: string, value: EpisodeFeedback): Promise<void>;
   developmentSelection?(topicId: TopicId, insufficient: boolean): DemoSelection;
   developmentAudio?(scenario: 'ready' | 'silence' | 'long'): Promise<AudioDemoReport>;
   developmentEditorial?(
@@ -170,6 +172,45 @@ export function createApi(options: BackendOptions) {
         return json({ job });
       }
       const episodeMatch = path.match(/^\/episodes\/([^/]+)(\/audio)?$/);
+      const feedbackMatch = path.match(/^\/episodes\/([^/]+)\/feedback$/);
+      if (feedbackMatch && request.method === 'POST' && options.feedback) {
+        const id = feedbackMatch[1]!;
+        if (!uuid.test(id) || !request.headers.get('content-type')?.startsWith('application/json'))
+          throw new ApiFault('invalid_request', 400);
+        if (!(await options.repository.episode(id))) throw new ApiFault('not_found', 404);
+        let value: EpisodeFeedback;
+        try {
+          const reader = request.body?.getReader();
+          if (!reader) throw new Error();
+          const chunks: Uint8Array[] = [];
+          let size = 0;
+          try {
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              size += value.length;
+              if (size > 1024) {
+                await reader.cancel();
+                throw new Error();
+              }
+              chunks.push(value);
+            }
+          } finally {
+            reader.releaseLock();
+          }
+          const bytes = new Uint8Array(size);
+          let offset = 0;
+          for (const chunk of chunks) {
+            bytes.set(chunk, offset);
+            offset += chunk.length;
+          }
+          value = parseFeedback(JSON.parse(new TextDecoder().decode(bytes)));
+        } catch {
+          throw new ApiFault('invalid_request', 400);
+        }
+        await options.feedback(userId, id, value);
+        return json({ received: true }, 202);
+      }
       if (episodeMatch && request.method === 'GET') {
         if (!uuid.test(episodeMatch[1]!)) throw new ApiFault('invalid_request', 400);
         const episode = await options.repository.episode(episodeMatch[1]!);

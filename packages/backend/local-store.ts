@@ -2,6 +2,8 @@ import { DatabaseSync } from 'node:sqlite';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { mkdirSync, chmodSync } from 'node:fs';
 import { dirname } from 'node:path';
+import type { EpisodeFeedback } from '../core/src/feedback.ts';
+import { ApiFault } from '../core/src/api.ts';
 
 /** Banco privado da instalação local. Nunca é servido pelo handler HTTP. */
 export class LocalStore {
@@ -24,6 +26,19 @@ export class LocalStore {
           token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires INTEGER NOT NULL
         ) STRICT;
         CREATE INDEX IF NOT EXISTS local_sessions_expiry ON local_sessions(expires);
+        CREATE TABLE IF NOT EXISTS local_withdrawals (
+          episode_id TEXT PRIMARY KEY, created INTEGER NOT NULL
+        ) STRICT;
+        CREATE TABLE IF NOT EXISTS local_publications (
+          url_hash TEXT PRIMARY KEY, published INTEGER NOT NULL, last_seen INTEGER NOT NULL
+        ) STRICT;
+        CREATE TABLE IF NOT EXISTS local_feedback (
+          id TEXT PRIMARY KEY, episode_id TEXT NOT NULL, session_hash TEXT NOT NULL,
+          kind TEXT NOT NULL, clarity INTEGER, naturalness INTEGER, created INTEGER NOT NULL
+        ) STRICT;
+        CREATE TABLE IF NOT EXISTS local_events (
+          id INTEGER PRIMARY KEY, kind TEXT NOT NULL, payload TEXT NOT NULL CHECK(json_valid(payload)), created INTEGER NOT NULL
+        ) STRICT;
         PRAGMA user_version=1;
       `);
       if (path !== ':memory:') chmodSync(path, 0o600);
@@ -83,6 +98,101 @@ export class LocalStore {
       .prepare('INSERT INTO local_sessions(token_hash,user_id,expires) VALUES(?,?,?)')
       .run(createHash('sha256').update(token).digest('hex'), randomUUID(), now + 3_600_000);
     return { accessToken: token, expiresIn: 3600 };
+  }
+  firstPublication(url: string, published: string, now = Date.now()): string {
+    const time = Date.parse(published);
+    if (!Number.isFinite(time)) throw new Error('Data inválida.');
+    const hash = createHash('sha256').update(url).digest('hex');
+    this.db
+      .prepare(
+        `INSERT INTO local_publications(url_hash,published,last_seen) VALUES(?,?,?)
+      ON CONFLICT(url_hash) DO UPDATE SET published=min(published,excluded.published),last_seen=excluded.last_seen`,
+      )
+      .run(hash, time, now);
+    return new Date(
+      this.db.prepare('SELECT published FROM local_publications WHERE url_hash=?').get(hash)!
+        .published as number,
+    ).toISOString();
+  }
+  isWithdrawn(id: string): boolean {
+    return !!this.db.prepare('SELECT 1 FROM local_withdrawals WHERE episode_id=?').get(id);
+  }
+  withdraw(id: string, now = Date.now()) {
+    this.db
+      .prepare(
+        'INSERT INTO local_withdrawals(episode_id,created) VALUES(?,?) ON CONFLICT DO NOTHING',
+      )
+      .run(id, now);
+  }
+  feedback(userId: string, episodeId: string, value: EpisodeFeedback, now = Date.now()) {
+    const hash = createHash('sha256').update(userId).digest('hex');
+    const count = this.db
+      .prepare('SELECT count(*) AS n FROM local_feedback WHERE created>?')
+      .get(now - 86_400_000)!.n as number;
+    if (count >= 1000) throw new ApiFault('rate_limited', 429);
+    const repeated = this.db
+      .prepare(
+        'SELECT 1 FROM local_feedback WHERE session_hash=? AND episode_id=? AND kind=? AND created>?',
+      )
+      .get(hash, episodeId, value.kind, now - 86_400_000);
+    if (repeated) return;
+    const personal = this.db
+      .prepare('SELECT count(*) AS n FROM local_feedback WHERE session_hash=? AND created>?')
+      .get(hash, now - 86_400_000)!.n as number;
+    if (personal >= 20) throw new ApiFault('rate_limited', 429);
+    this.db
+      .prepare(
+        'INSERT INTO local_feedback(id,episode_id,session_hash,kind,clarity,naturalness,created) VALUES(?,?,?,?,?,?,?)',
+      )
+      .run(
+        randomUUID(),
+        episodeId,
+        hash,
+        value.kind,
+        value.clarity ?? null,
+        value.naturalness ?? null,
+        now,
+      );
+  }
+  event(
+    kind:
+      | 'request'
+      | 'generation-start'
+      | 'phase'
+      | 'generation-ready'
+      | 'generation-failed'
+      | 'audio-access'
+      | 'provider-usage'
+      | 'narration',
+    data: Record<string, string | number | null>,
+    now = Date.now(),
+  ) {
+    this.db
+      .prepare('INSERT INTO local_events(kind,payload,created) VALUES(?,?,?)')
+      .run(kind, JSON.stringify(data), now);
+  }
+  report() {
+    return {
+      events: this.db
+        .prepare('SELECT kind,payload,created FROM local_events ORDER BY id DESC LIMIT 2000')
+        .all()
+        .map((row) => ({ ...row, payload: JSON.parse(row.payload as string) })),
+      feedback: this.db
+        .prepare(
+          'SELECT episode_id,kind,count(*) AS count,avg(clarity) AS clarity,avg(naturalness) AS naturalness FROM local_feedback GROUP BY episode_id,kind',
+        )
+        .all(),
+      withdrawals: this.db.prepare('SELECT episode_id,created FROM local_withdrawals').all(),
+      billing:
+        'Exige projeto Gemini Free Tier sem faturamento; valores financeiros não são inferidos das métricas.',
+    };
+  }
+  prune(now = Date.now()) {
+    this.db.prepare('DELETE FROM local_sessions WHERE expires<=?').run(now);
+    this.db.prepare('DELETE FROM local_feedback WHERE created<?').run(now - 30 * 86_400_000);
+    this.db.prepare('DELETE FROM local_events WHERE created<?').run(now - 90 * 86_400_000);
+    this.db.prepare('DELETE FROM local_withdrawals WHERE created<?').run(now - 90 * 86_400_000);
+    this.db.prepare('DELETE FROM local_publications WHERE last_seen<?').run(now - 180 * 86_400_000);
   }
   close() {
     if (!this.closed) {

@@ -275,7 +275,12 @@ async function fetchFeed(feed: Feed, fetcher: typeof fetch) {
   }
   return parseRss(Buffer.concat(chunks).toString('utf8'), feed);
 }
-export async function collectRss(topic: TopicId, reference: Date, fetcher: typeof fetch = fetch) {
+export async function collectRss(
+  topic: TopicId,
+  reference: Date,
+  fetcher: typeof fetch = fetch,
+  remember?: (url: string, publishedAt: string) => string,
+) {
   const feeds = rssFeeds.filter((feed) => feed.topics.includes(topic));
   const batches = await Promise.allSettled(feeds.map((feed) => fetchFeed(feed, fetcher)));
   const received = batches.flatMap((result) => (result.status === 'fulfilled' ? result.value : []));
@@ -287,7 +292,8 @@ export async function collectRss(topic: TopicId, reference: Date, fetcher: typeo
   }
   const allCandidates = received.map((item) => ({
     ...item,
-    publishedAt: firstPublication.get(item.url)!,
+    publishedAt:
+      remember?.(item.url, firstPublication.get(item.url)!) ?? firstPublication.get(item.url)!,
   }));
   const priority = (item: NewsCandidate) =>
     Number(

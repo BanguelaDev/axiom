@@ -44,6 +44,7 @@ function Navigation() {
         <Stack.Screen name="generate/[id]" options={{ title: 'Preparando seu podcast' }} />
         <Stack.Screen name="podcast/[id]" options={{ title: 'Seu podcast' }} />
         <Stack.Screen name="connection" options={{ title: 'Seu computador' }} />
+        <Stack.Screen name="feedback/[id]" options={{ title: 'Avaliar episódio' }} />
         <Stack.Screen
           name="prototype"
           options={{ title: 'Apresentação do projeto', headerBackTitle: 'Voltar' }}
