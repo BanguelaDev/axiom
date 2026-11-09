@@ -174,3 +174,5 @@ Revisão final do recorte: uma inspeção de notícias reais identificou “golp
 - O candidato continua em rascunho até a verificação. Aceite no Galaxy Note 20 Ultra e avaliação humana de voz/conteúdo permanecem separados.
 
 Conferência adicional: nenhuma das quatro credenciais locais ou o IP pessoal apareceu no bundle do APK. Após HTTP 503 temporário, uma segunda tentativa gerou IA em 120,03 segundos às 15:14, horário local. A inspeção encontrou HTML escapado em um feed; a limpeza agora decodifica antes de remover tags e scripts, com regressão aprovada entre 27 testes direcionados. Mudança somente no servidor.
+
+O teste nativo do APK 0.12.0 instalou e abriu o app, mas o toque no texto de Conectar não acionou a navegação. A hierarquia mostrou textos internos selecionáveis e clicáveis. Removido `selectable` global do componente Copy, preservando a opção explícita por tela. Novo candidato 0.12.1 em preparação; o anterior não será publicado. A coleta de logs do teste também recebeu limite de tempo para não esperar um emulador já encerrado.

@@ -25,7 +25,7 @@ export function Copy({
 }) {
   const { colors } = useApp();
   return (
-    <Text selectable {...props} style={[typography[variant], { color: colors[tone] }, style]} />
+    <Text {...props} style={[typography[variant], { color: colors[tone] }, style]} />
   );
 }
 export function Screen({ children }: { children: ReactNode }) {

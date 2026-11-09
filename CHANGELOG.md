@@ -1,5 +1,11 @@
 # Entregas do AXIOM
 
+## 0.12.1 — 9 de novembro de 2026
+
+Correção detectada no emulador: o texto globalmente selecionável interceptava o toque no centro de botões Android. O componente de texto agora segue o comportamento nativo padrão; seleção pode ser habilitada explicitamente quando necessária. A automação verificará a jornada completa novamente com o novo APK.
+
+O candidato 0.12.0 permanece sem publicação. O novo pacote será conferido antes do teste no celular.
+
 ## Validação do candidato Android — 9 de novembro de 2026
 
 APK 0.12.0 compilado pelo GitHub Actions a partir de 914f341. Assinatura verificada no build e checksum conferido após download. Pacote ainda em rascunho de release.
