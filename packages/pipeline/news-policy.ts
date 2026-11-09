@@ -39,7 +39,12 @@ export function matchesTopic(topic: TopicId, title: string, content: string): bo
   const text = normalizedText(`${title} ${content}`);
   const opening = normalizedText(`${title} ${content.slice(0, 900)}`);
   const fraud =
-    /\b(golpes?|fraudes?|phishing|scams?)\b/.test(opening) && !/\bgolpe de estado\b/.test(opening);
+    !/\bgolpe de estado\b/.test(opening) &&
+    (/\b(fraudes?|phishing|scams?|golpistas?|estelionato)\b/.test(opening) ||
+      (/\bgolpes?\b/.test(opening) &&
+        /\b(pix|bancari[oa]s?|bancos?|financeir[oa]s?|dinheiro|investimentos?|criptomoedas?|cartoes?|credito|pagamentos?|emprestimos?|fals[oa]s?|digitais|digital|whatsapp|compras?|vendas?)\b/.test(
+          opening,
+        )));
   const brazil =
     /\b(brasil|brazil|brasileir[oa]s?|brasilia|distrito federal|rio de janeiro|sao paulo|policia federal|policia rodoviaria federal|ministerio publico federal|supremo tribunal federal|mpf|stf)\b/.test(
       text,

@@ -8,6 +8,8 @@ Relatório local com reuso, fases, falhas, tentativas, caracteres e tokens infor
 
 113 testes aprovados, TypeScript/Deno, lint, exportações web/Android/iOS e Expo Doctor 20/20. A primeira compilação nativa identificou Reanimated indireto 4.2.2 incompatível com React Native 0.88.1; dependências alinhadas ao Expo SDK 58 (Reanimated 4.7.1 e Worklets 0.13.0). APK será recompilado. Fraudes ficou sem fontes recentes suficientes na nova coleta, mantendo o bloqueio editorial.
 
+Revisão do servidor: “golpes de faca” não define Fraudes e Golpes. O termo isolado agora exige contexto financeiro ou digital; fraude, phishing, estelionato e golpistas continuam explícitos. Teste de regressão acrescentado; 26 testes direcionados aprovados. Essa correção é do servidor e não altera o binário mobile 0.12.0.
+
 ## 0.11.0 — 9 de novembro de 2026
 
 **Etapa 11: candidato Android com servidor configurável.** Tela para conectar ao computador, validação da API e persistência do endereço. Trocar de servidor remonta o player e cancela pedidos da conexão anterior. Sessões separadas por endereço. Modo local explicitamente habilitado no build, sem incorporar endereço pessoal ou chaves.

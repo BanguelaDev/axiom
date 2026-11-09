@@ -163,3 +163,5 @@ Próximas pendências: concluir o candidato Android, operação/retirada e reten
 - Primeira compilação APK falhou pela versão indireta do Reanimated. Alinhados Reanimated 4.7.1 e Worklets 0.13.0 à matriz oficial do Expo SDK 58. CI de código da etapa 11 aprovada; nova compilação nativa pendente.
 
 Restam o candidato Android instalado, validações nativas no aparelho e revisão humana de conteúdo e voz. A cobertura por RSS pode resultar em indisponibilidade legítima em alguns temas.
+
+Revisão final do recorte: uma inspeção de notícias reais identificou “golpes de faca” como falso positivo de Fraudes. O termo genérico passou a exigir contexto financeiro/digital, com teste de regressão. Os 26 testes de seleção e fornecedores passaram. Auditoria dos seis temas confirmou Ucrânia, IA, Política e Crimes com material; Saúde Mental e Fraudes insuficientes naquele momento. Novos feeds inspecionados tinham apenas excertos curtos ou nenhuma pauta elegível e não foram adicionados para forçar a cobertura.

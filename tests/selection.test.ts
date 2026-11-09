@@ -9,6 +9,29 @@ import {
 } from '../packages/core/src/news.ts';
 import { selectionFixture, createSelectionDemo } from '../packages/backend/selection-demo.ts';
 import { matchesTopic, newsQueries } from '../packages/pipeline/news-policy.ts';
+
+test('golpes físicos não são classificados como fraude financeira ou digital', () => {
+  const title = 'Homem é morto com golpes de faca no Rio de Janeiro';
+  const content = 'A polícia investiga o crime ocorrido após uma discussão.';
+  assert.equal(matchesTopic('fraud', title, content), false);
+  assert.equal(matchesTopic('crime', title, content), true);
+  assert.equal(
+    matchesTopic(
+      'fraud',
+      'Polícia alerta sobre golpe do Pix',
+      'Falsos atendentes pedem transferências de dinheiro.',
+    ),
+    true,
+  );
+  assert.equal(
+    matchesTopic(
+      'fraud',
+      'Golpistas clonam contas',
+      'Criminosos enganam usuários de uma plataforma.',
+    ),
+    true,
+  );
+});
 import { selectNews } from '../packages/pipeline/selection.ts';
 
 const now = new Date('2026-11-08T12:00:00Z');
