@@ -8,6 +8,8 @@
 - Testes nativos em execução nos emuladores API 29 e 34. Até o registro do resultado, não considerar segundo plano ou tela bloqueada aprovados no binário.
 - Tentativa real de IA às 15:09, horário de Três Lagoas/Cuiabá: fornecedor respondeu HTTP 503 na preparação editorial; nenhuma voz foi liberada. O relatório local registrou fases, tokens retornados e a falha. Episódios aprovados anteriormente continuam sendo a evidência de voz real.
 - Segunda tentativa às 15:14: nova edição de IA aprovada e MP3 medido em 120,032653 segundos. Relatório privado em `work/live-check/2026-11-09T19-14-01-711Z`. Encontrado e corrigido HTML escapado na leitura RSS, com regressão entre 27 testes direcionados.
+- O responsável avaliou essa amostra em 5/5 para clareza e 5/5 para naturalidade. Solicitou retirar a abertura falada; a preferência foi incorporada à geração seguinte. Trata-se de uma avaliação individual.
+- [Teste nativo no Android 14](https://github.com/BanguelaDev/axiom/actions/runs/42686872673): jornada, pausa, avanço e continuidade com tela desligada aprovados no primeiro pacote. Verificados serviço foreground, saída AudioTrack iniciada e energia Asleep. O novo pacote 0.12.1 ainda terá sua conferência separada.
 
 As seções por etapa abaixo preservam o histórico das verificações. Supabase/Trigger.dev, lojas e iPhone físico pertencem às evoluções opcionais da entrega local escolhida.
 

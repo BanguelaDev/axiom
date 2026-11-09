@@ -33,7 +33,7 @@ export function validateEvidence(script: EpisodeScript, articles: Article[]): vo
     throw new Error('O roteiro precisa usar pelo menos dois veículos distintos.');
 }
 export function narrationText(script: EpisodeScript): string {
-  return `Este é o AXIOM. Um resumo das notícias recentes, com narração gerada por inteligência artificial. ${script.claims.map((claim) => claim.narration).join(' ')} Você pode consultar as fontes deste episódio no aplicativo.`;
+  return `${script.claims.map((claim) => claim.narration).join(' ')} Você pode consultar as fontes deste episódio no aplicativo.`.trim();
 }
 export function publicEpisode(
   script: EpisodeScript,

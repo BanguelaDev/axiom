@@ -59,6 +59,7 @@ export async function renderEpisode(options: {
       JSON.stringify({
         artifactId: approved.artifactId,
         voice: options.voice.identity,
+        narration: narrationText(approved.script),
         version: 'audio-v1',
       }),
     );
@@ -103,10 +104,14 @@ export async function renderEpisode(options: {
       attempts.push(report);
       options.onAttempt?.(report);
       const fixedWords = narrationText({ title: '', claims: [] }).trim().split(/\s+/).length;
-      words = Math.max(
-        170,
-        Math.min(320, Math.round((approved.wordCount * 120) / source.duration) - fixedWords),
+      const actualContentWords = Math.max(1, approved.wordCount - fixedWords);
+      const desiredContentWords = Math.max(
+        1,
+        Math.round((approved.wordCount * 120) / source.duration) - fixedWords,
       );
+      // Compensa a diferença entre o que foi pedido ao modelo e o que ele entregou.
+      const deliveredRatio = actualContentWords / words;
+      words = Math.max(170, Math.min(320, Math.round(desiredContentWords / deliveredRatio)));
       continue;
     }
     const file = resolve(options.directory, `final-${key}.mp3`);

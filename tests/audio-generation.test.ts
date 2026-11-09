@@ -22,7 +22,7 @@ import { LocalRepository } from '../packages/backend/local-repository.ts';
 import { LocalStore } from '../packages/backend/local-store.ts';
 
 let directory: string;
-let normal: Uint8Array, long: Uint8Array;
+let normal: Uint8Array, long: Uint8Array, short: Uint8Array;
 const now = new Date('2026-11-08T12:00:00Z');
 before(async () => {
   directory = await mkdtemp(join(tmpdir(), 'axiom-generation-'));
@@ -30,6 +30,7 @@ before(async () => {
   for (const [name, duration] of [
     ['normal', 122],
     ['long', 150],
+    ['short', 95],
   ] as const) {
     const path = join(directory, `${name}.mp3`);
     await runAudioTool(ffmpeg, [
@@ -47,6 +48,7 @@ before(async () => {
   }
   normal = new Uint8Array(await readFile(join(directory, 'normal.mp3')));
   long = new Uint8Array(await readFile(join(directory, 'long.mp3')));
+  short = new Uint8Array(await readFile(join(directory, 'short.mp3')));
 });
 after(async () => {
   const target = resolve(directory);
@@ -54,7 +56,7 @@ after(async () => {
     throw new Error('Destino temporário inesperado.');
   await rm(target, { recursive: true, force: true });
 });
-async function approvedBuilder() {
+async function approvedBuilder(shrinkBelow = 260) {
   const fixture = editorialFixture('ai', now),
     base = fixtureEditorialModel(fixture),
     options = { clock: () => now };
@@ -62,9 +64,10 @@ async function approvedBuilder() {
     ...base,
     async draft(input: Parameters<typeof base.draft>[0]) {
       const value = structuredClone(fixture.draft);
-      if (input.targetWords < 260) {
-        const text = value.claims[0]!.narration;
-        value.claims[0]!.narration = text.slice(0, text.lastIndexOf('.', text.length - 2) + 1);
+      if (input.targetWords < shrinkBelow) {
+        const last = value.claims.at(-1)!;
+        const text = last.narration;
+        last.narration = text.slice(0, text.lastIndexOf('.', text.length - 2) + 1);
       }
       return { value, usage: null };
     },
@@ -75,6 +78,7 @@ async function approvedBuilder() {
 
 test('áudio real é normalizado, reaproveita a síntese e detecta arquivo alterado', async () => {
   let calls = 0;
+  const spoken: string[] = [];
   const buildApproved = await approvedBuilder();
   const options = {
     directory: join(directory, 'reuse'),
@@ -82,13 +86,16 @@ test('áudio real é normalizado, reaproveita a síntese e detecta arquivo alter
     buildApproved,
     voice: {
       identity: 'test-voice',
-      async synthesize() {
+      async synthesize(text: string) {
         calls++;
+        spoken.push(text);
         return normal;
       },
     },
   };
   const first = await renderEpisode(options);
+  assert.ok(spoken[0]!.startsWith(first.approved.script.claims[0]!.narration));
+  assert.doesNotMatch(spoken[0]!, /Este é o AXIOM|narração gerada por inteligência artificial/);
   assert.ok(Math.abs(first.audio.metrics.duration - 120) <= 1);
   assert.ok(
     first.audio.metrics.integratedLufs! >= -18 && first.audio.metrics.integratedLufs! <= -14,
@@ -180,6 +187,27 @@ test('duração fora da margem exige nova revisão, com limite de três versões
   assert.ok(
     (await readdir(join(directory, 'exhausted'))).every((name) => !name.startsWith('final-')),
   );
+});
+
+test('narração curta aumenta o próximo alvo mesmo quando o modelo entregou menos palavras', async () => {
+  const targets: number[] = [];
+  let calls = 0;
+  const build = await approvedBuilder(261);
+  const rendered = await renderEpisode({
+    directory: join(directory, 'short-delivery'),
+    clock: () => now,
+    buildApproved: async (words) => {
+      targets.push(words);
+      return build(words);
+    },
+    voice: {
+      identity: 'test-short-delivery',
+      synthesize: async () => (++calls === 1 ? short : normal),
+    },
+  });
+  assert.equal(calls, 2);
+  assert.ok(targets[1]! > targets[0]! && targets[1]! <= 320);
+  assert.ok(Math.abs(rendered.audio.metrics.duration - 120) <= 1);
 });
 
 test('áudio silencioso, dados inválidos e pausa longa são reprovados por medição', async () => {
@@ -381,9 +409,9 @@ test('fila local compartilha trabalho, persiste áudio aprovado, isola sessões 
   assert.equal((await repository.audio(first.job.id))?.url, 'https://media.example/restored');
   assert.equal((await repository.request('user-four', 'ai')).kind, 'episode');
   assert.equal(calls, 1);
-  store.withdraw(first.job.id,time);
-  assert.equal(await repository.episode(first.job.id),null);
-  assert.equal(await repository.audio(first.job.id),null);
+  store.withdraw(first.job.id, time);
+  assert.equal(await repository.episode(first.job.id), null);
+  assert.equal(await repository.audio(first.job.id), null);
   time += 3_600_001;
   assert.equal(await repository.episode(first.job.id), null);
   assert.equal(await repository.audio(first.job.id), null);

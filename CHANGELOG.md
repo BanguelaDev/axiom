@@ -6,6 +6,10 @@ Correção detectada no emulador: o texto globalmente selecionável interceptava
 
 O candidato 0.12.0 permanece sem publicação. O novo pacote será conferido antes do teste no celular.
 
+A pedido do responsável, a narração passa a começar diretamente no assunto, sem a apresentação fixa do AXIOM e o aviso falado sobre IA. O texto efetivamente enviado à voz entra na chave do cache. O lembrete final das fontes permanece, e a duração continua sendo conferida em dois minutos.
+
+Recalibração considera a diferença entre palavras pedidas e entregues. 116 testes aprovados, incluindo síntese curta e início direto no texto recebido pelo fornecedor. A nova amostra real encontrou a cota gratuita da voz e não foi liberada. A avaliação individual da amostra anterior foi 5/5 em clareza e naturalidade.
+
 ## Validação do candidato Android — 9 de novembro de 2026
 
 APK 0.12.0 compilado pelo GitHub Actions a partir de 914f341. Assinatura verificada no build e checksum conferido após download. Pacote ainda em rascunho de release.

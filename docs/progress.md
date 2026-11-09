@@ -180,3 +180,11 @@ O teste nativo do APK 0.12.0 instalou e abriu o app, mas o toque no texto de Con
 No Android 14, a jornada com o primeiro pacote conectou, restaurou o endereço, abriu uma fixture de dois minutos, reproduziu, pausou e avançou. O serviço foreground, a MediaSession PLAYING e a saída AudioTrack STARTED foram confirmados fora do app. O teste de tela desligada foi ajustado para emitir o evento de dormir depois do Maestro, que mantinha o emulador acordado. O resultado final desse cenário continua pendente.
 
 O build 42682492006 compilou e verificou a assinatura do APK 0.12.1, mas falhou ao criar o rascunho via GITHUB_TOKEN em um commit ainda fora de main. A automação agora reserva o rascunho antes de compilar, para detectar esse bloqueio cedo. O código verificado será integrado a main antes da nova execução; não é necessária outra autorização do responsável.
+
+O responsável ouviu o episódio real de IA e atribuiu **5/5 para clareza e 5/5 para naturalidade**, em uma avaliação individual. Pediu retirar a apresentação falada inicial. A abertura fixa foi removida e o modelo orientado a começar no assunto; a chave do cache agora incorpora o texto narrado. Nova geração e medição em preparação. Essa avaliação corresponde à amostra de 15:14, não a uma pesquisa de beta.
+
+A remoção da abertura e a recalibração passaram em **116 testes**, incluindo uma síntese curta quando o modelo entrega menos palavras que o pedido. O próximo alvo considera essa diferença, sem ampliar o limite de tentativas ou de ritmo. A nova tentativa real parou na cota gratuita do TTS; nenhum serviço pago foi chamado. A edição anterior foi retirada para não voltar pelo cache. O teste confirma o texto enviado sem apresentação, mas uma nova narração real completa ainda depende da renovação da cota.
+
+Execução nativa 42686872673 aprovada no emulador Android 14 para o primeiro pacote: conexão/restauração, reprodução, pausa e avanço, serviço foreground, AudioTrack STARTED e tela realmente desligada (`mWakefulness=Asleep`). O novo APK 0.12.1 segue no build 42686834811, já com rascunho reservado e código em main 67208d5.
+
+Build 42686834811 concluído com sucesso: APK 0.12.1, fonte 67208d5. Verificação final do pacote e dos emuladores em andamento.
