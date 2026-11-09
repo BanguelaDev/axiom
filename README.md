@@ -47,7 +47,7 @@ O usuário escolhe um tema, e o aplicativo busca notícias publicadas nas últim
 
 ## Planejamento
 
-Já é possível explorar os seis temas, o player e o histórico. O app também conversa com uma API local e apresenta os critérios usados para selecionar notícias, com exemplos fictícios e motivos de descarte. A coleta e a base de Supabase e da fila estão preparadas para validação; a conexão com serviços reais e a geração de notícias e voz continuam pendentes.
+Já é possível explorar os seis temas, o player e o histórico. O app também apresenta os critérios de seleção e revisão com exemplos fictícios. No servidor, a preparação foi dividida em fatos, redação e revisão, mantendo o roteiro interno. A integração com serviços reais e a validação da qualidade de conteúdo e voz continuam pendentes.
 
 - [Roadmap resumido](AXIOM-roadmap-resumido.md): visão rápida da proposta, das tecnologias e das etapas.
 - [Roadmap completo](AXIOM-roadmap.md): detalhes da arquitetura, da geração dos episódios e dos testes previstos.
@@ -70,4 +70,5 @@ A demonstração usa uma amostra sonora de 12 segundos, sem notícias ou narraç
 - [Experiência e identidade](docs/ux.md): decisões e caminhos do protótipo.
 - [Base técnica](docs/backend.md): API local, banco, sessões e próximos passos da integração.
 - [Coleta e seleção](docs/news-selection.md): janela de 72 horas, fontes e auditoria.
+- [Roteiro e revisão](docs/editorial.md): evidências, verificações e limites da avaliação por IA.
 - [Registro das entregas](CHANGELOG.md): mudanças e testes de cada etapa.

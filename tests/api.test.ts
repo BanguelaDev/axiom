@@ -172,6 +172,21 @@ test('app conversa por HTTP com sessão descartável e catálogo da API local', 
     assert.equal(selection.simulated, true);
     assert.equal(selection.report.status, 'ready');
     assert.equal(selection.report.selected, 3);
+    const editorial = (await requestApi(
+      {
+        url,
+        async getToken() {
+          return session.accessToken;
+        },
+      },
+      '/dev/editorial/ai?scenario=contradiction',
+    )) as { status: string; reason: string };
+    assert.equal(editorial.status, 'blocked');
+    assert.equal(editorial.reason, 'review_rejected');
+    assert.doesNotMatch(
+      JSON.stringify(editorial),
+      /"(?:script|narration|quote|draft|statement|artifactId)":/,
+    );
     await assert.rejects(
       requestApi(
         {
@@ -198,6 +213,7 @@ test('app conversa por HTTP com sessão descartável e catálogo da API local', 
 test('amostras de seleção não existem na API de staging e exigem sessão no desenvolvimento', async () => {
   const { call } = setup();
   assert.equal((await call('/dev/selection/ai')).status, 404);
+  assert.equal((await call('/dev/editorial/ai')).status, 404);
   const local = setup({ environment: 'development' });
   assert.equal(
     (await local.call('/dev/selection/ai', { headers: { Authorization: '' } })).status,

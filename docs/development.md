@@ -41,6 +41,8 @@ As amostras ficam em `work/episode-*`, ignorado pelo Git. `episode.json` contém
 
 A versão 0.4 também grava `private/selection-report.json`, com decisões e metadados da coleta. O pipeline exige fontes revisadas, confere vínculos editoriais/agências identificados e revalida a diversidade das fontes efetivamente usadas pelo roteiro. Para apresentar os critérios sem credenciais, use a nova opção em Apresentação do projeto ou execute `npm run audit:selection`; todos esses exemplos são fictícios.
 
+Na versão 0.5, o pipeline extrai fatos uma vez e separa redação e revisão por afirmação. Cada nova redação para corrigir duração precisa de nova revisão. Os arquivos de fatos e revisão ficam em `private/`; não entram nas respostas do app. Veja [roteiro e revisão](editorial.md). A apresentação dos controles fica em Apresentação do projeto → Entender a revisão do roteiro, ou pelo comando `npm run audit:editorial`, sem IA real.
+
 ## Estrutura
 
 | Pasta               | Conteúdo                                                                        |

@@ -1,5 +1,14 @@
 # Validações do AXIOM
 
+## Etapa 5 — 8 de novembro de 2026
+
+- TypeScript/Deno, lint e exportação web: aprovados.
+- 67 testes aprovados: os 50 anteriores e 17 novos sobre o fluxo editorial e o adaptador OpenAI. Incluem material insuficiente, citações, referências, números em dígitos, atribuição, diversidade, revisão de outra versão, alterações posteriores e expiração das fontes.
+- SDK real exercitado com transporte HTTP substituído: três schemas de saída estruturada, `store: false`, ferramentas desativadas, recusa, resposta incompleta, formato incompatível e erro sem chave ou resposta privada.
+- Os três cenários de demonstração passaram nos seis temas: aprovação, evidência ausente e contradição. Isso valida o fluxo, não a capacidade semântica de uma IA real.
+- Na prévia: recuperação de sessão, demonstração aprovada, evidência ausente bloqueada antes da redação e contradição bloqueada antes da voz. Tela revisada em 390 pixels, com o tema longo de Redes Sociais e Saúde Mental. Nenhum roteiro ou trecho de evidência é mostrado.
+- Sem chamadas reais à OpenAI, GNews ou ElevenLabs e sem implantação remota. Qualidade factual, avaliação humana e custos continuam pendentes.
+
 ## Etapa 4 — 8 de novembro de 2026
 
 - TypeScript/Deno, lint e exportação web: aprovados.

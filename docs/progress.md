@@ -52,6 +52,20 @@ Entrega de 8 de novembro de 2026, conforme as seções 7.1 a 7.3, 10 e 11 do roa
 
 Pendente: validar cobertura e direitos com o fornecedor, cadastrar fontes reais, calibrar filtros e agrupamentos com revisão editorial, complementar classificação por LLM e persistir auditoria/histórico no ambiente remoto. As demonstrações não equivalem a um conjunto de notícias reais aprovado. Nenhuma chamada real ao fornecedor foi realizada. Veja [coleta e seleção](news-selection.md).
 
-## Etapas 5 a 8
+## Etapa 5 — Roteiro e revisão: implementação local, qualidade factual real pendente
+
+Entrega de 8 de novembro de 2026, conforme as seções 7.4, 7.5, 10 e 11 do roadmap:
+
+- Extração de fatos com evidências literais, redação com vínculos e revisão por afirmação em chamadas separadas da Responses API.
+- Respostas estruturadas, declaração explícita de material insuficiente e bloqueios de evidência inválida, número novo em dígitos, atribuição perdida e referências ausentes.
+- Conferência do título, suporte semântico, nomes/datas/números, incerteza, pertinência, tom, contradições e independência na revisão por LLM.
+- Aprovação ligada à versão do material e nova conferência das fontes antes da voz. Alterações e fontes vencidas interrompem o fluxo.
+- Prova de viabilidade integrada aos registros privados de fatos/revisão; correções de duração reutilizam fatos, mas exigem nova revisão do texto.
+- Apresentação de resultados no app e auditoria dos seis temas com exemplos fictícios, sem expor roteiro ou evidências internas.
+- 67 testes automatizados, incluindo o SDK real com respostas HTTP controladas. Nenhuma chamada real à OpenAI, notícias ou voz.
+
+Pendente: configurar e executar fornecedores reais, avaliar fidelidade e linguagem com notícias dos seis temas, medir tempo/custo, revisar casos sensíveis com pessoas e persistir os registros no ambiente remoto. Revisão por LLM e validação de citações não garantem ausência de erros. O aceite editorial real ainda não foi alcançado. Veja [roteiro e revisão](editorial.md).
+
+## Etapas 6 a 8
 
 As integrações locais são a base para a coleta e geração de produção. Filas remotas, controle distribuído de consumo, streaming de notícias geradas, builds de aparelhos, beta e publicação continuam pendentes. Nenhum marco de produção foi marcado como concluído.

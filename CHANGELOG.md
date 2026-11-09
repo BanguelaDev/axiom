@@ -1,5 +1,11 @@
 # Entregas do AXIOM
 
+## 0.5.0 — 8 de novembro de 2026
+
+**Etapa 5: roteiro e revisão no servidor.** Extração de fatos, redação e revisão por afirmação, com evidências, referências e controles antes da voz. Material insuficiente, citações inválidas, números novos, atribuição perdida, revisão incompleta e alterações após aprovação são bloqueados. Prova de viabilidade integrada a registros privados. Nova apresentação dos controles, sem expor o roteiro.
+
+Verificação: TypeScript/Deno, lint, 67 testes, auditoria fictícia dos seis temas e exportação web. O SDK foi exercitado com respostas HTTP controladas, sem chamar fornecedores. Qualidade factual real, revisão humana, custos e persistência remota continuam pendentes; geração de produção desativada.
+
 ## 0.4.0 — 8 de novembro de 2026
 
 **Etapa 4: coleta e seleção auditável.** Consultas em português/inglês para os seis temas, coleta limitada com tratamento de falhas, datas estritas, janela de 72 horas, filtros, deduplicação e agrupamento. Cadastro de fontes revisadas e contagem conservadora de vínculos editoriais e créditos de agência. Relatório privado conectado à prova de viabilidade. Nova apresentação no app e auditoria por terminal com exemplos fictícios.

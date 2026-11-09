@@ -52,6 +52,10 @@ function Navigation() {
           name="selection"
           options={{ title: 'Seleção de notícias', headerBackTitle: 'Voltar' }}
         />
+        <Stack.Screen
+          name="editorial"
+          options={{ title: 'Revisão do roteiro', headerBackTitle: 'Voltar' }}
+        />
       </Stack>
     </>
   );

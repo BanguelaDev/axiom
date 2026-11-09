@@ -3,7 +3,7 @@
     "name": "AXIOM",
     "slug": "axiom",
     "scheme": "axiom",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "ios": { "supportsTablet": true, "bundleIdentifier": "br.com.axiom.mobile" },

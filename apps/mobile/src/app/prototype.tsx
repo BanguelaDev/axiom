@@ -35,6 +35,11 @@ export default function PrototypeScreen() {
         secondary
         onPress={() => router.push('/selection')}
       />
+      <Button
+        title="Entender a revisão do roteiro"
+        secondary
+        onPress={() => router.push('/editorial')}
+      />
       <Button title="Voltar aos temas" secondary onPress={() => router.replace('/')} />
     </Screen>
   );

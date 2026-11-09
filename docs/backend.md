@@ -35,6 +35,8 @@ No Supabase, o prefixo é `/functions/v1/axiom`. O runner local acrescenta `POST
 
 Na etapa 4, o runner também oferece uma [apresentação da seleção](news-selection.md) em `/dev/selection/:topicId`, com sessão e dados fictícios. Essa rota não está disponível na API de staging/produção nem permite consultar relatórios de notícias reais.
 
+A etapa 5 acrescenta `/dev/editorial/:topicId`, também restrita ao desenvolvimento e à sessão. Ela exercita cenários fictícios de revisão e devolve somente estados e contagens. Fatos, citações, identificação da versão e roteiro ficam fora dessa resposta. Veja [roteiro e revisão](editorial.md).
+
 ## Banco e acesso
 
 - Roteiros ficam no schema `private`; o app não tem leitura ou escrita.

@@ -8,6 +8,7 @@ import {
 } from '../core/src/api.ts';
 import { getTopic, topics, type TopicId } from '../core/src/topics.ts';
 import type { DemoSelection } from '../core/src/selection-report.ts';
+import type { EditorialDemoReport, EditorialScenario } from '../core/src/editorial-report.ts';
 
 export interface BackendRepository {
   request(userId: string, topicId: TopicId): Promise<GenerationResult>;
@@ -23,6 +24,10 @@ export interface BackendOptions {
   repository: BackendRepository;
   enqueue(jobId: string): Promise<void>;
   developmentSelection?(topicId: TopicId, insufficient: boolean): DemoSelection;
+  developmentEditorial?(
+    topicId: TopicId,
+    scenario: EditorialScenario,
+  ): Promise<EditorialDemoReport>;
 }
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -64,6 +69,20 @@ export function createApi(options: BackendOptions) {
       if (!token || token.length > 8192) throw new ApiFault('unauthorized', 401);
       const userId = await options.authenticate(token);
       if (!userId) throw new ApiFault('unauthorized', 401);
+
+      const editorial = path.match(/^\/dev\/editorial\/([^/]+)$/);
+      if (
+        editorial &&
+        request.method === 'GET' &&
+        options.environment === 'development' &&
+        options.developmentEditorial
+      ) {
+        const topic = getTopic(editorial[1]!);
+        const scenario = new URL(request.url).searchParams.get('scenario') || 'approved';
+        if (!topic || !['approved', 'missing_evidence', 'contradiction'].includes(scenario))
+          throw new ApiFault('invalid_request', 400);
+        return json(await options.developmentEditorial(topic.id, scenario as EditorialScenario));
+      }
 
       const selection = path.match(/^\/dev\/selection\/([^/]+)$/);
       if (

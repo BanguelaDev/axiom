@@ -2,13 +2,15 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { getTopic } from '../packages/core/src/topics.ts';
 import { assertSufficientSources, episodeExpiresAt } from '../packages/core/src/news.ts';
-import { narrationText, validateEvidence, publicEpisode } from '../packages/core/src/script.ts';
+import { narrationText, publicEpisode } from '../packages/core/src/script.ts';
+import { synthesize, requireEnv } from '../packages/pipeline/providers.ts';
+import { createOpenAIEditorialModel } from '../packages/pipeline/openai-editorial.ts';
 import {
-  createScript,
-  reviewScript,
-  synthesize,
-  requireEnv,
-} from '../packages/pipeline/providers.ts';
+  extractEditorialFacts,
+  prepareEditorial,
+  assertApprovedEditorial,
+  EditorialFault,
+} from '../packages/pipeline/editorial.ts';
 import { correctionRatio, finalizeAudio, measureDuration } from '../packages/pipeline/audio.ts';
 import { collectNews } from '../packages/pipeline/collect-news.ts';
 
@@ -47,12 +49,56 @@ async function main() {
     );
   const articles = selection.articles;
   assertSufficientSources(articles);
+  const model = createOpenAIEditorialModel({
+    key: requireEnv('OPENAI_API_KEY'),
+    model: process.env.OPENAI_MODEL,
+  });
+  const context = await extractEditorialFacts(
+    { topic, articles, referenceAt: started.toISOString() },
+    model,
+  );
+  await writeFile(
+    resolve(privateDir, 'facts.json'),
+    JSON.stringify({ sourceDigest: context.sourceDigest, facts: context.facts }, null, 2),
+    { mode: 0o600 },
+  );
   let words = 260;
   for (let attempt = 0; attempt < 3; attempt++) {
     console.log(`Preparando e revisando roteiro (tentativa ${attempt + 1}/3).`);
-    const script = await createScript(topic, articles, words);
-    validateEvidence(script, articles);
-    await reviewScript(script, articles, topic);
+    const approved = await prepareEditorial(context, model, words).catch(async (error: unknown) => {
+      await writeFile(
+        resolve(privateDir, `editorial-${attempt}.json`),
+        JSON.stringify(
+          {
+            status: 'blocked',
+            code: error instanceof EditorialFault ? error.code : 'model_unavailable',
+          },
+          null,
+          2,
+        ),
+        { mode: 0o600 },
+      );
+      throw error;
+    });
+    const { script } = approved;
+    await writeFile(
+      resolve(privateDir, `editorial-${attempt}.json`),
+      JSON.stringify(
+        {
+          status: 'approved',
+          artifactId: approved.artifactId,
+          draft: approved.draft,
+          script,
+          review: approved.review,
+          checkedAt: approved.checkedAt,
+          wordCount: approved.wordCount,
+          usage: approved.usage,
+        },
+        null,
+        2,
+      ),
+      { mode: 0o600 },
+    );
     const narration = narrationText(script);
     if (narration.split(/\s+/).length > 360)
       throw new Error('Roteiro excessivamente longo; geração interrompida antes do custo de voz.');
@@ -63,6 +109,7 @@ async function main() {
     assertSufficientSources(usedArticles);
     episodeExpiresAt(usedArticles, new Date());
     const rawPath = resolve(privateDir, `raw-${attempt}.mp3`);
+    assertApprovedEditorial(approved, new Date());
     await writeFile(rawPath, await synthesize(narration));
     const duration = await measureDuration(rawPath);
     if (correctionRatio(duration) === null) {

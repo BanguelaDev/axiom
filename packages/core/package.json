@@ -8,6 +8,7 @@
     "./api": "./src/api.ts",
     "./api-client": "./src/api-client.ts",
     "./selection-report": "./src/selection-report.ts",
+    "./editorial-report": "./src/editorial-report.ts",
     "./demo-generation": "./src/demo-generation.ts",
     "./listening": "./src/listening.ts"
   }
